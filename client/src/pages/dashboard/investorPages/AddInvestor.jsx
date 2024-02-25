@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { InputAdornment } from "@mui/material";
-import { Icon } from "@iconify/react";
 import { useFormik } from "formik";
 import MyInput from "./../../../components/form/MyInput";
 import FilledBtn from "./../../../components/buttons/FilledBtn";
@@ -8,11 +6,16 @@ import MySelect from "./../../../components/form/MySelect";
 import { investorValidationSchema } from "./../../../utils/validationSchema";
 import PageNav from "./../../../components/header/PageNav";
 import { Autocomplete } from "@mui/material";
-
-const sectorFocusOptions = ["Tech", "Healthcare", "Finance", "Consumer Goods", "Real Estate"];
-const roundInvestOptions = ["Seed", "Series A", "Series B", "Series C", "Late Stage"];
-const startUpOptions = ["Startup A", "Startup B", "Startup C", "Startup D", "Startup E"];
-const dealStructureOptions = ["Equity", "Convertible Note"];
+import {
+  indianStates,
+  investorTypes,
+  sectorFocusOptions,
+  roundInvestOptions,
+  dealStructureOptions,
+  countries,
+} from "../../../utils/options";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const initialValues = {
   firm_name: "",
@@ -28,15 +31,14 @@ const initialValues = {
   revenue: "",
   company_age: "",
   valuation_cap: "",
-  who_selected: [],
-  who_rejected: [],
+  already_emailed: [],
+  no_response_at_all: [],
   open_dealflow_count: "",
   closed_dealflow_count: "",
   total_dealflow_count: "",
   geography: {
-    country: "",
-    state: "",
-    location: [],
+    country: [],
+    state: [],
   },
   preference: {
     sc_st_obc: false,
@@ -49,7 +51,6 @@ const initialValues = {
       phone_number: "",
       email: "",
       linkedin: "",
-      initial_email: [],
     },
   ],
 };
@@ -59,14 +60,39 @@ const AddInvestor = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: investorValidationSchema,
-    onSubmit: (values) => {
-      // Submit logic
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
+      handleSubmit(values, { resetForm });
     },
   });
 
+  const handleSubmit = async (values, { resetForm }) => {
+    const loadingToastId = toast.loading("Please wait...");
+    try {
+      const response = await axios.post("http://localhost:5000/api/investor/multi-add", [values]);
+      if (response.status === 201) {
+        toast.success("Investor Added Successfully...", { id: loadingToastId });
+        setEmployees(initialValues.employees);
+        resetForm();
+      } else {
+        toast.error("Facing some error !!");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });
+    }
+  };
+
   const handleAddEmployee = () => {
-    setEmployees([...employees, initialValues.employees[0]]);
+    // Create a new employee object
+    const newEmployee = { first_name: "", last_name: "", phone_number: "", email: "", linkedin: "" };
+
+    // Update the formik values for employees
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      employees: [...prevValues.employees, newEmployee],
+    }));
+
+    // Update the local state
+    setEmployees([...employees, newEmployee]);
   };
 
   return (
@@ -112,7 +138,7 @@ const AddInvestor = () => {
             <MySelect
               name="type"
               label="Type"
-              options={["Angel Investor", "Venture Capitalist", "Private Equity", "Corporate Venture Capital"]}
+              options={investorTypes}
               value={formik.values.type}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -279,177 +305,73 @@ const AddInvestor = () => {
                 formik.touched.valuation_cap && formik.errors.valuation_cap ? formik.errors.valuation_cap : ""
               }
             />
-
-            <Autocomplete
-              size="small"
-              multiple
-              id="who_selected"
-              options={startUpOptions}
-              value={formik.values.who_selected}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("who_selected", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="who_selected"
-                  label="Who selected"
-                  placeholder="Choose who selected"
-                  error={formik.touched.who_selected && Boolean(formik.errors.who_selected)}
-                  helperText={formik.touched.who_selected && formik.errors.who_selected}
-                />
-              )}
-            />
-
-            <Autocomplete
-              size="small"
-              multiple
-              id="who_rejected"
-              options={startUpOptions}
-              value={formik.values.who_rejected}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("who_rejected", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="who_rejected"
-                  label="Who rejected"
-                  placeholder="Choose who rejected"
-                  error={formik.touched.who_rejected && Boolean(formik.errors.who_rejected)}
-                  helperText={formik.touched.who_rejected && formik.errors.who_rejected}
-                />
-              )}
-            />
-
-            {/* Open Dealflow Count */}
-            <MyInput
-              name="open_dealflow_count"
-              type="number"
-              label="Open Dealflow Count"
-              placeholder="Enter open dealflow count"
-              value={formik.values.open_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.open_dealflow_count && formik.errors.open_dealflow_count}
-              helperText={
-                formik.touched.open_dealflow_count && formik.errors.open_dealflow_count
-                  ? formik.errors.open_dealflow_count
-                  : ""
-              }
-            />
-
-            {/* Closed Dealflow Count */}
-            <MyInput
-              name="closed_dealflow_count"
-              type="number"
-              label="Closed Dealflow Count"
-              placeholder="Enter closed dealflow count"
-              value={formik.values.closed_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.closed_dealflow_count && formik.errors.closed_dealflow_count}
-              helperText={
-                formik.touched.closed_dealflow_count && formik.errors.closed_dealflow_count
-                  ? formik.errors.closed_dealflow_count
-                  : ""
-              }
-            />
-
-            {/* Total Dealflow Count */}
-            <MyInput
-              name="total_dealflow_count"
-              type="number"
-              label="Total Dealflow Count"
-              placeholder="Enter total dealflow count"
-              value={formik.values.total_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.total_dealflow_count && formik.errors.total_dealflow_count}
-              helperText={
-                formik.touched.total_dealflow_count && formik.errors.total_dealflow_count
-                  ? formik.errors.total_dealflow_count
-                  : ""
-              }
-            />
           </div>
         </div>
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
           <h2 className="font-semibold text-xl opacity-70">Registered Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-            <MyInput
-              name="geography.country"
-              type="text"
-              label="Country"
-              placeholder="Country"
-              value={formik.values.geography.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.geography &&
-                formik.errors.geography &&
-                formik.touched.geography.country &&
-                formik.errors.geography.country
-              }
-              helperText={
-                formik.touched.geography &&
-                formik.errors.geography &&
-                formik.touched.geography.country &&
-                formik.errors.geography.country
-                  ? formik.errors.geography.country
-                  : ""
-              }
-            />
-            <MyInput
-              name="geography.state"
-              type="text"
-              label="State"
-              placeholder="State"
-              value={formik.values.geography.state}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.geography &&
-                formik.errors.geography &&
-                formik.touched.geography.state &&
-                formik.errors.geography.state
-              }
-              helperText={
-                formik.touched.geography &&
-                formik.errors.geography &&
-                formik.touched.geography.state &&
-                formik.errors.geography.state
-                  ? formik.errors.geography.state
-                  : ""
-              }
-            />
+            {/* Autocomplete for Country */}
             <Autocomplete
               size="small"
               multiple
-              id="geography_location"
-              options={["Rewari", "Gurgaon", "Faridabad", "Hisar", "Panipat"]}
-              value={formik.values.geography.location}
+              id="geography_country"
+              options={countries} // This should be your country options
+              value={formik.values.geography.country}
               onChange={(event, newValue) => {
-                formik.setFieldValue("geography.location", newValue);
+                formik.setFieldValue("geography.country", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="geography_location"
-                  label="Location"
-                  placeholder="Select location"
+                  name="geography.country"
+                  label="Country"
+                  placeholder="Country"
                   error={
                     formik.touched.geography &&
                     formik.errors.geography &&
-                    formik.touched.geography.location &&
-                    formik.errors.geography.location
+                    formik.touched.geography.country &&
+                    formik.errors.geography.country
                   }
                   helperText={
                     formik.touched.geography &&
                     formik.errors.geography &&
-                    formik.touched.geography.location &&
-                    formik.errors.geography.location
-                      ? formik.errors.geography.location
+                    formik.touched.geography.country &&
+                    formik.errors.geography.country
+                      ? formik.errors.geography.country
+                      : ""
+                  }
+                />
+              )}
+            />
+
+            {/* Autocomplete for State */}
+            <Autocomplete
+              size="small"
+              multiple
+              id="geography_state"
+              options={indianStates} // This should be your state options
+              value={formik.values.geography.state}
+              onChange={(event, newValue) => {
+                formik.setFieldValue("geography.state", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="geography.state"
+                  label="State"
+                  placeholder="State"
+                  error={
+                    formik.touched.geography &&
+                    formik.errors.geography &&
+                    formik.touched.geography.state &&
+                    formik.errors.geography.state
+                  }
+                  helperText={
+                    formik.touched.geography &&
+                    formik.errors.geography &&
+                    formik.touched.geography.state &&
+                    formik.errors.geography.state
+                      ? formik.errors.geography.state
                       : ""
                   }
                 />
@@ -499,15 +421,15 @@ const AddInvestor = () => {
             <div key={index} className="mt-5 border rounded-lg p-4">
               <h2>Employee {index + 1}</h2>
               {/* First Name */}
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
                 <MyInput
                   name={`employees[${index}].first_name`}
                   type="text"
                   label="First Name"
                   placeholder="Enter first name"
-                  value={employee.first_name}
-                  onChange={formik.handleChange}
+                  id={`first_name_${index}`}
+                  value={formik.values.employees[index]?.first_name} // Use formik values here
+                  onChange={formik.handleChange} // Use formik's handleChange
                   onBlur={formik.handleBlur}
                   error={
                     formik.touched.employees &&
@@ -530,8 +452,9 @@ const AddInvestor = () => {
                   type="text"
                   label="Last Name"
                   placeholder="Enter last name"
-                  value={employee.last_name}
-                  onChange={formik.handleChange}
+                  id={`last_name_${index}`}
+                  value={formik.values.employees[index]?.last_name} // Use formik values here
+                  onChange={formik.handleChange} // Use formik's handleChange
                   onBlur={formik.handleBlur}
                   error={
                     formik.touched.employees &&
@@ -554,8 +477,9 @@ const AddInvestor = () => {
                   type="text"
                   label="Phone Number"
                   placeholder="Enter phone number"
-                  value={employee.phone_number}
-                  onChange={formik.handleChange}
+                  id={`phone_number_${index}`}
+                  value={formik.values.employees[index]?.phone_number} // Use formik values here
+                  onChange={formik.handleChange} // Use formik's handleChange
                   onBlur={formik.handleBlur}
                   error={
                     formik.touched.employees &&
@@ -578,8 +502,9 @@ const AddInvestor = () => {
                   type="text"
                   label="Email"
                   placeholder="Enter email"
-                  value={employee.email}
-                  onChange={formik.handleChange}
+                  id={`email_${index}`}
+                  value={formik.values.employees[index]?.email} // Use formik values here
+                  onChange={formik.handleChange} // Use formik's handleChange
                   onBlur={formik.handleBlur}
                   error={
                     formik.touched.employees &&
@@ -602,8 +527,9 @@ const AddInvestor = () => {
                   type="text"
                   label="LinkedIn"
                   placeholder="Enter LinkedIn profile URL"
-                  value={employee.linkedin}
-                  onChange={formik.handleChange}
+                  id={`linkedin_${index}`}
+                  value={formik.values.employees[index]?.linkedin} // Use formik values here
+                  onChange={formik.handleChange} // Use formik's handleChange
                   onBlur={formik.handleBlur}
                   error={
                     formik.touched.employees &&

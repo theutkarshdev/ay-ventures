@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import AdminLinks from "./AdminLinks";
 import Logo2 from "../assets/logo2.png";
 import AccountDropdown from "../components/header/AccountDropdown";
+import { Toaster } from "react-hot-toast";
 
 const AdminLayout = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -14,7 +15,8 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex">
+    <div>
+      <Toaster />
       <div className="ml-auto h-screen overflow-hidden w-full lg:w-[calc(100vw_-_250px)]">
         <AppBar position="fixed" className="shadow-none p-0 h-12 bg-white text-black border-b z-[1201]">
           <Toolbar className="min-h-12 flex justify-between items-center">

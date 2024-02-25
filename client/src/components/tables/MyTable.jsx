@@ -1,19 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FilledBtn from "../buttons/FilledBtn";
 import OutlinedBtn from "../buttons/OutlinedBtn";
+import NoDataImg from "../../assets/course_not_found_icon.png";
 import { Icon } from "@iconify/react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { TablePagination, Menu, MenuItem } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Menu,
+  MenuItem,
+  Skeleton,
+} from "@mui/material";
+import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-const MyTable = ({ columns, data }) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const MyTable = ({ columns, tableDataApi }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState({ data: [], total: 0 });
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const limit = searchParams.get("limit") || 5;
+    const skip = searchParams.get("skip") || 0;
+    setRowsPerPage(Number(limit));
+    setPage(Math.floor(Number(skip) / Number(limit)));
+    handleTableData(Number(limit), Number(skip));
+  }, [searchParams]);
+
+  const handleTableData = async (limit, skip) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/api/${tableDataApi}?limit=${limit}&skip=${skip}`);
+      setTableData({
+        data: response.data.data,
+        total: response.data.total,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,13 +58,13 @@ const MyTable = ({ columns, data }) => {
     setAnchorEl(null);
   };
 
-  const handleEdit = () => {
-    // Handle edit action here
+  const handleEdit = (row) => {
+    navigate(`edit/${row?._id}`);
     handleMenuClose();
   };
 
-  const handleView = () => {
-    // Handle view action here
+  const handleView = (row) => {
+    navigate(`view/${row?._id}`);
     handleMenuClose();
   };
 
@@ -39,12 +74,18 @@ const MyTable = ({ columns, data }) => {
   };
 
   const handleChangePage = (event, newPage) => {
+    const newSkip = newPage * rowsPerPage;
     setPage(newPage);
+    searchParams.set("skip", newSkip.toString());
+    navigate(`?${searchParams.toString()}`, { replace: true });
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+    const newRowsPerPage = +event.target.value;
+    setRowsPerPage(newRowsPerPage);
     setPage(0);
+    searchParams.set("limit", newRowsPerPage.toString());
+    navigate(`?${searchParams.toString()}`, { replace: true });
   };
 
   return (
@@ -61,126 +102,141 @@ const MyTable = ({ columns, data }) => {
       </div>
 
       <div className="w-full">
-        <TableContainer>
-          <Table aria-label="sticky table">
-            <TableHead className="bg-[#0284C7]">
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    className="text-sm font-semibold text-white py-2"
-                    key={column.id}
-                    align={column.align}
-                    sx={{
-                      maxWidth: 200,
-                      minWidth: column.minWidth,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                return (
-                  <TableRow
-                    sx={{
-                      "&:nth-child(even) td": { background: "#eee" },
-                    }}
-                    tabIndex={-1}
-                    key={row.firm_name}
-                  >
-                    {columns.map((column) => {
-                      if (column.id === "actions") {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            <div className="flex justify-center">
-                              <button className="bg-slate-100 p-1 rounded-md border hover:border-gray-400">
-                                <Icon onClick={handleMenuOpen} className="text-xl" icon="pepicons-pencil:dots-y" />
-                              </button>
-
-                              <Menu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                onClose={handleMenuClose}
-                                anchorOrigin={{
-                                  vertical: "bottom",
-                                  horizontal: "right",
-                                }}
-                                transformOrigin={{
-                                  vertical: "top",
-                                  horizontal: "right",
-                                }}
-                                PaperProps={{
-                                  elevation: 0,
-                                  sx: {
-                                    overflow: "visible",
-                                    filter: "drop-shadow(0px 2px 2px rgba(0,0,0,0.1))",
-                                    boxShadow: "none",
-                                    borderRadius: 2,
-                                    mt: 1.5,
-                                    "&::before": {
-                                      content: '""',
-                                      display: "block",
-                                      position: "absolute",
-                                      top: 0,
-                                      right: 10,
-                                      width: 10,
-                                      height: 10,
-                                      bgcolor: "background.paper",
-                                      transform: "translateY(-50%) rotate(45deg)",
-                                      zIndex: 0,
+        {loading || tableData?.data?.length > 0 ? (
+          <TableContainer>
+            <Table aria-label="sticky table">
+              <TableHead className="bg-[#0284C7]">
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      className="text-sm font-semibold text-white py-2"
+                      key={column.id}
+                      align={column.align}
+                      sx={{
+                        maxWidth: 200,
+                        minWidth: column.minWidth,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {!loading ? (
+                  tableData?.data.map((row) => (
+                    <TableRow
+                      key={row.firm_name}
+                      sx={{
+                        "&:nth-of-type(even) td": { background: "#eee" },
+                      }}
+                      tabIndex={-1}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === "actions") {
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              <div className="flex justify-center">
+                                <button
+                                  className="bg-slate-100 p-1 rounded-md border hover:border-gray-400"
+                                  onClick={handleMenuOpen}
+                                >
+                                  <Icon className="text-xl" icon="pepicons-pencil:dots-y" />
+                                </button>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleMenuClose}
+                                  anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "right",
+                                  }}
+                                  transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                  }}
+                                  PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                      overflow: "visible",
+                                      filter: "drop-shadow(0px 2px 2px rgba(0,0,0,0.1))",
+                                      boxShadow: "none",
+                                      borderRadius: 2,
+                                      mt: 1.5,
+                                      "&::before": {
+                                        content: '""',
+                                        display: "block",
+                                        position: "absolute",
+                                        top: 0,
+                                        right: 10,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: "background.paper",
+                                        transform: "translateY(-50%) rotate(45deg)",
+                                        zIndex: 0,
+                                      },
                                     },
-                                  },
-                                }}
-                              >
-                                <MenuItem className="flex gap-2 items-center py-1.5 text-sm " onClick={handleView}>
-                                  <Icon className="text-xl" icon={"fluent:eye-16-regular"} />
-                                  View
-                                </MenuItem>
-                                <MenuItem className="flex gap-2 items-center py-1.5 text-sm" onClick={handleEdit}>
-                                  <Icon className="text-xl" icon={"fluent:edit-16-regular"} />
-                                  Edit
-                                </MenuItem>
-                                <MenuItem className="flex gap-2 items-center py-1.5 text-sm" onClick={handleDelete}>
-                                  <Icon className="text-xl" icon={"fluent:delete-16-regular"} />
-                                  Delete
-                                </MenuItem>
-                              </Menu>
-                            </div>
-                          </TableCell>
-                        );
-                      } else {
-                        const value = row[column.id];
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            sx={{
-                              maxWidth: 150,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                                  }}
+                                >
+                                  <MenuItem
+                                    className="flex gap-2 items-center py-1.5 text-sm "
+                                    onClick={() => handleView(row)}
+                                  >
+                                    <Icon className="text-xl" icon={"fluent:eye-16-regular"} />
+                                    View
+                                  </MenuItem>
+                                  <MenuItem
+                                    className="flex gap-2 items-center py-1.5 text-sm"
+                                    onClick={() => handleEdit(row)}
+                                  >
+                                    <Icon className="text-xl" icon={"fluent:edit-16-regular"} />
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem className="flex gap-2 items-center py-1.5 text-sm" onClick={handleDelete}>
+                                    <Icon className="text-xl" icon={"fluent:delete-16-regular"} />
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </div>
+                            </TableCell>
+                          );
+                        } else {
+                          const value = row[column.id];
+                          return (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              sx={{
+                                maxWidth: 150,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {value}
+                            </TableCell>
+                          );
+                        }
+                      })}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRowsLoader column={columns} rowsNum={rowsPerPage} />
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <NoData />
+        )}
+
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 100]}
+          rowsPerPageOptions={[5, 10, 25, 100, 200]}
           component="div"
-          count={data.length}
+          count={tableData.total}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -192,3 +248,28 @@ const MyTable = ({ columns, data }) => {
 };
 
 export default MyTable;
+
+const TableRowsLoader = ({ rowsNum, column }) => {
+  return [...Array(rowsNum)].map((row, index) => (
+    <TableRow
+      key={index}
+      sx={{
+        "&:nth-of-type(even) td": { background: "#eee" },
+      }}
+    >
+      {column.map((column, index) => (
+        <TableCell key={index} className="py-4">
+          <Skeleton className="py-1" animation="wave" variant="text" />
+        </TableCell>
+      ))}
+    </TableRow>
+  ));
+};
+
+const NoData = () => {
+  return (
+    <div className="w-full h-80 overflow-hidden grid place-items-center">
+      <img className="w-full max-w-[300px]" src={NoDataImg} />
+    </div>
+  );
+};
