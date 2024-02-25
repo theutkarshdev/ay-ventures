@@ -84,21 +84,22 @@ const MyTable = ({ columns, tableDataApi }) => {
 
   const handleChangeRowsPerPage = (event) => {
     const newRowsPerPage = +event.target.value;
+    const newSkip = 0;
     setRowsPerPage(newRowsPerPage);
     setPage(0);
     searchParams.set("limit", newRowsPerPage.toString());
+    searchParams.set("skip", newSkip.toString());
     navigate(`?${searchParams.toString()}`, { replace: true });
   };
 
   return (
     <div className="mt-5 mx-5 bg-white rounded-lg border">
       <div className="flex justify-between items-center gap-2 border-b py-3 px-3">
-        <div className="flex items-center gap-1 w-full max-w-xs py-2 px-3 border-2 rounded-lg focus:outline-sky-600">
+        <div className="flex items-center gap-1 w-full max-w-xs py-1.5 px-3 border-2 rounded-lg focus:outline-sky-600">
           <Icon className="text-2xl opacity-50" icon="fluent:text-bullet-list-square-search-20-regular" />
           <input placeholder="Search by Email..." className="w-full outline-none" />
         </div>
-        <div className="flex gap-2 items-center">
-          <FilledBtn icon="solar:filter-linear" text="Filter" />
+        <div className="">
           <OutlinedBtn icon="circum:export" text="Export" />
         </div>
       </div>
@@ -235,15 +236,23 @@ const MyTable = ({ columns, tableDataApi }) => {
           <NoData />
         )}
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 100, 200]}
-          component="div"
-          count={tableData.total}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {!loading ? (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 100, 200]}
+            component="div"
+            count={tableData.total}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        ) : (
+          <div className="flex gap-3 justify-end p-4">
+            <Skeleton className="py-1 w-40" animation="wave" variant="text" />
+            <Skeleton className="py-1 w-32" animation="wave" variant="text" />
+            <Skeleton className="py-1 w-20" animation="wave" variant="text" />
+          </div>
+        )}
       </div>
     </div>
   );

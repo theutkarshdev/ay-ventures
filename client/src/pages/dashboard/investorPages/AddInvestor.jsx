@@ -16,6 +16,7 @@ import {
 } from "../../../utils/options";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Icon } from "@iconify/react";
 
 const initialValues = {
   firm_name: "",
@@ -93,6 +94,17 @@ const AddInvestor = () => {
 
     // Update the local state
     setEmployees([...employees, newEmployee]);
+  };
+
+  const handleRemoveEmployee = (index) => {
+    // Remove employee from Formik values
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      employees: prevValues.employees.filter((_, i) => i !== index),
+    }));
+
+    // Remove employee from local state
+    setEmployees((prevEmployees) => prevEmployees.filter((_, i) => i !== index));
   };
 
   return (
@@ -222,8 +234,8 @@ const AddInvestor = () => {
                 <MyInput
                   {...params}
                   name="rounds_invest_in"
-                  label="Sector Focus"
-                  placeholder="Select sector focus"
+                  label="Rounds invest in"
+                  placeholder="Select Rounds invest in"
                   error={formik.touched.rounds_invest_in && Boolean(formik.errors.rounds_invest_in)}
                   helperText={formik.touched.rounds_invest_in && formik.errors.rounds_invest_in}
                 />
@@ -231,7 +243,7 @@ const AddInvestor = () => {
             />
 
             {/* Checkbox for lead investor required */}
-            <div className="flex items-center">
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -269,8 +281,8 @@ const AddInvestor = () => {
             <MyInput
               name="revenue"
               type="number"
-              label="Revenue"
-              placeholder="Enter revenue"
+              label="Revenue in USD($)"
+              placeholder="Enter revenue in USD($)"
               value={formik.values.revenue}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -278,25 +290,12 @@ const AddInvestor = () => {
               helperText={formik.touched.revenue && formik.errors.revenue ? formik.errors.revenue : ""}
             />
 
-            {/* Company Age */}
-            <MyInput
-              name="company_age"
-              type="number"
-              label="Company Age"
-              placeholder="Enter company age"
-              value={formik.values.company_age}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.company_age && formik.errors.company_age}
-              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
-            />
-
             {/* Valuation Cap */}
             <MyInput
               name="valuation_cap"
               type="number"
-              label="Valuation Cap"
-              placeholder="Enter valuation cap"
+              label="Valuation Cap in USD($)"
+              placeholder="Enter valuation cap in USD($)"
               value={formik.values.valuation_cap}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -307,9 +306,22 @@ const AddInvestor = () => {
             />
           </div>
         </div>
+
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Registered Location</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            {/* Company Age */}
+            <MyInput
+              name="company_age"
+              type="number"
+              label="Minimum Company Age in Years"
+              placeholder="Enter minimum company age in Years"
+              value={formik.values.company_age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.company_age && formik.errors.company_age}
+              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
+            />
             {/* Autocomplete for Country */}
             <Autocomplete
               size="small"
@@ -377,14 +389,8 @@ const AddInvestor = () => {
                 />
               )}
             />
-          </div>
-        </div>
-
-        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
             {/* Checkboxes for preference */}
-            <div>
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -396,7 +402,7 @@ const AddInvestor = () => {
                 SC/ST/OBC
               </label>
             </div>
-            <div>
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -411,6 +417,7 @@ const AddInvestor = () => {
           </div>
         </div>
 
+        {/* Employee section */}
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-xl opacity-70">All Employees</h2>
@@ -419,131 +426,88 @@ const AddInvestor = () => {
 
           {employees.map((employee, index) => (
             <div key={index} className="mt-5 border rounded-lg p-4">
-              <h2>Employee {index + 1}</h2>
-              {/* First Name */}
+              <div className="flex justify-between">
+                <h2 className="font-semibold">Employee {index + 1}</h2>
+                {index > 0 && (
+                  <Icon
+                    className="text-xl text-white bg-red-500 size-8 p-1.5 cursor-pointer hover:bg-red-600 rounded-lg"
+                    icon="solar:trash-bin-trash-linear"
+                    onClick={() => handleRemoveEmployee(index)}
+                  />
+                )}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
                 <MyInput
                   name={`employees[${index}].first_name`}
                   type="text"
                   label="First Name"
                   placeholder="Enter first name"
-                  id={`first_name_${index}`}
-                  value={formik.values.employees[index]?.first_name} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.first_name}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].first_name
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.first_name
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].first_name
-                      ? formik.errors.employees[index].first_name
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.first_name
                   }
                 />
-                {/* Last Name */}
                 <MyInput
                   name={`employees[${index}].last_name`}
                   type="text"
                   label="Last Name"
                   placeholder="Enter last name"
-                  id={`last_name_${index}`}
-                  value={formik.values.employees[index]?.last_name} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.last_name}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].last_name
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.last_name
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].last_name
-                      ? formik.errors.employees[index].last_name
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.last_name
                   }
                 />
-                {/* Phone Number */}
                 <MyInput
                   name={`employees[${index}].phone_number`}
                   type="text"
                   label="Phone Number"
                   placeholder="Enter phone number"
-                  id={`phone_number_${index}`}
-                  value={formik.values.employees[index]?.phone_number} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.phone_number}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].phone_number
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.phone_number
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].phone_number
-                      ? formik.errors.employees[index].phone_number
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.phone_number
                   }
                 />
-                {/* Email */}
                 <MyInput
                   name={`employees[${index}].email`}
                   type="text"
                   label="Email"
                   placeholder="Enter email"
-                  id={`email_${index}`}
-                  value={formik.values.employees[index]?.email} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.email}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].email
-                  }
+                  error={formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.email}
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].email
-                      ? formik.errors.employees[index].email
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.email
                   }
                 />
-                {/* LinkedIn */}
                 <MyInput
                   name={`employees[${index}].linkedin`}
                   type="text"
                   label="LinkedIn"
                   placeholder="Enter LinkedIn profile URL"
-                  id={`linkedin_${index}`}
-                  value={formik.values.employees[index]?.linkedin} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.linkedin}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].linkedin
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.linkedin
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].linkedin
-                      ? formik.errors.employees[index].linkedin
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.linkedin
                   }
                 />
                 {/* Add more fields for other employee details as needed */}

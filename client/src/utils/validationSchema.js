@@ -9,13 +9,21 @@ export const loginValidationSchema = Yup.object({
     .integer("Age must be an integer"),
 });
 
+const employeeSchema = Yup.object().shape({
+  first_name: Yup.string().required("First Name is required"),
+  last_name: Yup.string().required("Last Name is required"),
+  phone_number: Yup.string().required("Phone Number is required"),
+  email: Yup.string().email("Invalid email address").required("Email is required"),
+  linkedin: Yup.string(),
+  // Add more fields as needed
+});
 export const investorValidationSchema = Yup.object({
   firm_email: Yup.string().email("Invalid email address").required("Email is Required"),
   firm_name: Yup.string().required("Firm Name is Required"),
   type: Yup.string().required("Type is Required"),
   sector_focus: Yup.array().min(1, "At least one sector focus is required"),
   ticket_size: Yup.number().required("Ticket Size is Required").positive("Ticket Size must be a positive number"),
-  website: Yup.string().url("Invalid website URL").required("Website is Required"),
+  website: Yup.string().required("Website is Required"),
   date_onboarded: Yup.date().required("Date Onboarded is Required"),
   rounds_invest_in: Yup.array().min(1, "At least one round to invest in is required"),
   deal_structure: Yup.array().min(1, "At least one deal structure is required"),
@@ -38,10 +46,10 @@ export const investorValidationSchema = Yup.object({
   //   .positive("Total Dealflow Count must be a positive number"),
   geography: Yup.object().shape({
     country: Yup.array().min(1, "At least one country is required"),
-    state: Yup.array().min(1, "At least one state is required"),
   }),
   preference: Yup.object().shape({
     sc_st_obc: Yup.boolean(),
     women: Yup.boolean(),
   }),
+  employees: Yup.array().of(employeeSchema),
 });
