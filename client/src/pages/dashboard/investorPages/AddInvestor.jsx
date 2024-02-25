@@ -68,7 +68,7 @@ const AddInvestor = () => {
   const handleSubmit = async (values, { resetForm }) => {
     const loadingToastId = toast.loading("Please wait...");
     try {
-      const response = await axios.post("http://localhost:5000/api/investor/multi-add", [values]);
+      const response = await axios.post(`${import.meta.env.VITE_BACK_URL}/api/investor/multi-add`, [values]);
       if (response.status === 201) {
         toast.success("Investor Added Successfully...", { id: loadingToastId });
         setEmployees(initialValues.employees);

@@ -38,7 +38,9 @@ const MyTable = ({ columns, tableDataApi }) => {
   const handleTableData = async (limit, skip) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5000/api/${tableDataApi}?limit=${limit}&skip=${skip}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACK_URL}/api/${tableDataApi}?limit=${limit}&skip=${skip}`,
+      );
       setTableData({
         data: response.data.data,
         total: response.data.total,

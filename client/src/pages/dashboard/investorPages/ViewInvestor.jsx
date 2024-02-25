@@ -10,7 +10,7 @@ const ViewInvestor = () => {
 
   const fetchInvestor = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/investor/get/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACK_URL}/api/investor/get/${id}`);
 
       if (response.status === 200) {
         setInvestorApi(response?.data?.data);
