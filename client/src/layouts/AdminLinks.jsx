@@ -5,10 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 
 const links = [
   { text: "Dashboard", icon: "radix-icons:dashboard", path: "/" },
+  { text: "Deal Flow", icon: "fluent:cloud-flow-24-regular", path: "/deal-flow" },
   { text: "Investor Management", icon: "solar:users-group-rounded-linear", path: "/investor" },
   { text: "StartUp Management", icon: "solar:buildings-2-broken", path: "/startup" },
   { text: "User Management", icon: "solar:user-linear", path: "/user" },
-  { text: "Deal Flow", icon: "fluent:cloud-flow-24-regular", path: "/deal-flow" },
 ];
 
 const AdminLinks = () => {

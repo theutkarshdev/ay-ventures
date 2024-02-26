@@ -9,6 +9,10 @@ import AdminLayout from "../layouts/AdminLayout";
 import EditInvestor from "../pages/dashboard/investorPages/EditInvestor";
 import ViewInvestor from "./../pages/dashboard/investorPages/ViewInvestor";
 import Error500 from "../pages/error/Error500";
+import StartUpList from "./../pages/dashboard/startUpPages/StartUpList";
+import AddStartUp from "./../pages/dashboard/startUpPages/AddStartUp";
+import ViewStartUp from "./../pages/dashboard/startUpPages/ViewStartUp";
+import EditStartUp from "./../pages/dashboard/startUpPages/EditStartUp";
 
 // Create router configuration
 export const AdminRoutes = [
@@ -38,6 +42,27 @@ export const AdminRoutes = [
           {
             path: "edit/:id",
             element: <EditInvestor />,
+          },
+        ],
+      },
+      {
+        path: "/startup",
+        children: [
+          {
+            index: true,
+            element: <StartUpList />,
+          },
+          {
+            path: "add",
+            element: <AddStartUp />,
+          },
+          {
+            path: "view/:id",
+            element: <ViewStartUp />,
+          },
+          {
+            path: "edit/:id",
+            element: <EditStartUp />,
           },
         ],
       },
