@@ -1,9 +1,9 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import BarChart from './../../components/charts/BarChart';
-import DonutChart from './../../components/charts/DonutChart';
+import BarChart from "./../../components/charts/BarChart";
+import DonutChart from "./../../components/charts/DonutChart";
 
-const data = [
+const barChartdata = [
   { month: "JAN", value: 2000 },
   { month: "FEB", value: 3500 },
   { month: "MAR", value: 4500 },
@@ -21,37 +21,37 @@ const data = [
 const Dashboard = () => {
   return (
     <>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-6xl mt-5 px-3 md:px-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full mt-5 px-3 md:px-5">
         <div className="relative p-5 bg-gradient-to-r from-teal-400 to-green-500 rounded-lg overflow-hidden">
-          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">$5000.00</div>
-          <div className="relative z-10 text-green-200 leading-none font-semibold">Next month's income</div>
+          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">150</div>
+          <div className="text-xl text-white leading-none font-bold">Total Investors</div>
           <Icon
             className="absolute right-0 bottom-0 h-32 w-32 -mr-8 -mb-8 text-green-600 opacity-50"
-            icon="solar:user-linear"
+            icon="solar:users-group-two-rounded-line-duotone"
           />
         </div>
         <div className="relative p-5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg overflow-hidden">
-          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">110</div>
-          <div className="relative z-10 text-blue-200 leading-none font-semibold">Members</div>
+          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">130</div>
+          <div className="text-xl text-white leading-none font-bold">Total StartUps</div>
           <Icon
             className="absolute right-0 bottom-0 h-32 w-32 -mr-8 -mb-8 text-blue-700 opacity-50"
-            icon="solar:user-linear"
+            icon="solar:shop-linear"
           />
         </div>
         <div className="relative p-5 bg-gradient-to-r from-red-400 to-red-600 rounded-lg overflow-hidden">
-          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">60%</div>
-          <div className="relative z-10 text-red-200 leading-none font-semibold">Upcoming cancellations</div>
+          <div className="relative z-10 mb-4 text-white text-4xl leading-none font-semibold">300</div>
+          <div className="text-xl text-white leading-none font-bold">Sent Emails</div>
           <Icon
             className="absolute right-0 bottom-0 h-32 w-32 -mr-8 -mb-8 text-red-700 opacity-50"
-            icon="solar:user-linear"
+            icon="solar:circle-bottom-up-outline"
           />
         </div>
         <div className="relative p-5 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg overflow-hidden">
-          <div className=" mb-4 text-white text-4xl leading-none font-semibold">97.00%</div>
-          <div className="text-yellow-200 leading-none font-semibold">Retention rate</div>
+          <div className=" mb-4 text-white text-4xl leading-none font-semibold">83</div>
+          <div className="text-xl text-white leading-none font-bold">Responded Emails</div>
           <Icon
             className="absolute right-0 bottom-0 h-32 w-32 -mr-8 -mb-8 text-yellow-700 opacity-50"
-            icon="solar:user-linear"
+            icon="solar:mailbox-linear"
           />
         </div>
       </div>
@@ -62,7 +62,7 @@ const Dashboard = () => {
             <h4 className="text-lg opacity-80 font-semibold">Email Monthly Report</h4>
           </div>
           <div className="px-3">
-            <BarChart data={data} />
+            <BarChart data={barChartdata} />
           </div>
         </div>
 

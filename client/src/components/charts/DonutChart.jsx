@@ -3,13 +3,13 @@ import ReactApexChart from "react-apexcharts";
 
 const DonutChart = () => {
   const [chartData, setChartData] = useState({
-    series: [34, 65, 81, 27],
+    series: [150, 105, 25, 42],
     options: {
-      labels: ["Apple", "Mango", "Orange", "Watermelon"],
+      labels: ["Initial Emails", "1st FollowUp", "2nd FollowUp", "Replies"],
       chart: {
         type: "donut",
         offsetX: 0,
-        offsetY: -20,
+        offsetY: -10,
       },
       plotOptions: {
         pie: {
@@ -59,14 +59,13 @@ const DonutChart = () => {
         horizontalAlign: "center",
       },
       stroke: {
-        width: 10,
-        colors: "#fff",
+        width: 0,
       },
     },
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[380px]">
       <ReactApexChart options={chartData.options} series={chartData.series} type="donut" />
     </div>
   );

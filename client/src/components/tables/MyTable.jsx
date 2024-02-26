@@ -286,7 +286,7 @@ function SimpleDialog(props) {
           <h2 className="text-center font-bold text-xl mb-1 mt-3">Are You Sure ??</h2>
           <p className="text-sm opacity-70 text-center">
             This action cannot be undone. All values associated with
-            <span className="font-bold text-red-500">{delData?.name}</span> field will be lost.
+            <span className="font-bold text-red-500"> {delData?.name}</span> field will be lost.
           </p>
         </div>
         <div className="flex gap-4 mt-5">

@@ -40,6 +40,7 @@ const initialValues = {
   geography: {
     country: [],
     state: [],
+    global: false,
   },
   preference: {
     sc_st_obc: false,
@@ -389,6 +390,20 @@ const AddInvestor = () => {
                 />
               )}
             />
+
+            <div className="border rounded p-2 border-gray-400">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  name="geography.global" // Corrected name attribute
+                  checked={formik.values.geography.global}
+                  onChange={formik.handleChange}
+                  className="mt-0.5"
+                />
+                Global
+              </label>
+            </div>
+
             {/* Checkboxes for preference */}
             <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
