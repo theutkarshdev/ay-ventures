@@ -9,7 +9,7 @@ const tableColumns = [
   { id: "type", label: "Type", minWidth: 100 },
   { id: "revenue", label: "Revenue", minWidth: 100 },
   { id: "company_age", label: "Company Age", minWidth: 100, align: "center" },
-  { id: "actions", label: "Actions", minWidth: 100 },
+  { id: "actions", label: "Actions", minWidth: 100, align: "center" },
 ];
 
 const InvestorList = () => {
@@ -21,7 +21,7 @@ const InvestorList = () => {
         btnIcon={"fluent:add-circle-20-regular"}
         btnLink="/investor/add"
       />
-      <Table tableDataApi={"investor/get-all"} columns={tableColumns} />
+      <Table delApi={"investor/delete"} tableDataApi={"investor/get-all"} columns={tableColumns} />
     </>
   );
 };

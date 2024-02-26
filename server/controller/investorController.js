@@ -153,3 +153,16 @@ export const getInvestor = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const delInvestor = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedInvestor = await InvestorFirmModel.findByIdAndDelete(id); // Use findByIdAndDelete to delete by ID
+    if (!deletedInvestor) {
+      return res.status(404).json({ message: "Investor not found" });
+    }
+    res.status(200).json({ message: "Successfully Deleted...", deletedInvestor });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};

@@ -11,20 +11,22 @@ import {
   TableHead,
   TableRow,
   TablePagination,
-  Menu,
-  MenuItem,
   Skeleton,
+  Dialog,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const MyTable = ({ columns, tableDataApi }) => {
+const MyTable = ({ columns, tableDataApi, delApi }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState({ data: [], total: 0 });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [delDialog, setDelDialog] = useState({ open: false, id: "", name: "" });
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -52,27 +54,36 @@ const MyTable = ({ columns, tableDataApi }) => {
     }
   };
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleEdit = (row) => {
     navigate(`edit/${row?._id}`);
-    handleMenuClose();
   };
 
   const handleView = (row) => {
     navigate(`view/${row?._id}`);
-    handleMenuClose();
+  };
+  const handleDelete = (id, name) => {
+    setDelDialog({ open: true, id: id, name: name });
   };
 
-  const handleDelete = () => {
-    // Handle delete action here
-    handleMenuClose();
+  const handleCloseDeldialog = async (id) => {
+    setDelDialog({ open: false });
+    try {
+      if (id) {
+        const response = await axios.delete(`${import.meta.env.VITE_BACK_URL}/api/${delApi}/${id}`);
+        if (response.status === 200) {
+          toast.success("Successfully Deleted...");
+          const limit = searchParams.get("limit") || 5;
+          const skip = searchParams.get("skip") || 0;
+          setRowsPerPage(Number(limit));
+          setPage(Math.floor(Number(skip) / Number(limit)));
+          handleTableData(Number(limit), Number(skip));
+        } else {
+          toast.error("Somthing Went wrong...");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -142,67 +153,23 @@ const MyTable = ({ columns, tableDataApi }) => {
                         if (column.id === "actions") {
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              <div className="flex justify-center">
-                                <button
-                                  className="bg-slate-100 p-1 rounded-md border hover:border-gray-400"
-                                  onClick={handleMenuOpen}
-                                >
-                                  <Icon className="text-xl" icon="pepicons-pencil:dots-y" />
-                                </button>
-                                <Menu
-                                  anchorEl={anchorEl}
-                                  open={Boolean(anchorEl)}
-                                  onClose={handleMenuClose}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                  }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "right",
-                                  }}
-                                  PaperProps={{
-                                    elevation: 0,
-                                    sx: {
-                                      overflow: "visible",
-                                      filter: "drop-shadow(0px 2px 2px rgba(0,0,0,0.1))",
-                                      boxShadow: "none",
-                                      borderRadius: 2,
-                                      mt: 1.5,
-                                      "&::before": {
-                                        content: '""',
-                                        display: "block",
-                                        position: "absolute",
-                                        top: 0,
-                                        right: 10,
-                                        width: 10,
-                                        height: 10,
-                                        bgcolor: "background.paper",
-                                        transform: "translateY(-50%) rotate(45deg)",
-                                        zIndex: 0,
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <MenuItem
-                                    className="flex gap-2 items-center py-1.5 text-sm "
-                                    onClick={() => handleView(row)}
-                                  >
-                                    <Icon className="text-xl" icon={"fluent:eye-16-regular"} />
-                                    View
-                                  </MenuItem>
-                                  <MenuItem
-                                    className="flex gap-2 items-center py-1.5 text-sm"
-                                    onClick={() => handleEdit(row)}
-                                  >
-                                    <Icon className="text-xl" icon={"fluent:edit-16-regular"} />
-                                    Edit
-                                  </MenuItem>
-                                  <MenuItem className="flex gap-2 items-center py-1.5 text-sm" onClick={handleDelete}>
-                                    <Icon className="text-xl" icon={"fluent:delete-16-regular"} />
-                                    Delete
-                                  </MenuItem>
-                                </Menu>
+                              <div className="flex gap-2 justify-center">
+                                <Icon
+                                  onClick={() => handleView(row)}
+                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-xl"
+                                  icon={"fluent:eye-16-regular"}
+                                />
+
+                                <Icon
+                                  onClick={() => handleEdit(row)}
+                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-lg"
+                                  icon={"fluent:edit-16-regular"}
+                                />
+                                <Icon
+                                  onClick={() => handleDelete(row._id, row.firm_name)}
+                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-lg"
+                                  icon={"fluent:delete-16-regular"}
+                                />
                               </div>
                             </TableCell>
                           );
@@ -254,6 +221,8 @@ const MyTable = ({ columns, tableDataApi }) => {
           </div>
         )}
       </div>
+
+      <SimpleDialog delData={delDialog} onClose={(id) => handleCloseDeldialog(id)} />
     </div>
   );
 };
@@ -284,3 +253,47 @@ const NoData = () => {
     </div>
   );
 };
+
+function SimpleDialog(props) {
+  const { onClose, delData } = props;
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  const ClickDel = () => {
+    onClose(delData?.id);
+  };
+
+  return (
+    <Dialog
+      PaperProps={{
+        style: {
+          borderRadius: 15,
+        },
+      }}
+      fullWidth
+      maxWidth="xs"
+      onClose={handleClose}
+      open={delData?.open}
+    >
+      <DialogContent>
+        <div className="flex flex-col items-center">
+          <Icon
+            className="size-[80px] text-red-500 border-2 border-red-500 rounded-full p-3 bg-red-100"
+            icon="typcn:warning"
+          />
+          <h2 className="text-center font-bold text-xl mb-1 mt-3">Are You Sure ??</h2>
+          <p className="text-sm opacity-70 text-center">
+            This action cannot be undone. All values associated with
+            <span className="font-bold text-red-500">{delData?.name}</span> field will be lost.
+          </p>
+        </div>
+        <div className="flex gap-4 mt-5">
+          <OutlinedBtn onClick={handleClose} icon={"ion:close-outline"} border="gray" extra="w-1/2" text="Cancel" />
+          <FilledBtn onClick={ClickDel} icon={"fluent:delete-16-regular"} bg="red" extra="w-1/2" text="yes, Delete" />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
