@@ -1,7 +1,9 @@
 import * as Yup from "yup";
 
 export const loginValidationSchema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Email is Required"),
+  email: Yup.string()
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
+    .required("Email is Required"),
   password: Yup.string().required("Password is Required"),
   age: Yup.number()
     .required("Age is required")
@@ -13,12 +15,18 @@ const employeeSchema = Yup.object().shape({
   first_name: Yup.string().required("First Name is required"),
   last_name: Yup.string().required("Last Name is required"),
   phone_number: Yup.string().required("Phone Number is required"),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
-  linkedin: Yup.string(),
+  email: Yup.string()
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
+    .required("Email is Required")
+    .required("Email is required"),
+  linkedin: Yup.string().required("Linkedin url is required"),
   // Add more fields as needed
 });
 export const investorValidationSchema = Yup.object({
-  firm_email: Yup.string().email("Invalid email address").required("Email is Required"),
+  firm_email: Yup.string()
+    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
+    .required("Email is Required")
+    .required("Email is Required"),
   firm_name: Yup.string().required("Firm Name is Required"),
   type: Yup.string().required("Type is Required"),
   sector_focus: Yup.array().min(1, "At least one sector focus is required"),
