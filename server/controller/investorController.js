@@ -24,26 +24,34 @@ export const multiAddInvestor = async (req, res) => {
 export const getAllInvestor = async (req, res) => {
   try {
     // Check for query parameters
-    const { limit, skip } = req.query;
+    const { limit, skip, email } = req.query;
 
-    let investorsQuery = InvestorFirmModel.find({}, { __v: 0 });
+    let investorsQuery = {};
+
+    // If email is provided, add it to the query
+    if (email) {
+      investorsQuery = { ...investorsQuery, firm_email: { $regex: `^${email}`, $options: "i" } };
+    }
+
+    // Create the initial query
+    let query = InvestorFirmModel.find(investorsQuery, { __v: 0 });
 
     // Count total documents before applying limit and skip
-    let totalCount = await InvestorFirmModel.countDocuments();
+    let totalCount = await InvestorFirmModel.countDocuments(investorsQuery);
 
     // Apply limit and skip if provided
     if (limit) {
       const parsedLimit = parseInt(limit, 10);
-      investorsQuery = investorsQuery.limit(parsedLimit);
+      query = query.limit(parsedLimit);
     }
 
     if (skip) {
       const parsedSkip = parseInt(skip, 10);
-      investorsQuery = investorsQuery.skip(parsedSkip);
+      query = query.skip(parsedSkip);
     }
 
     // Execute the query
-    const investors = await investorsQuery.exec();
+    const investors = await query.exec();
 
     // Format the data to match the desired structure
     const formattedInvestors = investors.map((investor, index) => {

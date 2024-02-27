@@ -28,6 +28,7 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [delDialog, setDelDialog] = useState({ open: false, id: "", name: "" });
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchEmail, setSearchEmail] = useState(null);
 
   useEffect(() => {
     const limit = searchParams.get("limit") || 5;
@@ -108,7 +109,11 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
       <div className="flex justify-between items-center gap-2 border-b py-3 px-3">
         <div className="flex items-center gap-1 w-full max-w-xs py-1.5 px-3 border-2 rounded-lg focus:outline-sky-600">
           <Icon className="text-2xl opacity-50" icon="fluent:text-bullet-list-square-search-20-regular" />
-          <input placeholder="Search by Email..." className="w-full outline-none" />
+          <input
+            onChange={(e) => setSearchEmail(e.target.value)}
+            placeholder="Search by Email..."
+            className="w-full outline-none"
+          />
         </div>
         <div className="">
           <OutlinedBtn icon="circum:export" text="Export" />

@@ -185,8 +185,8 @@ const AddInvestor = () => {
             <MyInput
               name="ticket_size"
               type="number"
-              label="Ticket Size"
-              placeholder="Enter ticket size"
+              label="Ticket Size in USD($)"
+              placeholder="Enter ticket size in USD($)"
               value={formik.values.ticket_size}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -327,6 +327,7 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
+              disabled={formik.values.geography.global} // Disable based on global value
               id="geography_country"
               options={countries} // This should be your country options
               value={formik.values.geography.country}
@@ -361,6 +362,7 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
+              disabled={formik.values.geography.global} // Disable based on global value
               id="geography_state"
               options={indianStates} // This should be your state options
               value={formik.values.geography.state}

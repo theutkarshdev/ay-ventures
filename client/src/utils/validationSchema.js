@@ -12,8 +12,12 @@ export const loginValidationSchema = Yup.object({
 });
 
 const employeeSchema = Yup.object().shape({
-  first_name: Yup.string().required("First Name is required"),
-  last_name: Yup.string().required("Last Name is required"),
+  first_name: Yup.string()
+    .matches(/^[a-zA-Z]+$/, "First Name must contain only letters")
+    .required("First Name is required"),
+  last_name: Yup.string()
+    .matches(/^[a-zA-Z]+$/, "Last Name must contain only letters")
+    .required("Last Name is required"),
   phone_number: Yup.string().required("Phone Number is required"),
   email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
@@ -52,9 +56,9 @@ export const investorValidationSchema = Yup.object({
   // total_dealflow_count: Yup.number()
   //   .required("Total Dealflow Count is Required")
   //   .positive("Total Dealflow Count must be a positive number"),
-  geography: Yup.object().shape({
-    country: Yup.array().min(1, "At least one country is required"),
-  }),
+  // geography: Yup.object().shape({
+  //   country: Yup.array().min(1, "At least one country is required"),
+  // }),
   preference: Yup.object().shape({
     sc_st_obc: Yup.boolean(),
     women: Yup.boolean(),
