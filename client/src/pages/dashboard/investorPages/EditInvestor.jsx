@@ -67,16 +67,16 @@ const AddInvestor = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: investorValidationSchema,
-    onSubmit: (values, { resetForm }) => {
-      handleSubmit(values, { resetForm });
+    onSubmit: (values) => {
+      handleSubmit(values);
     },
   });
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values) => {
     const loadingToastId = toast.loading("Please wait...");
     try {
       if (isEqual(prevInvestorData, values)) {
-        return toast.warning("No fields are changed !!");
+        return toast.error("No fields are changed !!", { id: loadingToastId });
       }
       const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/api/investor/update/${id}`, values);
       if (response.status === 200) {
@@ -87,6 +87,7 @@ const AddInvestor = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });
+      console.log(error);
     }
   };
 
