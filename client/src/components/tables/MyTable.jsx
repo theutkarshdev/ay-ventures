@@ -161,18 +161,18 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
                               <div className="flex gap-2 justify-center">
                                 <Icon
                                   onClick={() => handleView(row)}
-                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-xl"
+                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-yellow-100 text-yellow-500 border-yellow-500 text-xl"
                                   icon={"fluent:eye-16-regular"}
                                 />
 
                                 <Icon
                                   onClick={() => handleEdit(row)}
-                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-lg"
+                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-blue-100 text-blue-500 border-blue-500 text-lg"
                                   icon={"fluent:edit-16-regular"}
                                 />
                                 <Icon
                                   onClick={() => handleDelete(row._id, row.firm_name)}
-                                  className="cursor-pointer p-2 border opacity-70 size-8 rounded-md bg-slate-100 text-lg"
+                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-red-100 text-red-500 border-red-500 text-lg"
                                   icon={"fluent:delete-16-regular"}
                                 />
                               </div>

@@ -13,6 +13,7 @@ import StartUpList from "./../pages/dashboard/startUpPages/StartUpList";
 import AddStartUp from "./../pages/dashboard/startUpPages/AddStartUp";
 import ViewStartUp from "./../pages/dashboard/startUpPages/ViewStartUp";
 import EditStartUp from "./../pages/dashboard/startUpPages/EditStartUp";
+import DealFlowList from "../pages/dashboard/dealFlowPages/DealFlowList";
 
 // Create router configuration
 export const AdminRoutes = [
@@ -63,6 +64,15 @@ export const AdminRoutes = [
           {
             path: "edit/:id",
             element: <EditStartUp />,
+          },
+        ],
+      },
+      {
+        path: "/deal-flow",
+        children: [
+          {
+            index: true,
+            element: <DealFlowList />,
           },
         ],
       },

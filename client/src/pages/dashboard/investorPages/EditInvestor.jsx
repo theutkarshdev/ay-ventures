@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { InputAdornment } from "@mui/material";
-import { Icon } from "@iconify/react";
 import { useFormik } from "formik";
 import MyInput from "./../../../components/form/MyInput";
 import FilledBtn from "./../../../components/buttons/FilledBtn";
@@ -8,8 +6,7 @@ import MySelect from "./../../../components/form/MySelect";
 import { investorValidationSchema } from "./../../../utils/validationSchema";
 import PageNav from "./../../../components/header/PageNav";
 import { Autocomplete } from "@mui/material";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { isEqual } from "lodash";
 import {
   indianStates,
   investorTypes,
@@ -18,6 +15,10 @@ import {
   dealStructureOptions,
   countries,
 } from "../../../utils/options";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Icon } from "@iconify/react";
+import { useParams } from "react-router-dom";
 
 const initialValues = {
   firm_name: "",
@@ -41,6 +42,7 @@ const initialValues = {
   geography: {
     country: [],
     state: [],
+    global: false,
   },
   preference: {
     sc_st_obc: false,
@@ -53,23 +55,40 @@ const initialValues = {
       phone_number: "",
       email: "",
       linkedin: "",
-      initial_email: [],
     },
   ],
 };
 
-const EditInvestor = () => {
+const AddInvestor = () => {
   const [employees, setEmployees] = useState(initialValues.employees);
+  const [prevInvestorData, setPrevInvestorData] = useState({});
   const { id } = useParams();
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: investorValidationSchema,
-    onSubmit: (values) => {
-      // Submit logic
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
+      handleSubmit(values, { resetForm });
     },
   });
+
+  const handleSubmit = async (values, { resetForm }) => {
+    const loadingToastId = toast.loading("Please wait...");
+    try {
+      if (isEqual(prevInvestorData, values)) {
+        return toast.warning("No fields are changed !!");
+      }
+      const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/api/investor/update/${id}`, values);
+      if (response.status === 200) {
+        toast.success("Investor Added Successfully...", { id: loadingToastId });
+        setEmployees(initialValues.employees);
+      } else {
+        toast.error("Facing some error !!", { id: loadingToastId });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });
+    }
+  };
 
   const handleAddEmployee = () => {
     // Create a new employee object
@@ -85,20 +104,30 @@ const EditInvestor = () => {
     setEmployees([...employees, newEmployee]);
   };
 
+  const handleRemoveEmployee = (index) => {
+    // Remove employee from Formik values
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      employees: prevValues.employees.filter((_, i) => i !== index),
+    }));
+
+    // Remove employee from local state
+    setEmployees((prevEmployees) => prevEmployees.filter((_, i) => i !== index));
+  };
+
   const fetchInvestor = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACK_URL}/api/investor/get/${id}`);
 
       if (response.status === 200) {
-        console.log(response?.data?.data);
-
+        setPrevInvestorData(response?.data?.data);
         // Set formik values with fetched data
         formik.setValues({
           ...response?.data?.data,
           geography: {
-            country: response?.data?.data?.geography?.country || "",
-            state: response?.data?.data?.geography?.state || "",
-            location: response?.data?.data?.geography?.location || [],
+            country: response?.data?.data?.geography?.country || [],
+            state: response?.data?.data?.geography?.state || [],
+            global: response?.data?.data?.geography?.global || false,
           },
           employees: response?.data?.data?.employees || [],
         });
@@ -191,8 +220,8 @@ const EditInvestor = () => {
             <MyInput
               name="ticket_size"
               type="number"
-              label="Ticket Size"
-              placeholder="Enter ticket size"
+              label="Ticket Size in USD($)"
+              placeholder="Enter ticket size in USD($)"
               value={formik.values.ticket_size}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -242,7 +271,7 @@ const EditInvestor = () => {
                   {...params}
                   name="rounds_invest_in"
                   label="Rounds invest in"
-                  placeholder="Select rounds invest in"
+                  placeholder="Select Rounds invest in"
                   error={formik.touched.rounds_invest_in && Boolean(formik.errors.rounds_invest_in)}
                   helperText={formik.touched.rounds_invest_in && formik.errors.rounds_invest_in}
                 />
@@ -250,7 +279,7 @@ const EditInvestor = () => {
             />
 
             {/* Checkbox for lead investor required */}
-            <div className="flex items-center">
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -288,8 +317,8 @@ const EditInvestor = () => {
             <MyInput
               name="revenue"
               type="number"
-              label="Revenue"
-              placeholder="Enter revenue"
+              label="Revenue in USD($)"
+              placeholder="Enter revenue in USD($)"
               value={formik.values.revenue}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -297,25 +326,12 @@ const EditInvestor = () => {
               helperText={formik.touched.revenue && formik.errors.revenue ? formik.errors.revenue : ""}
             />
 
-            {/* Company Age */}
-            <MyInput
-              name="company_age"
-              type="number"
-              label="Company Age"
-              placeholder="Enter company age"
-              value={formik.values.company_age}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.company_age && formik.errors.company_age}
-              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
-            />
-
             {/* Valuation Cap */}
             <MyInput
               name="valuation_cap"
               type="number"
-              label="Valuation Cap"
-              placeholder="Enter valuation cap"
+              label="Valuation Cap in USD($)"
+              placeholder="Enter valuation cap in USD($)"
               value={formik.values.valuation_cap}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -324,105 +340,29 @@ const EditInvestor = () => {
                 formik.touched.valuation_cap && formik.errors.valuation_cap ? formik.errors.valuation_cap : ""
               }
             />
-            {/* 
-            <Autocomplete
-              size="small"
-              multiple
-              id="already_emailed"
-              options={startUpOptions}
-              value={formik.values.already_emailed}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("already_emailed", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="already_emailed"
-                  label="Who selected"
-                  placeholder="Choose who selected"
-                  error={formik.touched.already_emailed && Boolean(formik.errors.already_emailed)}
-                  helperText={formik.touched.already_emailed && formik.errors.already_emailed}
-                />
-              )}
-            />
-
-            <Autocomplete
-              size="small"
-              multiple
-              id="no_response_at_all"
-              options={startUpOptions}
-              value={formik.values.no_response_at_all}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("no_response_at_all", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="no_response_at_all"
-                  label="Who rejected"
-                  placeholder="Choose who rejected"
-                  error={formik.touched.no_response_at_all && Boolean(formik.errors.no_response_at_all)}
-                  helperText={formik.touched.no_response_at_all && formik.errors.no_response_at_all}
-                />
-              )}
-            />
-
-            <MyInput
-              name="open_dealflow_count"
-              type="number"
-              label="Open Dealflow Count"
-              placeholder="Enter open dealflow count"
-              value={formik.values.open_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.open_dealflow_count && formik.errors.open_dealflow_count}
-              helperText={
-                formik.touched.open_dealflow_count && formik.errors.open_dealflow_count
-                  ? formik.errors.open_dealflow_count
-                  : ""
-              }
-            />
-
-            <MyInput
-              name="closed_dealflow_count"
-              type="number"
-              label="Closed Dealflow Count"
-              placeholder="Enter closed dealflow count"
-              value={formik.values.closed_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.closed_dealflow_count && formik.errors.closed_dealflow_count}
-              helperText={
-                formik.touched.closed_dealflow_count && formik.errors.closed_dealflow_count
-                  ? formik.errors.closed_dealflow_count
-                  : ""
-              }
-            />
-
-            <MyInput
-              name="total_dealflow_count"
-              type="number"
-              label="Total Dealflow Count"
-              placeholder="Enter total dealflow count"
-              value={formik.values.total_dealflow_count}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.total_dealflow_count && formik.errors.total_dealflow_count}
-              helperText={
-                formik.touched.total_dealflow_count && formik.errors.total_dealflow_count
-                  ? formik.errors.total_dealflow_count
-                  : ""
-              }
-            /> */}
           </div>
         </div>
+
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Registered Location</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            {/* Company Age */}
+            <MyInput
+              name="company_age"
+              type="number"
+              label="Minimum Company Age in Years"
+              placeholder="Enter minimum company age in Years"
+              value={formik.values.company_age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.company_age && formik.errors.company_age}
+              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
+            />
             {/* Autocomplete for Country */}
             <Autocomplete
               size="small"
               multiple
+              disabled={formik.values.geography.global} // Disable based on global value
               id="geography_country"
               options={countries} // This should be your country options
               value={formik.values.geography.country}
@@ -457,6 +397,7 @@ const EditInvestor = () => {
             <Autocomplete
               size="small"
               multiple
+              disabled={formik.values.geography.global} // Disable based on global value
               id="geography_state"
               options={indianStates} // This should be your state options
               value={formik.values.geography.state}
@@ -486,14 +427,22 @@ const EditInvestor = () => {
                 />
               )}
             />
-          </div>
-        </div>
 
-        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+            <div className="border rounded p-2 border-gray-400">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  name="geography.global" // Corrected name attribute
+                  checked={formik.values.geography.global}
+                  onChange={formik.handleChange}
+                  className="mt-0.5"
+                />
+                Global
+              </label>
+            </div>
+
             {/* Checkboxes for preference */}
-            <div>
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -505,7 +454,7 @@ const EditInvestor = () => {
                 SC/ST/OBC
               </label>
             </div>
-            <div>
+            <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -520,6 +469,7 @@ const EditInvestor = () => {
           </div>
         </div>
 
+        {/* Employee section */}
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-xl opacity-70">All Employees</h2>
@@ -528,131 +478,88 @@ const EditInvestor = () => {
 
           {employees.map((employee, index) => (
             <div key={index} className="mt-5 border rounded-lg p-4">
-              <h2>Employee {index + 1}</h2>
-              {/* First Name */}
+              <div className="flex justify-between">
+                <h2 className="font-semibold">Employee {index + 1}</h2>
+                {index > 0 && (
+                  <Icon
+                    className="text-xl text-white bg-red-500 size-8 p-1.5 cursor-pointer hover:bg-red-600 rounded-lg"
+                    icon="solar:trash-bin-trash-linear"
+                    onClick={() => handleRemoveEmployee(index)}
+                  />
+                )}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
                 <MyInput
                   name={`employees[${index}].first_name`}
                   type="text"
                   label="First Name"
                   placeholder="Enter first name"
-                  id={`first_name_${index}`}
-                  value={formik.values.employees[index].first_name} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.first_name}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].first_name
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.first_name
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].first_name
-                      ? formik.errors.employees[index].first_name
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.first_name
                   }
                 />
-                {/* Last Name */}
                 <MyInput
                   name={`employees[${index}].last_name`}
                   type="text"
                   label="Last Name"
                   placeholder="Enter last name"
-                  id={`last_name_${index}`}
-                  value={formik.values.employees[index].last_name} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.last_name}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].last_name
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.last_name
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].last_name
-                      ? formik.errors.employees[index].last_name
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.last_name
                   }
                 />
-                {/* Phone Number */}
                 <MyInput
                   name={`employees[${index}].phone_number`}
                   type="text"
                   label="Phone Number"
                   placeholder="Enter phone number"
-                  id={`phone_number_${index}`}
-                  value={formik.values.employees[index].phone_number} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.phone_number}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].phone_number
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.phone_number
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].phone_number
-                      ? formik.errors.employees[index].phone_number
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.phone_number
                   }
                 />
-                {/* Email */}
                 <MyInput
                   name={`employees[${index}].email`}
                   type="text"
                   label="Email"
                   placeholder="Enter email"
-                  id={`email_${index}`}
-                  value={formik.values.employees[index].email} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.email}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].email
-                  }
+                  error={formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.email}
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].email
-                      ? formik.errors.employees[index].email
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.email
                   }
                 />
-                {/* LinkedIn */}
                 <MyInput
                   name={`employees[${index}].linkedin`}
                   type="text"
                   label="LinkedIn"
                   placeholder="Enter LinkedIn profile URL"
-                  id={`linkedin_${index}`}
-                  value={formik.values.employees[index].linkedin} // Use formik values here
-                  onChange={formik.handleChange} // Use formik's handleChange
+                  value={formik.values.employees[index]?.linkedin}
+                  onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].linkedin
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.linkedin
                   }
                   helperText={
-                    formik.touched.employees &&
-                    formik.errors.employees &&
-                    formik.errors.employees[index] &&
-                    formik.errors.employees[index].linkedin
-                      ? formik.errors.employees[index].linkedin
-                      : ""
+                    formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.linkedin
                   }
                 />
                 {/* Add more fields for other employee details as needed */}
@@ -675,4 +582,4 @@ const EditInvestor = () => {
   );
 };
 
-export default EditInvestor;
+export default AddInvestor;

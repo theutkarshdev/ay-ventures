@@ -162,10 +162,36 @@ export const getInvestor = async (req, res) => {
   }
 };
 
+export const updateInvestor = async (req, res) => {
+  const investorData = req.body;
+  const { id } = req.params;
+  try {
+    const existingInvestor = await InvestorFirmModel.findById(id);
+    if (!existingInvestor) {
+      return res.status(404).json({ message: `Investor with ID ${id} not found` });
+    }
+    // Check if the request body is empty
+    if (Object.keys(investorData).length === 0) {
+      return res.status(400).json({ message: "Request body is empty" });
+    }
+    // Update investor fields
+    Object.keys(investorData).forEach((key) => {
+      existingInvestor[key] = investorData[key];
+    });
+
+    // Save updated investor
+    const updatedInvestor = await existingInvestor.save();
+
+    return res.status(200).json({ message: "Updated Successfully...", investor: updatedInvestor, investorData });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 export const delInvestor = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedInvestor = await InvestorFirmModel.findByIdAndDelete(id); // Use findByIdAndDelete to delete by ID
+    const deletedInvestor = await InvestorFirmModel.findByIdAndDelete(id);
     if (!deletedInvestor) {
       return res.status(404).json({ message: "Investor not found" });
     }
