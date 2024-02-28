@@ -20,7 +20,7 @@ const FirmSchema = new Schema({
   website: String,
   date_onboarded: String,
   rounds_invest_in: [String],
-  lead_investor_required: Boolean,
+  lead_investor_required: { type: Boolean, default: false },
   deal_structure: [String],
   revenue: Number,
   company_age: Number,
@@ -28,11 +28,11 @@ const FirmSchema = new Schema({
   geography: {
     country: [String],
     state: [String],
-    global: Boolean,
+    global: { type: Boolean, default: false },
   },
   preference: {
-    sc_st_obc: Boolean,
-    women: Boolean,
+    sc_st_obc: { type: Boolean, default: false },
+    women: { type: Boolean, default: false },
   },
   employees: [EmployeeSchema], // Embed the Employee schema
 });
@@ -40,4 +40,4 @@ const FirmSchema = new Schema({
 // Create the model
 const InvestorFirmModel = mongoose.model("InvestorFirm", FirmSchema);
 
-export default InvestorFirmModel; 
+export default InvestorFirmModel;
