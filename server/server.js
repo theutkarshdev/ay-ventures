@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectToMongoDB from "./db.js";
-import investorRoutes from "./routes/investorRoutes.js"
+import investorRoutes from "./routes/investorRoutes.js";
+import startUpRoutes from "./routes/StartUpRoutes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +19,7 @@ connectToMongoDB()
   .then(() => {
     // Use the user routes
     app.use("/api/investor", investorRoutes);
+    app.use("/api/startup", startUpRoutes);
 
     // Start the server
     app.listen(PORT, () => {
