@@ -5,10 +5,6 @@ export const loginValidationSchema = Yup.object({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required"),
   password: Yup.string().required("Password is Required"),
-  age: Yup.number()
-    .required("Age is required")
-    .positive("Age must be a positive number")
-    .integer("Age must be an integer"),
 });
 
 const employeeSchema = Yup.object().shape({
