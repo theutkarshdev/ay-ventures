@@ -4,11 +4,13 @@ import cors from "cors";
 import connectToMongoDB from "./db.js";
 import investorRoutes from "./routes/investorRoutes.js";
 import startUpRoutes from "./routes/startUpRoutes.js";
+import { startCronJob } from "./controller/cron.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+startCronJob();
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
