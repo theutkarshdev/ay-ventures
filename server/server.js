@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectToMongoDB from "./db.js";
 import investorRoutes from "./routes/investorRoutes.js";
-import startUpRoutes from "./routes/StartUpRoutes.js";
+import startUpRoutes from "./routes/startUpRoutes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
