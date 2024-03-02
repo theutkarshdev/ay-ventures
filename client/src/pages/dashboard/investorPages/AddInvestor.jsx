@@ -32,11 +32,6 @@ const initialValues = {
   revenue: "",
   company_age: "",
   valuation_cap: "",
-  already_emailed: [],
-  no_response_at_all: [],
-  open_dealflow_count: "",
-  closed_dealflow_count: "",
-  total_dealflow_count: "",
   geography: {
     country: [],
     state: [],

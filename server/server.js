@@ -10,7 +10,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-startCronJob();
+//startCronJob();
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());

@@ -35,30 +35,14 @@ const ViewInvestor = () => {
       <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border">
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Basic Info</h2>
         <div className="flex flex-wrap gap-5 items-center">
-          <div className="flex justify-center items-center w-full md:w-auto">
-            <div className="relative">
-              <img
-                className="size-[150px] object-cover rounded-full border-2 border-sky-600"
-                src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/company-logo-design-template-e089327a5c476ce5c70c74f7359c5898_screen.jpg"
-              />
-              <Icon className="absolute right-1 top-2/3 text-3xl text-green-500" icon={"ph:seal-check-fill"} />
-            </div>
-          </div>
           <div>
-            <h1 className="font-semibold text-2xl">{investorApi.firm_name}</h1>
-            <p className="flex gap-1 text-sm opacity-70 mb-5 items-center">
+            <h1 className="font-semibold text-3xl mb-3">{investorApi.firm_name}</h1>
+            <p className="flex gap-1 text-sm opacity-70 items-center">
               <Icon className="mt-1" icon="solar:letter-outline" /> {investorApi.firm_email}
             </p>
-            <div>
-              <p className="flex gap-1 text-sm opacity-70 items-center">
-                <Icon className="mt-1" icon="solar:map-point-rotate-linear" />
-                {investorApi?.geography?.state + ", " + investorApi?.geography?.country}
-              </p>
-
-              <p className="flex gap-1 text-sm opacity-70 items-center">
-                <Icon className="mt-1" icon="solar:link-minimalistic-2-linear" /> {investorApi.website}
-              </p>
-            </div>
+            <p className="flex gap-1 text-sm opacity-70 items-center">
+              <Icon className="mt-1" icon="solar:link-minimalistic-2-linear" /> {investorApi.website}
+            </p>
           </div>
         </div>
       </div>
@@ -87,13 +71,56 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Company Age</h4>
+            <h4 className="text-sm font-semibold">Minimum Company Age</h4>
             <p className="text-sm opacity-70">{investorApi.company_age} Years</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Valuation Cap</h4>
             <p className="text-sm opacity-70">{investorApi.valuation_cap}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Country</h4>
+            <p className="text-sm opacity-70">{investorApi.geography?.country}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">State</h4>
+            <p className="text-sm opacity-70">{investorApi.geography?.state}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Global</h4>
+            <p className="text-sm opacity-70">{investorApi.geography?.global ? "true" : "false"}</p>
+          </div>
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Lead Investor Required</h4>
+            <p className="text-sm opacity-70">{investorApi.lead_investor_required ? "true" : "false"}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">SC/ST/OBC Preference</h4>
+            <p className="text-sm opacity-70">{investorApi.preference?.sc_st_obc ? "true" : "false"}</p>
+          </div>
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Women Prefrence</h4>
+            <p className="text-sm opacity-70">{investorApi.preference?.women ? "true" : "false"}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Sector Focus</h4>
+            <p className="text-sm opacity-70">{investorApi.sector_focus}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Rounds Invest In</h4>
+            <p className="text-sm opacity-70">{investorApi.rounds_invest_in}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Deal Structure</h4>
+            <p className="text-sm opacity-70">{investorApi.deal_structure}</p>
           </div>
         </div>
       </div>

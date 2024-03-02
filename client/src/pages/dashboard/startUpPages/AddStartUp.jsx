@@ -12,13 +12,13 @@ import {
   sectorFocusOptions,
   dealStructureOptions,
   countries,
+  roundInvestOptions,
 } from "../../../utils/options";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const initialValues = {
   dateOnboarded: "",
-  daysSinceOnboarded: 0,
   companyName: "",
   founder: "",
   email: "",
@@ -106,22 +106,6 @@ const AddStartUp = () => {
               error={formik.touched.dateOnboarded && formik.errors.dateOnboarded}
               helperText={
                 formik.touched.dateOnboarded && formik.errors.dateOnboarded ? formik.errors.dateOnboarded : ""
-              }
-            />
-
-            {/* Days Since Onboarded */}
-            <MyInput
-              name="daysSinceOnboarded"
-              type="number"
-              label="Days Since Onboarded"
-              value={formik.values.daysSinceOnboarded}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.daysSinceOnboarded && formik.errors.daysSinceOnboarded}
-              helperText={
-                formik.touched.daysSinceOnboarded && formik.errors.daysSinceOnboarded
-                  ? formik.errors.daysSinceOnboarded
-                  : ""
               }
             />
 
@@ -387,10 +371,10 @@ const AddStartUp = () => {
             />
 
             {/* Current Round */}
-            <MyInput
+            <MySelect
               name="currentRound"
-              type="text"
               label="Current Round"
+              options={roundInvestOptions}
               value={formik.values.currentRound}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -442,7 +426,7 @@ const AddStartUp = () => {
         </div>
 
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Investor Preferences</h2>
+          <h2 className="font-semibold text-xl opacity-70">StartUp Preferences</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
             {/* Investor Type Preference */}
             <Autocomplete
