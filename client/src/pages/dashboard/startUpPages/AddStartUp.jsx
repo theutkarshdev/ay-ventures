@@ -16,6 +16,7 @@ import {
 } from "../../../utils/options";
 import axios from "axios";
 import toast from "react-hot-toast";
+import QuillEditor from "../../../components/form/QuillEditor";
 
 const initialValues = {
   dateOnboarded: "",
@@ -157,34 +158,6 @@ const AddStartUp = () => {
               helperText={formik.touched.phoneNumber && formik.errors.phoneNumber ? formik.errors.phoneNumber : ""}
             />
 
-            {/* About The Company */}
-            <MyInput
-              name="aboutTheCompany"
-              type="text"
-              label="About The Company"
-              value={formik.values.aboutTheCompany}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.aboutTheCompany && formik.errors.aboutTheCompany}
-              helperText={
-                formik.touched.aboutTheCompany && formik.errors.aboutTheCompany ? formik.errors.aboutTheCompany : ""
-              }
-            />
-
-            {/* Business Model */}
-            <MyInput
-              name="businessModel"
-              type="text"
-              label="Business Model"
-              value={formik.values.businessModel}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.businessModel && formik.errors.businessModel}
-              helperText={
-                formik.touched.businessModel && formik.errors.businessModel ? formik.errors.businessModel : ""
-              }
-            />
-
             {/* Revenue */}
             <MyInput
               name="revenue"
@@ -196,43 +169,6 @@ const AddStartUp = () => {
               error={formik.touched.revenue && formik.errors.revenue}
               helperText={formik.touched.revenue && formik.errors.revenue ? formik.errors.revenue : ""}
             />
-
-            {/* Traction */}
-            <MyInput
-              name="traction"
-              type="text"
-              label="Traction"
-              value={formik.values.traction}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.traction && formik.errors.traction}
-              helperText={formik.touched.traction && formik.errors.traction ? formik.errors.traction : ""}
-            />
-
-            {/* Pitch Deck */}
-            <MyInput
-              name="pitchDeck"
-              type="text"
-              label="Pitch Deck"
-              value={formik.values.pitchDeck}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.pitchDeck && formik.errors.pitchDeck}
-              helperText={formik.touched.pitchDeck && formik.errors.pitchDeck ? formik.errors.pitchDeck : ""}
-            />
-
-            {/* Business Plan */}
-            <MyInput
-              name="businessPlan"
-              type="text"
-              label="Business Plan"
-              value={formik.values.businessPlan}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.businessPlan && formik.errors.businessPlan}
-              helperText={formik.touched.businessPlan && formik.errors.businessPlan ? formik.errors.businessPlan : ""}
-            />
-
             {/* MIS */}
             <MyInput
               name="mIS"
@@ -298,18 +234,6 @@ const AddStartUp = () => {
               helperText={formik.touched.valuation && formik.errors.valuation ? formik.errors.valuation : ""}
             />
 
-            {/* About The Team */}
-            <MyInput
-              name="aboutTheTeam"
-              type="text"
-              label="About The Team"
-              value={formik.values.aboutTheTeam}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.aboutTheTeam && formik.errors.aboutTheTeam}
-              helperText={formik.touched.aboutTheTeam && formik.errors.aboutTheTeam ? formik.errors.aboutTheTeam : ""}
-            />
-
             {/* Sector */}
             <Autocomplete
               size="small"
@@ -358,16 +282,26 @@ const AddStartUp = () => {
               }
             />
 
-            {/* Commitments */}
             <MyInput
-              name="commitments"
+              name="pitchDeck"
               type="text"
-              label="Commitments"
-              value={formik.values.commitments}
+              label="Pitch Deck"
+              value={formik.values.pitchDeck}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.commitments && formik.errors.commitments}
-              helperText={formik.touched.commitments && formik.errors.commitments ? formik.errors.commitments : ""}
+              error={formik.touched.pitchDeck && formik.errors.pitchDeck}
+              helperText={formik.touched.pitchDeck && formik.errors.pitchDeck ? formik.errors.pitchDeck : ""}
+            />
+
+            <MyInput
+              name="businessPlan"
+              type="text"
+              label="Business Plan"
+              value={formik.values.businessPlan}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.businessPlan && formik.errors.businessPlan}
+              helperText={formik.touched.businessPlan && formik.errors.businessPlan ? formik.errors.businessPlan : ""}
             />
 
             {/* Current Round */}
@@ -424,7 +358,6 @@ const AddStartUp = () => {
             />
           </div>
         </div>
-
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
           <h2 className="font-semibold text-xl opacity-70">StartUp Preferences</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
@@ -479,22 +412,6 @@ const AddStartUp = () => {
                 Any Lead Investor
               </label>
             </div>
-
-            {/* USP And Competitors */}
-            <MyInput
-              name="uSPAndCompetitors"
-              type="text"
-              label="USP And Competitors"
-              value={formik.values.uSPAndCompetitors}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.uSPAndCompetitors && formik.errors.uSPAndCompetitors}
-              helperText={
-                formik.touched.uSPAndCompetitors && formik.errors.uSPAndCompetitors
-                  ? formik.errors.uSPAndCompetitors
-                  : ""
-              }
-            />
 
             {/* Deal Structure */}
             <Autocomplete
@@ -562,46 +479,6 @@ const AddStartUp = () => {
               )}
             />
 
-            {/* GTM */}
-            <MyInput
-              name="gTM"
-              type="text"
-              label="Go To Market Strategy (GTM)"
-              value={formik.values.gTM}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.gTM && formik.errors.gTM}
-              helperText={formik.touched.gTM && formik.errors.gTM ? formik.errors.gTM : ""}
-            />
-
-            {/* Future Plans */}
-            <MyInput
-              name="futurePlans"
-              type="text"
-              label="Future Plans"
-              value={formik.values.futurePlans}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.futurePlans && formik.errors.futurePlans}
-              helperText={formik.touched.futurePlans && formik.errors.futurePlans ? formik.errors.futurePlans : ""}
-            />
-
-            {/* Problem And Solution */}
-            <MyInput
-              name="problemAndSolution"
-              type="text"
-              label="Problem And Solution"
-              value={formik.values.problemAndSolution}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.problemAndSolution && formik.errors.problemAndSolution}
-              helperText={
-                formik.touched.problemAndSolution && formik.errors.problemAndSolution
-                  ? formik.errors.problemAndSolution
-                  : ""
-              }
-            />
-
             {/* SC/ST/OBC Cofounders */}
 
             <div className="border rounded p-2 border-gray-400">
@@ -630,6 +507,69 @@ const AddStartUp = () => {
                 Any of the Cofounders Woman
               </label>
             </div>
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70 mb-5">All Details</h2>
+
+          <QuillEditor
+            formik={formik}
+            placeholder="Write some content here..."
+            name="aboutTheCompany"
+            label="About The Company"
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="aboutTheTeam"
+              label="About The Team"
+            />
+
+            <QuillEditor formik={formik} placeholder="Write some content here..." name="traction" label="Traction" />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="businessModel"
+              label="Business Model"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="commitments"
+              label="Commitments"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="gTM"
+              label="Go To Market Strategy (GTM)"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="uSPAndCompetitors"
+              label="USP And Competitors"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="futurePlans"
+              label="Future Plans"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="problemAndSolution"
+              label="Problem And Solution"
+            />
           </div>
         </div>
 

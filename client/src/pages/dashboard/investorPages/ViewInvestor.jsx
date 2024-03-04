@@ -49,7 +49,7 @@ const ViewInvestor = () => {
 
       <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border">
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Investment Info</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-4 break-all">
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Type</h4>
             <p className="text-sm opacity-70">{investorApi.type}</p>
@@ -125,13 +125,13 @@ const ViewInvestor = () => {
         </div>
       </div>
 
-      <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border">
+      <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border break-all">
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Employees Info</h2>
         {investorApi?.employees?.length > 0 &&
           investorApi?.employees?.map((emp, index) => (
             <div className="mt-5 bg-slate-100 rounded-lg p-4">
               <h3 className="text-lg font-semibold">Employee {index + 1}</h3>
-              <div className="grid grid-cols-3 gap-4 mt-4">
+              <div className="grid grid-cols-4 gap-4 mt-4 break-all">
                 <div className="border rounded-lg p-3 bg-white">
                   <h4 className="text-sm font-semibold">First Name</h4>
                   <p className="text-sm opacity-70">{emp.first_name}</p>

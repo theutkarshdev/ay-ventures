@@ -130,6 +130,7 @@ export const getStartUp = async (req, res) => {
     // Format the data to match the desired structure
     const formattedStartUp = {
       _id: startUp._id,
+      dateOnboarded: startUp.dateOnboarded,
       companyName: startUp.companyName,
       founder: startUp.founder,
       email: startUp.email,
