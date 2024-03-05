@@ -9,10 +9,10 @@ export const loginValidationSchema = Yup.object({
 
 const employeeSchema = Yup.object().shape({
   first_name: Yup.string()
-    .matches(/^[a-zA-Z]+$/, "First Name must contain only letters")
+    .matches(/^[a-zA-Z]+(?: [a-zA-Z]+)?$/, "First Name must contain only letters")
     .required("First Name is required"),
   last_name: Yup.string()
-    .matches(/^[a-zA-Z]+$/, "Last Name must contain only letters")
+    .matches(/^[a-zA-Z]+(?: [a-zA-Z]+)?$/, "Last Name must contain only letters")
     .required("Last Name is required"),
   phone_number: Yup.string()
     .matches(/^[\d+()-,]+$/, "Invalid phone format")
@@ -29,7 +29,7 @@ export const investorValidationSchema = Yup.object({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required")
     .required("Email is Required"),
-  firm_name: Yup.string().required("Firm Name is Required"),
+  firm_name: Yup.string().matches(/^[a-zA-Z]+(?: [a-zA-Z]+)?$/, "Firm Name must contain only letters").required("Firm Name is Required"),
   type: Yup.string().required("Type is Required"),
   sector_focus: Yup.array().min(1, "At least one sector focus is required"),
   ticket_size: Yup.number().required("Ticket Size is Required").positive("Ticket Size must be a positive number"),
@@ -55,7 +55,7 @@ export const investorValidationSchema = Yup.object({
 export const startUpValidationSchema = Yup.object().shape({
   dateOnboarded: Yup.date().required("Date onboarded is required"),
   companyName: Yup.string().required("Company name is required"),
-  founder: Yup.string().required("Founder name is required"),
+  founder: Yup.string().matches(/^[a-zA-Z]+(?: [a-zA-Z]+)?$/, "Founder Name must contain only letters").required("Founder name is required"),
   email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required"),
