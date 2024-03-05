@@ -1,4 +1,4 @@
-const investorTypes = ["Private Equity", "Family Office", "Angel Investor", "Micro VC", "VC", "Corporate Investor","Impact Investor"];
+const investorTypes = ["Private Equity", "Family Office", "Angel Investor", "Micro VC", "VC", "Corporate Investor"];
 
 const sectorFocusOptions = [
   "Edtech",

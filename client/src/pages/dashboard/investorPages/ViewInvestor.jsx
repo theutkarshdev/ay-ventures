@@ -51,13 +51,28 @@ const ViewInvestor = () => {
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Investment Info</h2>
         <div className="grid grid-cols-4 gap-4 break-all">
           <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Sector Focus</h4>
+            <p className="text-sm opacity-70">{investorApi.sector_focus}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Rounds Invest In</h4>
+            <p className="text-sm opacity-70">{investorApi.rounds_invest_in}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Deal Structure</h4>
+            <p className="text-sm opacity-70">{investorApi.deal_structure}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Type</h4>
             <p className="text-sm opacity-70">{investorApi.type}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Ticket Size</h4>
-            <p className="text-sm opacity-70">{investorApi.ticket_size}</p>
+            <p className="text-sm opacity-70">$ {investorApi.ticket_size}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -66,8 +81,8 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Revenue</h4>
-            <p className="text-sm opacity-70">{investorApi.revenue}</p>
+            <h4 className="text-sm font-semibold">Company Revenue</h4>
+            <p className="text-sm opacity-70">$ {investorApi.revenue}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -77,7 +92,12 @@ const ViewInvestor = () => {
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Valuation Cap</h4>
-            <p className="text-sm opacity-70">{investorApi.valuation_cap}</p>
+            <p className="text-sm opacity-70">$ {investorApi.valuation_cap}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Global</h4>
+            <p className="text-sm opacity-70">{investorApi.geography?.global ? "true" : "false"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -91,10 +111,6 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Global</h4>
-            <p className="text-sm opacity-70">{investorApi.geography?.global ? "true" : "false"}</p>
-          </div>
-          <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Lead Investor Required</h4>
             <p className="text-sm opacity-70">{investorApi.lead_investor_required ? "true" : "false"}</p>
           </div>
@@ -106,21 +122,6 @@ const ViewInvestor = () => {
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Women Prefrence</h4>
             <p className="text-sm opacity-70">{investorApi.preference?.women ? "true" : "false"}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Sector Focus</h4>
-            <p className="text-sm opacity-70">{investorApi.sector_focus}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Rounds Invest In</h4>
-            <p className="text-sm opacity-70">{investorApi.rounds_invest_in}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Deal Structure</h4>
-            <p className="text-sm opacity-70">{investorApi.deal_structure}</p>
           </div>
         </div>
       </div>

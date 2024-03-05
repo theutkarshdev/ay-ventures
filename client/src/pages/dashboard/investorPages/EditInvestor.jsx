@@ -174,6 +174,7 @@ const AddInvestor = () => {
             <MyInput
               name="firm_email"
               type="email"
+              disabled
               label="Investor Firm Email"
               placeholder="Ex: example@gmail.com"
               value={formik.values.firm_email}
@@ -279,20 +280,6 @@ const AddInvestor = () => {
               )}
             />
 
-            {/* Checkbox for lead investor required */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="lead_investor_required"
-                  checked={formik.values.lead_investor_required}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Lead Investor Required
-              </label>
-            </div>
-
             <Autocomplete
               size="small"
               multiple
@@ -312,6 +299,24 @@ const AddInvestor = () => {
                   helperText={formik.touched.deal_structure && formik.errors.deal_structure}
                 />
               )}
+            />
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            {/* Company Age */}
+            <MyInput
+              name="company_age"
+              type="number"
+              label="Minimum Company Age in Years"
+              placeholder="Enter minimum company age in Years"
+              value={formik.values.company_age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.company_age && formik.errors.company_age}
+              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
             />
 
             {/* Revenue */}
@@ -341,24 +346,20 @@ const AddInvestor = () => {
                 formik.touched.valuation_cap && formik.errors.valuation_cap ? formik.errors.valuation_cap : ""
               }
             />
-          </div>
-        </div>
 
-        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
-            {/* Company Age */}
-            <MyInput
-              name="company_age"
-              type="number"
-              label="Minimum Company Age in Years"
-              placeholder="Enter minimum company age in Years"
-              value={formik.values.company_age}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.company_age && formik.errors.company_age}
-              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
-            />
+            <div className="border rounded p-2 border-gray-400">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  name="geography.global" // Corrected name attribute
+                  checked={formik.values.geography.global}
+                  onChange={formik.handleChange}
+                  className="mt-0.5"
+                />
+                Global
+              </label>
+            </div>
+
             {/* Autocomplete for Country */}
             <Autocomplete
               size="small"
@@ -429,16 +430,17 @@ const AddInvestor = () => {
               )}
             />
 
+            {/* Checkbox for lead investor required */}
             <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  name="geography.global" // Corrected name attribute
-                  checked={formik.values.geography.global}
+                  name="lead_investor_required"
+                  checked={formik.values.lead_investor_required}
                   onChange={formik.handleChange}
                   className="mt-0.5"
                 />
-                Global
+                Lead Investor Required
               </label>
             </div>
 
@@ -539,6 +541,7 @@ const AddInvestor = () => {
                   name={`employees[${index}].email`}
                   type="text"
                   label="Email"
+                  disabled
                   placeholder="Enter email"
                   value={formik.values.employees[index]?.email}
                   onChange={formik.handleChange}
