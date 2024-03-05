@@ -14,7 +14,7 @@ const employeeSchema = Yup.object().shape({
   last_name: Yup.string()
     .matches(/^[a-zA-Z]+$/, "Last Name must contain only letters")
     .required("Last Name is required"),
-  phone_number: Yup.string().required("Phone Number is required"),
+  phone_number: Yup.string().matches(/^[\d+()-,]+$/, "Invalid phone format").required("Phone Number is required"),
   email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required")
@@ -41,20 +41,6 @@ export const investorValidationSchema = Yup.object({
     .positive("Company Age must be a positive number")
     .integer("Company Age must be an integer"),
   valuation_cap: Yup.number().required("Valuation Cap is Required").positive("Valuation Cap must be a positive number"),
-  // already_emailed: Yup.array().min(1, "At least one selected startup is required"),
-  // no_response_at_all: Yup.array().min(1, "At least one rejected startup is required"),
-  // open_dealflow_count: Yup.number()
-  //   .required("Open Dealflow Count is Required")
-  //   .positive("Open Dealflow Count must be a positive number"),
-  // closed_dealflow_count: Yup.number()
-  //   .required("Closed Dealflow Count is Required")
-  //   .positive("Closed Dealflow Count must be a positive number"),
-  // total_dealflow_count: Yup.number()
-  //   .required("Total Dealflow Count is Required")
-  //   .positive("Total Dealflow Count must be a positive number"),
-  // geography: Yup.object().shape({
-  //   country: Yup.array().min(1, "At least one country is required"),
-  // }),
   preference: Yup.object().shape({
     sc_st_obc: Yup.boolean(),
     women: Yup.boolean(),
@@ -69,7 +55,7 @@ export const startUpValidationSchema = Yup.object().shape({
   email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required"),
-  phoneNumber: Yup.string().required("Phone number is required"),
+  phoneNumber: Yup.string().matches(/^[\d+()-,]+$/, "Invalid phone format").required("Phone number is required"),
   aboutTheCompany: Yup.string().required("About the company is required"),
   businessModel: Yup.string().required("Business model is required"),
   revenue: Yup.number().min(100).required("Revenue is required"),
