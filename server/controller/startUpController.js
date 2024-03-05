@@ -195,19 +195,10 @@ export const updateStartUp = async (req, res) => {
       return res.status(400).json({ message: "Request body is empty" });
     }
 
-    let hasChanges = false;
-
-    // Check each field in startUpData
-    Object.keys(startUpData).forEach((key) => {
-      if (existingStartUp[key] !== startUpData[key]) {
-        existingStartUp[key] = startUpData[key];
-        hasChanges = true;
-      }
+    // Update investor fields
+    Object.keys(investorData).forEach((key) => {
+      existingInvestor[key] = investorData[key];
     });
-
-    if (!hasChanges) {
-      return res.status(200).json({ message: "No changes to update" });
-    }
 
     // Save updated StartUp
     const updatedStartUp = await existingStartUp.save();

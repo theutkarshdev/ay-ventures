@@ -67,18 +67,18 @@ const EditStartUp = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: startUpValidationSchema,
-    onSubmit: (values, { resetForm }) => {
-      handleSubmit(values, { resetForm });
+    onSubmit: (values) => {
+      handleSubmit(values);
     },
   });
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values) => {
     const loadingToastId = toast.loading("Please wait...");
     try {
       if (isEqual(prevStartUpData, values)) {
         return toast.error("No fields are changed !!", { id: loadingToastId });
       }
-      const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/api/startup/update/${id}`, [values]);
+      const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/api/startup/update/${id}`, values);
       if (response.status === 200) {
         toast.success("StartUp Updated Successfully...", { id: loadingToastId });
       } else {
@@ -161,6 +161,7 @@ const EditStartUp = () => {
             {/* Email */}
             <MyInput
               name="email"
+              disabled
               type="email"
               label="Email"
               value={formik.values.email}

@@ -59,116 +59,116 @@ const ViewStartUp = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">dateOnboarded</h4>
+            <h4 className="text-sm font-semibold">Date On Boarded</h4>
             <p className="text-sm opacity-70">{startUpApi.dateOnboarded}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">phoneNumber</h4>
+            <h4 className="text-sm font-semibold">Phone Number</h4>
             <p className="text-sm opacity-70">{startUpApi.phoneNumber}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">pitchDeck</h4>
+            <h4 className="text-sm font-semibold">Pitch Deck</h4>
             <p className="text-sm opacity-70">{startUpApi.pitchDeck}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">businessPlan</h4>
+            <h4 className="text-sm font-semibold">Business Plan</h4>
             <p className="text-sm opacity-70">{startUpApi.businessPlan}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">mIS</h4>
+            <h4 className="text-sm font-semibold">MIS</h4>
             <p className="text-sm opacity-70">{startUpApi.mIS}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">otherDocuments</h4>
+            <h4 className="text-sm font-semibold">Other Documents</h4>
             <p className="text-sm opacity-70">{startUpApi.otherDocuments}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">foundingDate</h4>
+            <h4 className="text-sm font-semibold">Founding Date</h4>
             <p className="text-sm opacity-70">{startUpApi.foundingDate}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">investmentAsk</h4>
+            <h4 className="text-sm font-semibold">Investment Ask</h4>
             <p className="text-sm opacity-70">{startUpApi.investmentAsk}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">valuation</h4>
+            <h4 className="text-sm font-semibold">Valuation</h4>
             <p className="text-sm opacity-70">{startUpApi.valuation}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">sector</h4>
+            <h4 className="text-sm font-semibold">Sector</h4>
             <p className="text-sm opacity-70">{startUpApi.sector}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">marketSize</h4>
+            <h4 className="text-sm font-semibold">Market Size</h4>
             <p className="text-sm opacity-70">{startUpApi.marketSize}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">previousRounds</h4>
+            <h4 className="text-sm font-semibold">Previous Rounds</h4>
             <p className="text-sm opacity-70">{startUpApi.previousRounds}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">currentRound</h4>
+            <h4 className="text-sm font-semibold">CurrentRound</h4>
             <p className="text-sm opacity-70">{startUpApi.currentRound}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">locationCountry</h4>
+            <h4 className="text-sm font-semibold">Location Country</h4>
             <p className="text-sm opacity-70">{startUpApi.locationCountry}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">locationState</h4>
+            <h4 className="text-sm font-semibold">Location State</h4>
             <p className="text-sm opacity-70">{startUpApi.locationState}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">deadlineToClose</h4>
+            <h4 className="text-sm font-semibold">Deadline To Close</h4>
             <p className="text-sm opacity-70">{startUpApi.deadlineToClose}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">investorTypePreference</h4>
+            <h4 className="text-sm font-semibold">Investor Type Preference</h4>
             <p className="text-sm opacity-70">{startUpApi.investorTypePreference}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">investorMinimumTicketSize</h4>
+            <h4 className="text-sm font-semibold">Investor Minimum Ticket Size</h4>
             <p className="text-sm opacity-70">{startUpApi.investorMinimumTicketSize}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">dealStructure</h4>
+            <h4 className="text-sm font-semibold">Deal Structure</h4>
             <p className="text-sm opacity-70">{startUpApi.dealStructure}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">investorLocationCountry</h4>
+            <h4 className="text-sm font-semibold">Investor Location Country</h4>
             <p className="text-sm opacity-70">{startUpApi.investorLocationCountry}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">investorLocationState</h4>
+            <h4 className="text-sm font-semibold">Investor Location State</h4>
             <p className="text-sm opacity-70">{startUpApi.investorLocationState}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">anyOfTheCofounders_sc_st_obc</h4>
+            <h4 className="text-sm font-semibold">Any Of The Cofounders SC/ST/OBC</h4>
             <p className="text-sm opacity-70">{startUpApi.anyOfTheCofounders_sc_st_obc ? "true" : "false"}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">anyOfTheCofoundersWoman </h4>
+            <h4 className="text-sm font-semibold">Any Of The Cofounders Woman </h4>
             <p className="text-sm opacity-70">{startUpApi.anyOfTheCofoundersWoman ? "true" : "false"}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">anyLeadInvestor</h4>
+            <h4 className="text-sm font-semibold">Any Lead Investor</h4>
             <p className="text-sm opacity-70">{startUpApi.anyLeadInvestor ? "true" : "false"}</p>
           </div>
         </div>
