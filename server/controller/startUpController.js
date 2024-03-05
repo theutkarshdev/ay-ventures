@@ -182,21 +182,32 @@ export const getStartUp = async (req, res) => {
 };
 
 export const updateStartUp = async (req, res) => {
-  const startUpData = req.body;
   const { id } = req.params;
+  const startUpData = req.body;
   try {
     const existingStartUp = await StartUpModel.findById(id);
     if (!existingStartUp) {
       return res.status(404).json({ message: `StartUp with ID ${id} not found` });
     }
+
     // Check if the request body is empty
     if (Object.keys(startUpData).length === 0) {
       return res.status(400).json({ message: "Request body is empty" });
     }
-    // Update StartUp fields
+
+    let hasChanges = false;
+
+    // Check each field in startUpData
     Object.keys(startUpData).forEach((key) => {
-      existingStartUp[key] = startUpData[key];
+      if (existingStartUp[key] !== startUpData[key]) {
+        existingStartUp[key] = startUpData[key];
+        hasChanges = true;
+      }
     });
+
+    if (!hasChanges) {
+      return res.status(200).json({ message: "No changes to update" });
+    }
 
     // Save updated StartUp
     const updatedStartUp = await existingStartUp.save();

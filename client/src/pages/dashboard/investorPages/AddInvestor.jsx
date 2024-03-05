@@ -71,7 +71,7 @@ const AddInvestor = () => {
         setEmployees(initialValues.employees);
         resetForm();
       } else {
-        toast.error("Facing some error !!");
+        toast.error("Facing some error !!", { id: loadingToastId });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });

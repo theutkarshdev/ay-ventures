@@ -75,7 +75,7 @@ const AddStartUp = () => {
         toast.success("Investor Added Successfully...", { id: loadingToastId });
         resetForm();
       } else {
-        toast.error("Facing some error !!");
+        toast.error("Facing some error !!", { id: loadingToastId });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });
