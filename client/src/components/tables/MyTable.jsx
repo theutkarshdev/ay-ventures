@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import FilledBtn from "../buttons/FilledBtn";
 import OutlinedBtn from "../buttons/OutlinedBtn";
 import NoDataImg from "../../assets/course_not_found_icon.png";
 import { Icon } from "@iconify/react";
@@ -12,13 +11,12 @@ import {
   TableRow,
   TablePagination,
   Skeleton,
-  Dialog,
-  DialogContent,
-  DialogContentText,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import SimpleDialog from "./SimpleDialog";
+import TableRowsLoader from "./TableRowsLoader";
 
 const MyTable = ({ columns, tableDataApi, delApi }) => {
   const navigate = useNavigate();
@@ -234,23 +232,6 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
 
 export default MyTable;
 
-const TableRowsLoader = ({ rowsNum, column }) => {
-  return [...Array(rowsNum)].map((row, index) => (
-    <TableRow
-      key={index}
-      sx={{
-        "&:nth-of-type(even) td": { background: "#eee" },
-      }}
-    >
-      {column.map((column, index) => (
-        <TableCell key={index} className="py-4">
-          <Skeleton className="py-1" animation="wave" variant="text" />
-        </TableCell>
-      ))}
-    </TableRow>
-  ));
-};
-
 const NoData = () => {
   return (
     <div className="w-full h-80 overflow-hidden grid place-items-center">
@@ -258,47 +239,3 @@ const NoData = () => {
     </div>
   );
 };
-
-function SimpleDialog(props) {
-  const { onClose, delData } = props;
-
-  const handleClose = () => {
-    onClose();
-  };
-
-  const ClickDel = () => {
-    onClose(delData?.id);
-  };
-
-  return (
-    <Dialog
-      PaperProps={{
-        style: {
-          borderRadius: 15,
-        },
-      }}
-      fullWidth
-      maxWidth="xs"
-      onClose={handleClose}
-      open={delData?.open}
-    >
-      <DialogContent>
-        <div className="flex flex-col items-center">
-          <Icon
-            className="size-[80px] text-red-500 border-2 border-red-500 rounded-full p-3 bg-red-100"
-            icon="typcn:warning"
-          />
-          <h2 className="text-center font-bold text-xl mb-1 mt-3">Are You Sure ??</h2>
-          <p className="text-sm opacity-70 text-center">
-            This action cannot be undone. All values associated with
-            <span className="font-bold text-red-500"> {delData?.name}</span> field will be lost.
-          </p>
-        </div>
-        <div className="flex gap-4 mt-5">
-          <OutlinedBtn onClick={handleClose} icon={"ion:close-outline"} border="gray" extra="w-1/2" text="Cancel" />
-          <FilledBtn onClick={ClickDel} icon={"fluent:delete-16-regular"} bg="red" extra="w-1/2" text="yes, Delete" />
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}

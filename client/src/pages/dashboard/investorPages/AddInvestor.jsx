@@ -17,13 +17,14 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
+import CurrencyInput from "../../../components/form/CurrencyInput";
 
 const initialValues = {
   firm_name: "",
   firm_email: "",
   type: "",
   sector_focus: [],
-  ticket_size: "",
+  ticket_size: null,
   website: "",
   date_onboarded: "",
   rounds_invest_in: [],
@@ -177,16 +178,11 @@ const AddInvestor = () => {
             />
 
             {/* Ticket Size */}
-            <MyInput
+            <CurrencyInput
               name="ticket_size"
-              type="number"
               label="Ticket Size in USD($)"
               placeholder="Enter ticket size in USD($)"
-              value={formik.values.ticket_size}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.ticket_size && formik.errors.ticket_size}
-              helperText={formik.touched.ticket_size && formik.errors.ticket_size ? formik.errors.ticket_size : ""}
+              formik={formik}
             />
 
             {/* Website */}

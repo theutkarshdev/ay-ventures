@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import PageNav from "../../../components/header/PageNav";
 import { Icon } from "@iconify/react";
@@ -34,16 +34,19 @@ const ViewInvestor = () => {
       />
       <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border">
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Basic Info</h2>
-        <div className="flex flex-wrap gap-5 items-center">
-          <div>
-            <h1 className="font-semibold text-3xl mb-3">{investorApi.firm_name}</h1>
-            <p className="flex gap-1 text-sm opacity-70 items-center">
-              <Icon className="mt-1" icon="solar:letter-outline" /> {investorApi.firm_email}
-            </p>
-            <p className="flex gap-1 text-sm opacity-70 items-center">
-              <Icon className="mt-1" icon="solar:link-minimalistic-2-linear" /> {investorApi.website}
-            </p>
-          </div>
+        <div className="space-y-1">
+          <h1 className="font-semibold text-3xl mb-3">{investorApi.firm_name}</h1>
+          <p className="flex gap-1 text-sm opacity-70 items-center">
+            <Icon className="mt-1" icon="solar:letter-outline" /> {investorApi.firm_email}
+          </p>
+          <Link to={investorApi.website || "#"} className="text-sky-600 flex gap-1 text-sm items-center">
+            <Icon className="mt-1" icon="solar:link-minimalistic-2-linear" /> {investorApi.website}
+          </Link>
+
+          <p className="flex gap-1 text-sm opacity-70 items-center">
+            <Icon icon="solar:calendar-outline" />
+            Date Onboarded : {investorApi.date_onboarded}
+          </p>
         </div>
       </div>
 
@@ -73,11 +76,6 @@ const ViewInvestor = () => {
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Ticket Size</h4>
             <p className="text-sm opacity-70">$ {investorApi.ticket_size}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Date Onboarded</h4>
-            <p className="text-sm opacity-70">{investorApi.date_onboarded}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
