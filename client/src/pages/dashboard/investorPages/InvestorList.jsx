@@ -7,8 +7,8 @@ const tableColumns = [
   { id: "firm_name", label: "Firm Name", minWidth: 170 },
   { id: "firm_email", label: "Firm Email", minWidth: 170 },
   { id: "type", label: "Type", minWidth: 100 },
-  { id: "revenue", label: "Revenue", minWidth: 100 },
-  { id: "company_age", label: "Company Age", minWidth: 100, align: "center" },
+  { id: "startup_min_revenue", label: "Revenue", minWidth: 100 },
+  { id: "startup_min_company_age", label: "Company Age", minWidth: 100, align: "center" },
   { id: "actions", label: "Actions", minWidth: 100, align: "center" },
 ];
 

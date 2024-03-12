@@ -63,6 +63,7 @@ export const getAllStartUp = async (req, res) => {
         companyName: startUp.companyName,
         founder: startUp.founder,
         email: startUp.email,
+        location: startUp.location,
         phoneNumber: startUp.phoneNumber,
         aboutTheCompany: startUp.aboutTheCompany,
         businessModel: startUp.businessModel,
@@ -81,8 +82,7 @@ export const getAllStartUp = async (req, res) => {
         previousRounds: startUp.previousRounds,
         commitments: startUp.commitments,
         currentRound: startUp.currentRound,
-        locationCountry: startUp.locationCountry,
-        locationState: startUp.locationState,
+        investorLocationPreference: startUp.investorLocationPreference,
         deadlineToClose: startUp.deadlineToClose,
         investorTypePreference: startUp.investorTypePreference,
         investorMinimumTicketSize: startUp.investorMinimumTicketSize,
@@ -101,6 +101,20 @@ export const getAllStartUp = async (req, res) => {
         openDealflowCount: startUp.openDealflowCount,
         closedDealflowCount: startUp.closedDealflowCount,
         totalDealflowCount: startUp.totalDealflowCount,
+        coFounders: startUp.coFounders.map((coFounder, empIndex) => {
+          const coFounderSerialNo = startUpSerialNo * 100 + empIndex + 1;
+          return {
+            _id: coFounder._id,
+            serial_no: coFounderSerialNo,
+            first_name: coFounder.first_name,
+            last_name: coFounder.last_name,
+            phone_number: coFounder.phone_number,
+            email: coFounder.email,
+            linkedin: coFounder.linkedin,
+            intial_email: coFounder.intial_email,
+            company_email_done: coFounder.company_email_done,
+          };
+        }),
       };
     });
 
@@ -127,54 +141,7 @@ export const getStartUp = async (req, res) => {
       return res.status(404).json({ message: "StartUp not found" });
     }
 
-    // Format the data to match the desired structure
-    const formattedStartUp = {
-      _id: startUp._id,
-      dateOnboarded: startUp.dateOnboarded,
-      companyName: startUp.companyName,
-      founder: startUp.founder,
-      email: startUp.email,
-      phoneNumber: startUp.phoneNumber,
-      aboutTheCompany: startUp.aboutTheCompany,
-      businessModel: startUp.businessModel,
-      revenue: startUp.revenue,
-      traction: startUp.traction,
-      pitchDeck: startUp.pitchDeck,
-      businessPlan: startUp.businessPlan,
-      mIS: startUp.mIS,
-      otherDocuments: startUp.otherDocuments,
-      foundingDate: startUp.foundingDate,
-      investmentAsk: startUp.investmentAsk,
-      valuation: startUp.valuation,
-      aboutTheTeam: startUp.aboutTheTeam,
-      sector: startUp.sector,
-      marketSize: startUp.marketSize,
-      previousRounds: startUp.previousRounds,
-      commitments: startUp.commitments,
-      currentRound: startUp.currentRound,
-      locationCountry: startUp.locationCountry,
-      locationState: startUp.locationState,
-      deadlineToClose: startUp.deadlineToClose,
-      investorTypePreference: startUp.investorTypePreference,
-      investorMinimumTicketSize: startUp.investorMinimumTicketSize,
-      anyLeadInvestor: startUp.anyLeadInvestor,
-      uSPAndCompetitors: startUp.uSPAndCompetitors,
-      dealStructure: startUp.dealStructure,
-      investorLocationCountry: startUp.investorLocationCountry,
-      investorLocationState: startUp.investorLocationState,
-      gTM: startUp.gTM,
-      futurePlans: startUp.futurePlans,
-      problemAndSolution: startUp.problemAndSolution,
-      anyOfTheCofounders_sc_st_obc: startUp.anyOfTheCofounders_sc_st_obc,
-      anyOfTheCofoundersWoman: startUp.anyOfTheCofoundersWoman,
-      whoHasBeenMailed: startUp.whoHasBeenMailed,
-      whoRejected: startUp.whoRejected,
-      openDealflowCount: startUp.openDealflowCount,
-      closedDealflowCount: startUp.closedDealflowCount,
-      totalDealflowCount: startUp.totalDealflowCount,
-    };
-
-    res.status(200).json({ message: "StartUp Fetched Successfully", data: formattedStartUp });
+    res.status(200).json({ message: "StartUp Fetched Successfully", data: startUp });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -196,8 +163,8 @@ export const updateStartUp = async (req, res) => {
     }
 
     // Update investor fields
-    Object.keys(investorData).forEach((key) => {
-      existingInvestor[key] = investorData[key];
+    Object.keys(startUpData).forEach((key) => {
+      existingStartUp[key] = startUpData[key];
     });
 
     // Save updated StartUp

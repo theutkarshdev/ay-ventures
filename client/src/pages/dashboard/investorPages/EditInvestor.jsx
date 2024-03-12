@@ -19,27 +19,28 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import { useParams } from "react-router-dom";
+import CurrencyInput from "../../../components/form/CurrencyInput";
 
 const initialValues = {
   firm_name: "",
   firm_email: "",
   type: "",
+  location: {
+    country: "",
+    state: "",
+  },
   sector_focus: [],
-  ticket_size: "",
+  min_ticket_size: 0,
+  max_ticket_size: 0,
   website: "",
   date_onboarded: "",
   rounds_invest_in: [],
   lead_investor_required: false,
   deal_structure: [],
-  revenue: "",
-  company_age: "",
-  valuation_cap: "",
-  already_emailed: [],
-  no_response_at_all: [],
-  open_dealflow_count: "",
-  closed_dealflow_count: "",
-  total_dealflow_count: "",
-  geography: {
+  startup_min_revenue: 0,
+  startup_min_company_age: 0,
+  startup_max_valuation_cap: 0,
+  startup_location_preference: {
     country: [],
     state: [],
     global: false,
@@ -125,10 +126,10 @@ const AddInvestor = () => {
         // Set formik values with fetched data
         formik.setValues({
           ...response?.data?.data,
-          geography: {
-            country: response?.data?.data?.geography?.country || [],
-            state: response?.data?.data?.geography?.state || [],
-            global: response?.data?.data?.geography?.global || false,
+          startup_location_preference: {
+            country: response?.data?.data?.startup_location_preference?.country || [],
+            state: response?.data?.data?.startup_location_preference?.state || [],
+            global: response?.data?.data?.startup_location_preference?.global || false,
           },
           employees: response?.data?.data?.employees || [],
         });
@@ -196,6 +197,34 @@ const AddInvestor = () => {
               helperText={formik.touched.type && formik.errors.type ? formik.errors.type : ""}
             />
 
+            <MySelect
+              name="location.country"
+              label="Current Country"
+              options={countries} // Define your country options
+              value={formik.values.location.country}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.location?.country && formik.errors.location?.country}
+              helperText={
+                formik.touched.location?.country && formik.errors.location?.country
+                  ? formik.errors.location?.country
+                  : ""
+              }
+            />
+
+            <MySelect
+              name="location.state"
+              label="Current State"
+              options={indianStates} // Define your state options
+              value={formik.values.location.state}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.location?.state && formik.errors.location?.state}
+              helperText={
+                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+              }
+            />
+
             {/* Replace array fields with Autocomplete */}
             <Autocomplete
               size="small"
@@ -219,16 +248,18 @@ const AddInvestor = () => {
             />
 
             {/* Ticket Size */}
-            <MyInput
-              name="ticket_size"
-              type="number"
-              label="Ticket Size in USD($)"
-              placeholder="Enter ticket size in USD($)"
-              value={formik.values.ticket_size}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.ticket_size && formik.errors.ticket_size}
-              helperText={formik.touched.ticket_size && formik.errors.ticket_size ? formik.errors.ticket_size : ""}
+            <CurrencyInput
+              name="min_ticket_size"
+              label="Minimum Ticket Size in USD($)"
+              placeholder="min ticket size in USD($)"
+              formik={formik}
+            />
+
+            <CurrencyInput
+              name="max_ticket_size"
+              label="Maximum Ticket Size in USD($)"
+              placeholder="max ticket size in USD($)"
+              formik={formik}
             />
 
             {/* Website */}
@@ -308,42 +339,52 @@ const AddInvestor = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
             {/* Company Age */}
             <MyInput
-              name="company_age"
+              name="startup_min_company_age"
               type="number"
-              label="Minimum Company Age in Years"
-              placeholder="Enter minimum company age in Years"
-              value={formik.values.company_age}
+              label="Minimum Company Age in Months"
+              placeholder="Enter minimum company age in Months"
+              value={formik.values.startup_min_company_age}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.company_age && formik.errors.company_age}
-              helperText={formik.touched.company_age && formik.errors.company_age ? formik.errors.company_age : ""}
+              error={formik.touched.startup_min_company_age && formik.errors.startup_min_company_age}
+              helperText={
+                formik.touched.startup_min_company_age && formik.errors.startup_min_company_age
+                  ? formik.errors.startup_min_company_age
+                  : ""
+              }
             />
 
-            {/* Revenue */}
+            {/* startup_min_revenue */}
             <MyInput
-              name="revenue"
+              name="startup_min_revenue"
               type="number"
-              label="Revenue in USD($)"
-              placeholder="Enter revenue in USD($)"
-              value={formik.values.revenue}
+              label="startup_min_revenue in USD($)"
+              placeholder="Enter startup_min_revenue in USD($)"
+              value={formik.values.startup_min_revenue}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.revenue && formik.errors.revenue}
-              helperText={formik.touched.revenue && formik.errors.revenue ? formik.errors.revenue : ""}
+              error={formik.touched.startup_min_revenue && formik.errors.startup_min_revenue}
+              helperText={
+                formik.touched.startup_min_revenue && formik.errors.startup_min_revenue
+                  ? formik.errors.startup_min_revenue
+                  : ""
+              }
             />
 
             {/* Valuation Cap */}
             <MyInput
-              name="valuation_cap"
+              name="startup_max_valuation_cap"
               type="number"
               label="Valuation Cap in USD($)"
               placeholder="Enter valuation cap in USD($)"
-              value={formik.values.valuation_cap}
+              value={formik.values.startup_max_valuation_cap}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.valuation_cap && formik.errors.valuation_cap}
+              error={formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap}
               helperText={
-                formik.touched.valuation_cap && formik.errors.valuation_cap ? formik.errors.valuation_cap : ""
+                formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap
+                  ? formik.errors.startup_max_valuation_cap
+                  : ""
               }
             />
 
@@ -351,8 +392,8 @@ const AddInvestor = () => {
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  name="geography.global" // Corrected name attribute
-                  checked={formik.values.geography.global}
+                  name="startup_location_preference.global" // Corrected name attribute
+                  checked={formik.values.startup_location_preference.global}
                   onChange={formik.handleChange}
                   className="mt-0.5"
                 />
@@ -364,31 +405,31 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.geography.global} // Disable based on global value
-              id="geography_country"
+              disabled={formik.values.startup_location_preference.global} // Disable based on global value
+              id="startup_location_preference_country"
               options={countries} // This should be your country options
-              value={formik.values.geography.country}
+              value={formik.values.startup_location_preference.country}
               onChange={(event, newValue) => {
-                formik.setFieldValue("geography.country", newValue);
+                formik.setFieldValue("startup_location_preference.country", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="geography.country"
+                  name="startup_location_preference.country"
                   label="Country"
                   placeholder="Country"
                   error={
-                    formik.touched.geography &&
-                    formik.errors.geography &&
-                    formik.touched.geography.country &&
-                    formik.errors.geography.country
+                    formik.touched.startup_location_preference &&
+                    formik.errors.startup_location_preference &&
+                    formik.touched.startup_location_preference.country &&
+                    formik.errors.startup_location_preference.country
                   }
                   helperText={
-                    formik.touched.geography &&
-                    formik.errors.geography &&
-                    formik.touched.geography.country &&
-                    formik.errors.geography.country
-                      ? formik.errors.geography.country
+                    formik.touched.startup_location_preference &&
+                    formik.errors.startup_location_preference &&
+                    formik.touched.startup_location_preference.country &&
+                    formik.errors.startup_location_preference.country
+                      ? formik.errors.startup_location_preference.country
                       : ""
                   }
                 />
@@ -399,31 +440,31 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.geography.global} // Disable based on global value
-              id="geography_state"
+              disabled={formik.values.startup_location_preference.global} // Disable based on global value
+              id="startup_location_preference_state"
               options={indianStates} // This should be your state options
-              value={formik.values.geography.state}
+              value={formik.values.startup_location_preference.state}
               onChange={(event, newValue) => {
-                formik.setFieldValue("geography.state", newValue);
+                formik.setFieldValue("startup_location_preference.state", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="geography.state"
+                  name="startup_location_preference.state"
                   label="State"
                   placeholder="State"
                   error={
-                    formik.touched.geography &&
-                    formik.errors.geography &&
-                    formik.touched.geography.state &&
-                    formik.errors.geography.state
+                    formik.touched.startup_location_preference &&
+                    formik.errors.startup_location_preference &&
+                    formik.touched.startup_location_preference.state &&
+                    formik.errors.startup_location_preference.state
                   }
                   helperText={
-                    formik.touched.geography &&
-                    formik.errors.geography &&
-                    formik.touched.geography.state &&
-                    formik.errors.geography.state
-                      ? formik.errors.geography.state
+                    formik.touched.startup_location_preference &&
+                    formik.errors.startup_location_preference &&
+                    formik.touched.startup_location_preference.state &&
+                    formik.errors.startup_location_preference.state
+                      ? formik.errors.startup_location_preference.state
                       : ""
                   }
                 />

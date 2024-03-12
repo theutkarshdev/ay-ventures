@@ -75,37 +75,37 @@ const ViewInvestor = () => {
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Ticket Size</h4>
-            <p className="text-sm opacity-70">$ {investorApi.ticket_size}</p>
+            <p className="text-sm opacity-70">$ {investorApi.min_ticket_size}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Company Revenue</h4>
-            <p className="text-sm opacity-70">$ {investorApi.revenue}</p>
+            <p className="text-sm opacity-70">$ {investorApi.startup_min_revenue}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Minimum Company Age</h4>
-            <p className="text-sm opacity-70">{investorApi.company_age} Years</p>
+            <p className="text-sm opacity-70">{investorApi.startup_min_company_age} Months</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Valuation Cap</h4>
-            <p className="text-sm opacity-70">$ {investorApi.valuation_cap}</p>
+            <p className="text-sm opacity-70">$ {investorApi.startup_max_valuation_cap}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Global</h4>
-            <p className="text-sm opacity-70">{investorApi.geography?.global ? "true" : "false"}</p>
+            <p className="text-sm opacity-70">{investorApi.startup_location_preference?.global ? "true" : "false"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Country</h4>
-            <p className="text-sm opacity-70">{investorApi.geography?.country}</p>
+            <p className="text-sm opacity-70">{investorApi.startup_location_preference?.country}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">State</h4>
-            <p className="text-sm opacity-70">{investorApi.geography?.state}</p>
+            <p className="text-sm opacity-70">{investorApi.startup_location_preference?.state}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">

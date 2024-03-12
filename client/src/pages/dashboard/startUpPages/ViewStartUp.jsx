@@ -124,13 +124,13 @@ const ViewStartUp = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Location Country</h4>
-            <p className="text-sm opacity-70">{startUpApi.locationCountry}</p>
+            <h4 className="text-sm font-semibold">Current Country</h4>
+            <p className="text-sm opacity-70">{startUpApi.location?.country}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Location State</h4>
-            <p className="text-sm opacity-70">{startUpApi.locationState}</p>
+            <h4 className="text-sm font-semibold">Current State</h4>
+            <p className="text-sm opacity-70">{startUpApi.location?.state}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -152,12 +152,12 @@ const ViewStartUp = () => {
             <p className="text-sm opacity-70">{startUpApi.dealStructure}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Location Country</h4>
-            <p className="text-sm opacity-70">{startUpApi.investorLocationCountry}</p>
+            <h4 className="text-sm font-semibold">Investor Location Preference Country</h4>
+            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.country}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Location State</h4>
-            <p className="text-sm opacity-70">{startUpApi.investorLocationState}</p>
+            <h4 className="text-sm font-semibold">Investor Location Preference State</h4>
+            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.state}</p>
           </div>
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Any Of The Cofounders SC/ST/OBC</h4>

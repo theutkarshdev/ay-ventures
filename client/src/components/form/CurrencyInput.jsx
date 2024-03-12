@@ -1,10 +1,19 @@
 import { InputAdornment, TextField, Tooltip } from "@mui/material";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import numberToWords from "number-to-words";
 
 const CurrencyInput = ({ formik, placeholder, name, label, ...restProps }) => {
   const [amountInWords, setAmountInWords] = useState("");
+
+  useEffect(() => {
+    // When the value from formik changes, update the amountInWords
+    if (!isNaN(formik.values[name]) && isFinite(formik.values[name]) && formik.values[name]) {
+      setAmountInWords(numberToWords.toWords(formik.values[name]));
+    } else {
+      setAmountInWords("");
+    }
+  }, [formik.values[name]]);
 
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
@@ -24,8 +33,9 @@ const CurrencyInput = ({ formik, placeholder, name, label, ...restProps }) => {
       size="small"
       type="number"
       fullWidth
+      label={label}
       variant="outlined"
-      error={Boolean(formik.touched.name && formik.errors.name)}
+      error={Boolean(formik.touched[name] && formik.errors[name])}
       placeholder={placeholder}
       name={name}
       value={formik.values[name]}

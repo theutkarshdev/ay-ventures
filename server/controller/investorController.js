@@ -63,18 +63,20 @@ export const getAllInvestor = async (req, res) => {
         firm_name: investor.firm_name,
         firm_email: investor.firm_email,
         type: investor.type,
-        geography: investor.geography,
+        location: investor.location,
         preference: investor.preference,
         sector_focus: investor.sector_focus,
-        ticket_size: investor.ticket_size,
+        min_ticket_size: investor.min_ticket_size,
+        max_ticket_size: investor.max_ticket_size,
         website: investor.website,
         date_onboarded: investor.date_onboarded,
         rounds_invest_in: investor.rounds_invest_in,
         lead_investor_required: investor.lead_investor_required,
         deal_structure: investor.deal_structure,
-        revenue: investor.revenue,
-        company_age: investor.company_age,
-        valuation_cap: investor.valuation_cap,
+        startup_min_revenue: investor.startup_min_revenue,
+        startup_min_company_age: investor.startup_min_company_age,
+        startup_max_valuation_cap: investor.startup_max_valuation_cap,
+        startup_location_preference: investor.startup_location_preference,
         already_emailed: investor.already_emailed,
         no_response_at_all: investor.no_response_at_all,
         open_dealflow_count: investor.open_dealflow_count,
@@ -120,42 +122,7 @@ export const getInvestor = async (req, res) => {
       return res.status(404).json({ message: "Investor not found" });
     }
 
-    // Format the data to match the desired structure
-    const formattedInvestor = {
-      _id: investor._id,
-      firm_name: investor.firm_name,
-      firm_email: investor.firm_email,
-      type: investor.type,
-      geography: investor.geography,
-      preference: investor.preference,
-      sector_focus: investor.sector_focus,
-      ticket_size: investor.ticket_size,
-      website: investor.website,
-      date_onboarded: investor.date_onboarded,
-      rounds_invest_in: investor.rounds_invest_in,
-      lead_investor_required: investor.lead_investor_required,
-      deal_structure: investor.deal_structure,
-      revenue: investor.revenue,
-      company_age: investor.company_age,
-      valuation_cap: investor.valuation_cap,
-      already_emailed: investor.already_emailed,
-      no_response_at_all: investor.no_response_at_all,
-      open_dealflow_count: investor.open_dealflow_count,
-      closed_dealflow_count: investor.closed_dealflow_count,
-      total_dealflow_count: investor.total_dealflow_count,
-      employees: investor.employees.map((employee) => ({
-        _id: employee._id,
-        first_name: employee.first_name,
-        last_name: employee.last_name,
-        phone_number: employee.phone_number,
-        email: employee.email,
-        linkedin: employee.linkedin,
-        initial_email: employee.initial_email,
-        company_email_done: employee.company_email_done,
-      })),
-    };
-
-    res.status(200).json({ message: "Investor Fetched Successfully", data: formattedInvestor });
+    res.status(200).json({ message: "Investor Fetched Successfully", data: investor });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

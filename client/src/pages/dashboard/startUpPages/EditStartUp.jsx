@@ -19,12 +19,17 @@ import toast from "react-hot-toast";
 import QuillEditor from "../../../components/form/QuillEditor";
 import { useParams } from "react-router-dom";
 import { isEqual } from "lodash";
+import CurrencyInput from "../../../components/form/CurrencyInput";
 
 const initialValues = {
   dateOnboarded: "",
   companyName: "",
   founder: "",
   email: "",
+  location: {
+    country: "",
+    state: "",
+  },
   phoneNumber: "",
   aboutTheCompany: "",
   businessModel: "",
@@ -43,24 +48,38 @@ const initialValues = {
   previousRounds: "",
   commitments: "",
   currentRound: "",
-  locationCountry: "",
-  locationState: "",
+  location: {
+    country: "",
+    state: "",
+  },
   deadlineToClose: "",
   investorTypePreference: [],
   investorMinimumTicketSize: 0,
   anyLeadInvestor: false,
   uSPAndCompetitors: "",
   dealStructure: [],
-  investorLocationCountry: [],
-  investorLocationState: [],
+  investorLocationPreference: {
+    country: [],
+    state: [],
+  },
   gTM: "",
   futurePlans: "",
   problemAndSolution: "",
   anyOfTheCofounders_sc_st_obc: false,
   anyOfTheCofoundersWoman: false,
+  coFounders: [
+    {
+      first_name: "",
+      last_name: "",
+      phone_number: "",
+      email: "",
+      linkedin: "",
+    },
+  ],
 };
 
 const EditStartUp = () => {
+  const [coFounders, setCoFounders] = useState(initialValues.coFounders);
   const { id } = useParams();
   const [prevStartUpData, setPrevStartUpData] = useState({});
 
@@ -80,13 +99,38 @@ const EditStartUp = () => {
       }
       const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/api/startup/update/${id}`, values);
       if (response.status === 200) {
-        toast.success("StartUp Updated Successfully...", { id: loadingToastId });
+        toast.success("Startup Updated Successfully...", { id: loadingToastId });
       } else {
         toast.error("Facing some error !!", { id: loadingToastId });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went really wrong...", { id: loadingToastId });
     }
+  };
+
+  const handleAddCoFounder = () => {
+    // Create a new coFounder object
+    const newCoFounder = { first_name: "", last_name: "", phone_number: "", email: "", linkedin: "" };
+
+    // Update the formik values for coFounders
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      coFounders: [...prevValues.coFounders, newCoFounder],
+    }));
+
+    // Update the local state
+    setCoFounders([...coFounders, newCoFounder]);
+  };
+
+  const handleRemoveCoFounder = (index) => {
+    // Remove coFounder from Formik values
+    formik.setValues((prevValues) => ({
+      ...prevValues,
+      coFounders: prevValues.coFounders.filter((_, i) => i !== index),
+    }));
+
+    // Remove coFounder from local state
+    setCoFounders((prevCoFounders) => prevCoFounders.filter((_, i) => i !== index));
   };
 
   const fetchStartUp = async () => {
@@ -109,7 +153,7 @@ const EditStartUp = () => {
   return (
     <>
       <PageNav
-        label={"Edit StartUp"}
+        label={"Update StartUp"}
         btnText={"StartUp List"}
         btnIcon={"solar:users-group-rounded-outline"}
         btnLink="/startup"
@@ -161,7 +205,6 @@ const EditStartUp = () => {
             {/* Email */}
             <MyInput
               name="email"
-              disabled
               type="email"
               label="Email"
               value={formik.values.email}
@@ -183,17 +226,8 @@ const EditStartUp = () => {
               helperText={formik.touched.phoneNumber && formik.errors.phoneNumber ? formik.errors.phoneNumber : ""}
             />
 
-            {/* Revenue */}
-            <MyInput
-              name="revenue"
-              type="number"
-              label="Revenue in USD($)"
-              value={formik.values.revenue}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.revenue && formik.errors.revenue}
-              helperText={formik.touched.revenue && formik.errors.revenue ? formik.errors.revenue : ""}
-            />
+            <CurrencyInput name="revenue" label="Revenue in USD($)" placeholder="Revenue in USD($)" formik={formik} />
+
             {/* MIS */}
             <MyInput
               name="mIS"
@@ -234,30 +268,10 @@ const EditStartUp = () => {
             />
 
             {/* Investment Ask */}
-            <MyInput
-              name="investmentAsk"
-              type="number"
-              label="Investment Ask in USD($)"
-              value={formik.values.investmentAsk}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.investmentAsk && formik.errors.investmentAsk}
-              helperText={
-                formik.touched.investmentAsk && formik.errors.investmentAsk ? formik.errors.investmentAsk : ""
-              }
-            />
+            <CurrencyInput name="investmentAsk" label="Investment Ask in USD($)" formik={formik} />
 
             {/* Valuation */}
-            <MyInput
-              name="valuation"
-              type="number"
-              label="Valuation in USD($)"
-              value={formik.values.valuation}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.valuation && formik.errors.valuation}
-              helperText={formik.touched.valuation && formik.errors.valuation ? formik.errors.valuation : ""}
-            />
+            <CurrencyInput name="valuation" label="Valuation in USD($)" formik={formik} />
 
             {/* Sector */}
             <Autocomplete
@@ -341,30 +355,32 @@ const EditStartUp = () => {
               helperText={formik.touched.currentRound && formik.errors.currentRound ? formik.errors.currentRound : ""}
             />
 
-            {/* Location Country */}
             <MySelect
-              name="locationCountry"
-              label="Location Country"
-              options={countries}
-              value={formik.values.locationCountry}
+              name="location.country"
+              label="Current Country"
+              options={countries} // Define your country options
+              value={formik.values.location.country}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.locationCountry && formik.errors.locationCountry}
+              error={formik.touched.location?.country && formik.errors.location?.country}
               helperText={
-                formik.touched.locationCountry && formik.errors.locationCountry ? formik.errors.locationCountry : ""
+                formik.touched.location?.country && formik.errors.location?.country
+                  ? formik.errors.location?.country
+                  : ""
               }
             />
 
-            {/* Location State */}
             <MySelect
-              name="locationState"
-              label="Location State"
-              options={indianStates}
-              value={formik.values.locationState}
+              name="location.state"
+              label="Current State"
+              options={indianStates} // Define your state options
+              value={formik.values.location.state}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.locationState && Boolean(formik.errors.locationState)}
-              helperText={formik.touched.locationState && formik.errors.locationState}
+              error={formik.touched.location?.state && formik.errors.location?.state}
+              helperText={
+                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+              }
             />
 
             {/* Deadline to Close */}
@@ -409,19 +425,10 @@ const EditStartUp = () => {
             />
 
             {/* Investor Minimum Ticket Size */}
-            <MyInput
+            <CurrencyInput
               name="investorMinimumTicketSize"
-              type="number"
               label="Investor Minimum Ticket Size in USD($)"
-              value={formik.values.investorMinimumTicketSize}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.investorMinimumTicketSize && formik.errors.investorMinimumTicketSize}
-              helperText={
-                formik.touched.investorMinimumTicketSize && formik.errors.investorMinimumTicketSize
-                  ? formik.errors.investorMinimumTicketSize
-                  : ""
-              }
+              formik={formik}
             />
 
             {/* Any Lead Investor */}
@@ -460,46 +467,72 @@ const EditStartUp = () => {
               )}
             />
 
-            {/* Investor Location Country */}
+            {/* Autocomplete for Country */}
             <Autocomplete
               size="small"
               multiple
-              id="investorLocationCountry"
-              options={countries}
-              value={formik.values.investorLocationCountry}
+              disabled={formik.values.investorLocationPreference.global}
+              id="investorLocationPreference_country"
+              options={countries} // Define your options
+              value={formik.values.investorLocationPreference.country}
               onChange={(event, newValue) => {
-                formik.setFieldValue("investorLocationCountry", newValue);
+                formik.setFieldValue("investorLocationPreference.country", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="investorLocationCountry"
-                  label="Investor Location Country"
-                  placeholder="Select countries"
-                  error={formik.touched.investorLocationCountry && Boolean(formik.errors.investorLocationCountry)}
-                  helperText={formik.touched.investorLocationCountry && formik.errors.investorLocationCountry}
+                  name="investorLocationPreference.country"
+                  label="Preference Country"
+                  placeholder="Country"
+                  error={
+                    formik.touched.investorLocationPreference &&
+                    formik.errors.investorLocationPreference &&
+                    formik.touched.investorLocationPreference.country &&
+                    formik.errors.investorLocationPreference.country
+                  }
+                  helperText={
+                    formik.touched.investorLocationPreference &&
+                    formik.errors.investorLocationPreference &&
+                    formik.touched.investorLocationPreference.country &&
+                    formik.errors.investorLocationPreference.country
+                      ? formik.errors.investorLocationPreference.country
+                      : ""
+                  }
                 />
               )}
             />
 
-            {/* Investor Location State */}
+            {/* Autocomplete for State */}
             <Autocomplete
               size="small"
               multiple
-              id="investorLocationState"
-              options={indianStates}
-              value={formik.values.investorLocationState}
+              disabled={formik.values.investorLocationPreference.global}
+              id="investorLocationPreference_state"
+              options={indianStates} // Define your options
+              value={formik.values.investorLocationPreference.state}
               onChange={(event, newValue) => {
-                formik.setFieldValue("investorLocationState", newValue);
+                formik.setFieldValue("investorLocationPreference.state", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="investorLocationState"
-                  label="Investor Location State"
-                  placeholder="Select states"
-                  error={formik.touched.investorLocationState && Boolean(formik.errors.investorLocationState)}
-                  helperText={formik.touched.investorLocationState && formik.errors.investorLocationState}
+                  name="investorLocationPreference.state"
+                  label="Preference State"
+                  placeholder="State"
+                  error={
+                    formik.touched.investorLocationPreference &&
+                    formik.errors.investorLocationPreference &&
+                    formik.touched.investorLocationPreference.state &&
+                    formik.errors.investorLocationPreference.state
+                  }
+                  helperText={
+                    formik.touched.investorLocationPreference &&
+                    formik.errors.investorLocationPreference &&
+                    formik.touched.investorLocationPreference.state &&
+                    formik.errors.investorLocationPreference.state
+                      ? formik.errors.investorLocationPreference.state
+                      : ""
+                  }
                 />
               )}
             />
@@ -596,6 +629,110 @@ const EditStartUp = () => {
               label="Problem And Solution"
             />
           </div>
+        </div>
+
+        {/* CoFounder section */}
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-xl opacity-70">All CoFounders</h2>
+            <FilledBtn type="button" text="Add CoFounder" onClick={handleAddCoFounder} />
+          </div>
+
+          {coFounders.map((coFounder, index) => (
+            <div key={index} className="mt-5 border rounded-lg p-4">
+              <div className="flex justify-between">
+                <h2 className="font-semibold">CoFounder {index + 1}</h2>
+                {index > 0 && (
+                  <Icon
+                    className="text-xl text-white bg-red-500 size-8 p-1.5 cursor-pointer hover:bg-red-600 rounded-lg"
+                    icon="solar:trash-bin-trash-linear"
+                    onClick={() => handleRemoveCoFounder(index)}
+                  />
+                )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+                <MyInput
+                  name={`coFounders[${index}].first_name`}
+                  type="text"
+                  label="First Name"
+                  placeholder="Enter first name"
+                  value={formik.values.coFounders[index]?.first_name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.first_name
+                  }
+                  helperText={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.first_name
+                  }
+                />
+                <MyInput
+                  name={`coFounders[${index}].last_name`}
+                  type="text"
+                  label="Last Name"
+                  placeholder="Enter last name"
+                  value={formik.values.coFounders[index]?.last_name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.last_name
+                  }
+                  helperText={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.last_name
+                  }
+                />
+                <MyInput
+                  name={`coFounders[${index}].phone_number`}
+                  type="text"
+                  label="Phone Number"
+                  placeholder="Enter phone number"
+                  value={formik.values.coFounders[index]?.phone_number}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.coFounders &&
+                    formik.errors.coFounders &&
+                    formik.errors.coFounders[index]?.phone_number
+                  }
+                  helperText={
+                    formik.touched.coFounders &&
+                    formik.errors.coFounders &&
+                    formik.errors.coFounders[index]?.phone_number
+                  }
+                />
+                <MyInput
+                  name={`coFounders[${index}].email`}
+                  type="text"
+                  label="Email"
+                  placeholder="Enter email"
+                  value={formik.values.coFounders[index]?.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.email
+                  }
+                  helperText={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.email
+                  }
+                />
+                <MyInput
+                  name={`coFounders[${index}].linkedin`}
+                  type="text"
+                  label="LinkedIn"
+                  placeholder="Enter LinkedIn profile URL"
+                  value={formik.values.coFounders[index]?.linkedin}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.linkedin
+                  }
+                  helperText={
+                    formik.touched.coFounders && formik.errors.coFounders && formik.errors.coFounders[index]?.linkedin
+                  }
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="mx-5 float-right">
