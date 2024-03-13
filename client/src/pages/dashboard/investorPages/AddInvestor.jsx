@@ -148,18 +148,6 @@ const AddInvestor = () => {
               helperText={formik.touched.firm_email && formik.errors.firm_email ? formik.errors.firm_email : ""}
             />
 
-            {/* Type */}
-            <MySelect
-              name="type"
-              label="Type"
-              options={investorTypes} // Define your options
-              value={formik.values.type}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.type && formik.errors.type}
-              helperText={formik.touched.type && formik.errors.type ? formik.errors.type : ""}
-            />
-
             <MySelect
               name="location.country"
               label="Current Country"
@@ -186,28 +174,6 @@ const AddInvestor = () => {
               helperText={
                 formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
               }
-            />
-
-            {/* Replace array fields with Autocomplete */}
-            <Autocomplete
-              size="small"
-              multiple
-              id="sector_focus"
-              options={sectorFocusOptions} // Define your options
-              value={formik.values.sector_focus}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("sector_focus", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="sector_focus"
-                  label="Sector Focus"
-                  placeholder="Select sector focus"
-                  error={formik.touched.sector_focus && Boolean(formik.errors.sector_focus)}
-                  helperText={formik.touched.sector_focus && formik.errors.sector_focus}
-                />
-              )}
             />
 
             {/* Ticket Size */}
@@ -252,6 +218,32 @@ const AddInvestor = () => {
                 formik.touched.date_onboarded && formik.errors.date_onboarded ? formik.errors.date_onboarded : ""
               }
             />
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Thesis</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            <Autocomplete
+              size="small"
+              multiple
+              id="sector_focus"
+              options={sectorFocusOptions} // Define your options
+              value={formik.values.sector_focus}
+              onChange={(event, newValue) => {
+                formik.setFieldValue("sector_focus", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="sector_focus"
+                  label="Sector Focus"
+                  placeholder="Select sector focus"
+                  error={formik.touched.sector_focus && Boolean(formik.errors.sector_focus)}
+                  helperText={formik.touched.sector_focus && formik.errors.sector_focus}
+                />
+              )}
+            />
 
             <Autocomplete
               size="small"
@@ -272,82 +264,6 @@ const AddInvestor = () => {
                   helperText={formik.touched.rounds_invest_in && formik.errors.rounds_invest_in}
                 />
               )}
-            />
-
-            <Autocomplete
-              size="small"
-              multiple
-              id="deal_structure"
-              options={dealStructureOptions} // Define your options
-              value={formik.values.deal_structure}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("deal_structure", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="deal_structure"
-                  label="Deal Structure"
-                  placeholder="Select Deal Structure"
-                  error={formik.touched.deal_structure && Boolean(formik.errors.deal_structure)}
-                  helperText={formik.touched.deal_structure && formik.errors.deal_structure}
-                />
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
-            {/* Company Age */}
-            <MyInput
-              name="startup_min_company_age"
-              type="number"
-              label="Minimum Company Age in Months"
-              placeholder="Enter minimum company age in Months"
-              value={formik.values.startup_min_company_age}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_min_company_age && formik.errors.startup_min_company_age}
-              helperText={
-                formik.touched.startup_min_company_age && formik.errors.startup_min_company_age
-                  ? formik.errors.startup_min_company_age
-                  : ""
-              }
-            />
-            {/* Revenue */}
-            <MyInput
-              name="startup_min_revenue"
-              type="number"
-              label="Minimum Revenue in USD($)"
-              placeholder="Enter minimum revenue in USD($)"
-              value={formik.values.startup_min_revenue}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_min_revenue && formik.errors.startup_min_revenue}
-              helperText={
-                formik.touched.startup_min_revenue && formik.errors.startup_min_revenue
-                  ? formik.errors.startup_min_revenue
-                  : ""
-              }
-            />
-
-            {/* Valuation Cap */}
-            <MyInput
-              name="startup_max_valuation_cap"
-              type="number"
-              label="Maximum Valuation Cap in USD($)"
-              placeholder="Enter maximum valuation cap in USD($)"
-              value={formik.values.startup_max_valuation_cap}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap}
-              helperText={
-                formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap
-                  ? formik.errors.startup_max_valuation_cap
-                  : ""
-              }
             />
 
             <div className="border rounded p-2 border-gray-400">
@@ -431,6 +347,71 @@ const AddInvestor = () => {
                   }
                 />
               )}
+            />
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Additional Preferences</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            {/* Type */}
+            <MySelect
+              name="type"
+              label="Type"
+              options={investorTypes} // Define your options
+              value={formik.values.type}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.type && formik.errors.type}
+              helperText={formik.touched.type && formik.errors.type ? formik.errors.type : ""}
+            />
+
+            <Autocomplete
+              size="small"
+              multiple
+              id="deal_structure"
+              options={dealStructureOptions} // Define your options
+              value={formik.values.deal_structure}
+              onChange={(event, newValue) => {
+                formik.setFieldValue("deal_structure", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="deal_structure"
+                  label="Deal Structure"
+                  placeholder="Select Deal Structure"
+                  error={formik.touched.deal_structure && Boolean(formik.errors.deal_structure)}
+                  helperText={formik.touched.deal_structure && formik.errors.deal_structure}
+                />
+              )}
+            />
+            {/* Company Age */}
+            <MyInput
+              name="startup_min_company_age"
+              type="number"
+              label="Minimum Company Age in Months"
+              placeholder="Enter minimum company age in Months"
+              value={formik.values.startup_min_company_age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.startup_min_company_age && formik.errors.startup_min_company_age}
+              helperText={
+                formik.touched.startup_min_company_age && formik.errors.startup_min_company_age
+                  ? formik.errors.startup_min_company_age
+                  : ""
+              }
+            />
+            {/* Revenue */}
+
+            <CurrencyInput name="startup_min_revenue" label="Minimum Revenue in USD($)" formik={formik} />
+
+            {/* Valuation Cap */}
+            <CurrencyInput
+              name="startup_max_valuation_cap"
+              type="number"
+              label="Maximum Valuation Cap in USD($)"
+              formik={formik}
             />
 
             {/* Checkbox for lead investor required */}
