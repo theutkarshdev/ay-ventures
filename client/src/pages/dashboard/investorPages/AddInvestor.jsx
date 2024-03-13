@@ -555,7 +555,7 @@ const AddInvestor = () => {
         </div>
 
         <div className="p-5 float-right">
-          <FilledBtn type="submit" text="Save Investor" onClick={handleAddEmployee} />
+          <FilledBtn type="submit" text="Save Investor"/>
         </div>
       </form>
     </>
