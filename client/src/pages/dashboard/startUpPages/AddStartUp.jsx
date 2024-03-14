@@ -206,7 +206,7 @@ const AddStartUp = () => {
             {/* MIS */}
             <MyInput
               name="mIS"
-              type="text"
+              type="url"
               label="MIS"
               value={formik.values.mIS}
               onChange={formik.handleChange}
@@ -218,7 +218,7 @@ const AddStartUp = () => {
             {/* Other Documents */}
             <MyInput
               name="otherDocuments"
-              type="text"
+              type="url"
               label="Other Documents"
               value={formik.values.otherDocuments}
               onChange={formik.handleChange}
@@ -298,7 +298,7 @@ const AddStartUp = () => {
 
             <MyInput
               name="pitchDeck"
-              type="text"
+              type="url"
               label="Pitch Deck"
               value={formik.values.pitchDeck}
               onChange={formik.handleChange}
@@ -309,7 +309,7 @@ const AddStartUp = () => {
 
             <MyInput
               name="businessPlan"
-              type="text"
+              type="url"
               label="Business Plan"
               value={formik.values.businessPlan}
               onChange={formik.handleChange}

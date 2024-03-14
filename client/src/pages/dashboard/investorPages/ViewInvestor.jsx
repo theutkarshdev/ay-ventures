@@ -59,7 +59,7 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Rounds Invest In</h4>
+            <h4 className="text-sm font-semibold">Rounds they invest in</h4>
             <p className="text-sm opacity-70">{investorApi.rounds_invest_in}</p>
           </div>
 
@@ -79,7 +79,7 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Company Revenue</h4>
+            <h4 className="text-sm font-semibold">Minimum Annual Revenue of Company Required</h4>
             <p className="text-sm opacity-70">$ {investorApi.startup_min_revenue}</p>
           </div>
 
@@ -89,17 +89,17 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Valuation Cap</h4>
+            <h4 className="text-sm font-semibold">Maximum Valuation Cap they invest in ?</h4>
             <p className="text-sm opacity-70">$ {investorApi.startup_max_valuation_cap}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Global</h4>
+            <h4 className="text-sm font-semibold">Invest Globally</h4>
             <p className="text-sm opacity-70">{investorApi.startup_location_preference?.global ? "true" : "false"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Country</h4>
+            <h4 className="text-sm font-semibold">Countries they invest in?</h4>
             <p className="text-sm opacity-70">{investorApi.startup_location_preference?.country}</p>
           </div>
 
@@ -109,7 +109,7 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Lead Investor Required</h4>
+            <h4 className="text-sm font-semibold">Lead Investor Required ?</h4>
             <p className="text-sm opacity-70">{investorApi.lead_investor_required ? "true" : "false"}</p>
           </div>
 

@@ -7,7 +7,7 @@ const links = [
   { text: "Dashboard", icon: "radix-icons:dashboard", path: "/" },
   { text: "Deal Flow", icon: "fluent:cloud-flow-24-regular", path: "/deal-flow" },
   { text: "Investor Management", icon: "fluent-emoji-high-contrast:money-bag", path: "/investor" },
-  { text: "StartUp Management", icon: "ion:rocket-outline", path: "/startup" },
+  { text: "Company Management", icon: "ion:rocket-outline", path: "/startup" },
   { text: "User Management", icon: "solar:user-linear", path: "/user" },
 ];
 
