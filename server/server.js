@@ -22,7 +22,7 @@ connectToMongoDB()
     // Use the user routes
     app.use("/api/investor", investorRoutes);
     app.use("/api/startup", startUpRoutes);
-    app.use("/",MatchMakingRoutes)
+    app.use("/api/match",MatchMakingRoutes)
 
 
 

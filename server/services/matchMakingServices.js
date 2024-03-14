@@ -48,5 +48,5 @@ export function scoreMatching(score,investor,startup){
      if(investor.preference.women<=startup.anyOfTheCofoundersWoman){
       score++
      }
-     
+     return score
 }
