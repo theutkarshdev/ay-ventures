@@ -5,7 +5,7 @@ import connectToMongoDB from "./db.js";
 import investorRoutes from "./routes/investorRoutes.js";
 import startUpRoutes from "./routes/startUpRoutes.js";
 import { startCronJob } from "./controller/cron.js";
-
+import  MatchMakingRoutes  from "./routes/matchMakingRoutes.js";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
@@ -22,7 +22,13 @@ connectToMongoDB()
     // Use the user routes
     app.use("/api/investor", investorRoutes);
     app.use("/api/startup", startUpRoutes);
+    app.use("/",MatchMakingRoutes)
 
+
+
+    app.all('*',(req,res)=>{
+res.status(400).json({message:"invalid request"})
+    })
     // Start the server
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

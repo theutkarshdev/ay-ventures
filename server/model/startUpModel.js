@@ -1,4 +1,4 @@
-import { mongoose } from "mongoose";
+import mongoose  from "mongoose";
 const { Schema } = mongoose;
 
 // Define schema for employees
@@ -59,6 +59,7 @@ const StartUpSchema = new Schema({
   openDealflowCount: Number,
   closedDealflowCount: Number,
   totalDealflowCount: Number,
+  synced: { type: Boolean, default: false },
 });
 
 // Create the model
