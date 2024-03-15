@@ -1,4 +1,5 @@
 import InvestorFirmModel from "../model/investorModel.js";
+import { arrayEqualityCheck, objectsEqual } from "../services/matchMakingServices.js";
 
 export const multiAddInvestor = async (req, res) => {
   const investorData = req.body;
@@ -131,6 +132,7 @@ export const getInvestor = async (req, res) => {
 
 export const updateInvestor = async (req, res) => {
   const investorData = req.body;
+  const{sector_focus,min_ticket_size,rounds_invest_in,startup_location_preference}=req.body
   const { id } = req.params;
   try {
     const existingInvestor = await InvestorFirmModel.findById(id);
@@ -140,6 +142,17 @@ export const updateInvestor = async (req, res) => {
     // Check if the request body is empty
     if (Object.keys(investorData).length === 0) {
       return res.status(400).json({ message: "Request body is empty" });
+    }
+   
+
+  
+
+    if(!arrayEqualityCheck(sector_focus,existingInvestor.sector_focus)||min_ticket_size!=existingInvestor.min_ticket_size||!arrayEqualityCheck(rounds_invest_in,existingInvestor.rounds_invest_in)||!objectsEqual(startup_location_preference,existingInvestor.startup_location_preference)){
+      investorData.synced=false
+      console.log("changed")
+    }
+    else{
+      investorData.synced=true
     }
     // Update investor fields
     Object.keys(investorData).forEach((key) => {
