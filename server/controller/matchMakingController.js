@@ -77,19 +77,24 @@ export async function StartUpMatchMaking() {
               if (investor.startup_location_preference.global == true) {
                 score = scoreMatching(score, investor, startup);
                 insertQueueData(investor, startup, score);
-              } else if (
-                checkIntersection(
-                  investor.startup_location_preference.country,
+              }
+               else if (
+                investor.startup_location_preference.country.includes(
                   startup.location.country
-                ) &&
-                checkIntersection(
-                  investor.startup_location_preference.state,
-                  startup.location.state
                 )
               ) {
-                score = scoreMatching(score, investor, startup);
+                if (
+                  investor.startup_location_preference.country.includes(
+                    "india"
+                  ) &&
+                  investor.startup_location_preference.state.includes(
+                    startup.location.state
+                  )
+                ) {
+                  score = scoreMatching(score, investor, startup);
 
-                insertQueueData(investor, startup, score);
+                  insertQueueData(investor, startup, score);
+                }
               }
             }
           })
@@ -128,19 +133,23 @@ export async function InvestorMatchMaking() {
                 score = scoreMatching(score, investor, startup);
 
                 insertQueueData(investor, startup, score);
-              } else if (
-                checkIntersection(
-                  investor.startup_location_preference.country,
+              }  else if (
+                investor.startup_location_preference.country.includes(
                   startup.location.country
-                ) &&
-                checkIntersection(
-                  investor.startup_location_preference.state,
-                  startup.location.state
                 )
               ) {
-                scoreMatching(score, investor, startup);
+                if (
+                  investor.startup_location_preference.country.includes(
+                    "india"
+                  ) &&
+                  investor.startup_location_preference.state.includes(
+                    startup.location.state
+                  )
+                ) {
+                  score = scoreMatching(score, investor, startup);
 
-                insertQueueData(investor, startup, score);
+                  insertQueueData(investor, startup, score);
+                }
               }
             }
           })
@@ -177,22 +186,19 @@ export async function deletInvestorMatch(id) {
 
 export async function updateInvestorMatch(id) {
   const result = await MatchMakingModel.updateOne(
-    {investorId:id},
+    { investorId: id },
     {
-
       $pull: {
         emailQueue: {
-         
           "send.primaryEmail": false,
           "send.followUpEmail": false,
           response: false,
         },
       },
-    },
-    
+    }
   );
 
-  InvestorMatchMaking()
+  InvestorMatchMaking();
 }
 export async function updateStartupMatch(id) {
   const result = await MatchMakingModel.updateMany(
@@ -210,5 +216,5 @@ export async function updateStartupMatch(id) {
     { multi: true }
   );
 
-  StartUpMatchMaking()
+  StartUpMatchMaking();
 }

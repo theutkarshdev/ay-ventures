@@ -27,11 +27,11 @@ export function scoreMatching(score,investor,startup){
      if(checkIntersection(investor.deal_structure,startup.dealStructure)){
       score++
      }
-     if(investor.location.country==startup.investorLocationPreference.country){
+     if(startup.investorLocationPreference.country.includes(investor.location.country)){
       score++
   
      }
-     if(investor.location.state==startup.investorLocationPreference.state){
+     if(startup.investorLocationPreference.state.includes(investor.location.state)){
       score++
      }
      if(investor.startup_min_revenue<=startup.revenue){
