@@ -95,6 +95,10 @@ export async function StartUpMatchMaking() {
 
                   insertQueueData(investor, startup, score);
                 }
+                else if(!investor.startup_location_preference.country.includes("india")){
+                  score = scoreMatching(score, investor, startup);
+                  insertQueueData(investor, startup, score);
+                }
               }
             }
           })
@@ -148,6 +152,9 @@ export async function InvestorMatchMaking() {
                 ) {
                   score = scoreMatching(score, investor, startup);
 
+                  insertQueueData(investor, startup, score);
+                }else if(!investor.startup_location_preference.country.includes("india")){
+                  score = scoreMatching(score, investor, startup);
                   insertQueueData(investor, startup, score);
                 }
               }
