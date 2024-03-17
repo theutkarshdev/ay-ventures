@@ -19,7 +19,7 @@ export async function getAllMatchMaking(req, res) {
   }
 }
 
-async function inserQueueData(investor, startup, score) {
+async function insertQueueData(investor, startup, score) {
   const query = { investorId: investor._id };
   const update = {
     $addToSet: {
@@ -76,7 +76,7 @@ export async function StartUpMatchMaking() {
             ) {
               if (investor.startup_location_preference.global == true) {
                 score = scoreMatching(score, investor, startup);
-                inserQueueData(investor, startup, score);
+                insertQueueData(investor, startup, score);
               } else if (
                 checkIntersection(
                   investor.startup_location_preference.country,
@@ -89,7 +89,7 @@ export async function StartUpMatchMaking() {
               ) {
                 score = scoreMatching(score, investor, startup);
 
-                inserQueueData(investor, startup, score);
+                insertQueueData(investor, startup, score);
               }
             }
           })
@@ -127,7 +127,7 @@ export async function InvestorMatchMaking() {
               if (investor.startup_location_preference.global == true) {
                 score = scoreMatching(score, investor, startup);
 
-                inserQueueData(investor, startup, score);
+                insertQueueData(investor, startup, score);
               } else if (
                 checkIntersection(
                   investor.startup_location_preference.country,
@@ -140,7 +140,7 @@ export async function InvestorMatchMaking() {
               ) {
                 scoreMatching(score, investor, startup);
 
-                inserQueueData(investor, startup, score);
+                insertQueueData(investor, startup, score);
               }
             }
           })
