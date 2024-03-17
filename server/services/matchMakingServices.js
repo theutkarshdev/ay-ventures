@@ -27,10 +27,11 @@ export function scoreMatching(score,investor,startup){
      if(checkIntersection(investor.deal_structure,startup.dealStructure)){
       score++
      }
-     if(investor.location.country==startup.location.country){
+     if(investor.location.country==startup.investorLocationPreference.country){
       score++
+  
      }
-     if(investor.location.state==startup.location.state){
+     if(investor.location.state==startup.investorLocationPreference.state){
       score++
      }
      if(investor.startup_min_revenue<=startup.revenue){
@@ -39,13 +40,13 @@ export function scoreMatching(score,investor,startup){
      if(investor.startup_min_company_age<=dateToMonths(startup.foundingDate)){
       score++
      }
-     if(investor.startup_max_valuation_cap<=startup.valuation){
+     if(investor.startup_max_valuation_cap>=startup.valuation){
       score++
      }
-     if(investor.preference.sc_st_obc<=startup.anyOfTheCofounders_sc_st_obc){
+     if(investor.preference.sc_st_obc===startup.anyOfTheCofounders_sc_st_obc){
       score++
      }
-     if(investor.preference.women<=startup.anyOfTheCofoundersWoman){
+     if(investor.preference.women===startup.anyOfTheCofoundersWoman){
       score++
      }
      return score

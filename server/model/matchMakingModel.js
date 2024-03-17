@@ -36,6 +36,7 @@ const matchMakingSchema = new Schema(
           type: Boolean,
           default: false,
         },
+        remark: String,
       },
     ],
   },
