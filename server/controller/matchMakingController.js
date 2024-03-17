@@ -85,7 +85,7 @@ export async function StartUpMatchMaking() {
               ) {
                 if (
                   investor.startup_location_preference.country.includes(
-                    "india"
+                    "India"
                   ) &&
                   investor.startup_location_preference.state.includes(
                     startup.location.state
@@ -95,7 +95,7 @@ export async function StartUpMatchMaking() {
 
                   insertQueueData(investor, startup, score);
                 }
-                else if(!investor.startup_location_preference.country.includes("india")){
+                else if(!investor.startup_location_preference.country.includes("India")){
                   score = scoreMatching(score, investor, startup);
                   insertQueueData(investor, startup, score);
                 }
@@ -144,7 +144,7 @@ export async function InvestorMatchMaking() {
               ) {
                 if (
                   investor.startup_location_preference.country.includes(
-                    "india"
+                    "India"
                   ) &&
                   investor.startup_location_preference.state.includes(
                     startup.location.state
@@ -153,7 +153,7 @@ export async function InvestorMatchMaking() {
                   score = scoreMatching(score, investor, startup);
 
                   insertQueueData(investor, startup, score);
-                }else if(!investor.startup_location_preference.country.includes("india")){
+                }else if(!investor.startup_location_preference.country.includes("India")){
                   score = scoreMatching(score, investor, startup);
                   insertQueueData(investor, startup, score);
                 }
