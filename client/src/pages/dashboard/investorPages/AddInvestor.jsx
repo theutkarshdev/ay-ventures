@@ -5,7 +5,7 @@ import FilledBtn from "./../../../components/buttons/FilledBtn";
 import MySelect from "./../../../components/form/MySelect";
 import { investorValidationSchema } from "./../../../utils/validationSchema";
 import PageNav from "./../../../components/header/PageNav";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, createFilterOptions } from "@mui/material";
 import {
   indianStates,
   investorTypes,
@@ -226,11 +226,25 @@ const AddInvestor = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
             <Autocomplete
               size="small"
+              className="col-span-4"
               multiple
               id="sector_focus"
-              options={sectorFocusOptions} // Define your options
+              filterOptions={(options, params) => {
+                const filter = createFilterOptions();
+                const filtered = filter(options, params);
+                return ["Select All...", ...filtered];
+              }}
+              options={sectorFocusOptions}
               value={formik.values.sector_focus}
               onChange={(event, newValue) => {
+                if (newValue.find((option) => option === "Select All...")) {
+                  formik.setFieldValue(
+                    "sector_focus",
+                    newValue.length === sectorFocusOptions.length ? [] : sectorFocusOptions,
+                  );
+                  return;
+                }
+
                 formik.setFieldValue("sector_focus", newValue);
               }}
               renderInput={(params) => (
@@ -555,7 +569,7 @@ const AddInvestor = () => {
         </div>
 
         <div className="p-5 float-right">
-          <FilledBtn type="submit" text="Save Investor"/>
+          <FilledBtn type="submit" text="Save Investor" />
         </div>
       </form>
     </>

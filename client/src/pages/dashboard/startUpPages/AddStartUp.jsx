@@ -229,12 +229,12 @@ const AddStartUp = () => {
               }
             />
 
-            {/* Founding Date */}
+            {/* Incorporation/Founding Date */}
             <MyInput
               name="foundingDate"
               type="date"
               InputLabelProps={{ shrink: true }}
-              label="Founding Date"
+              label="Incorporation/Founding Date"
               value={formik.values.foundingDate}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -268,32 +268,6 @@ const AddStartUp = () => {
                   helperText={formik.touched.sector && formik.errors.sector}
                 />
               )}
-            />
-
-            {/* Market Size */}
-            <MyInput
-              name="marketSize"
-              type="text"
-              label="Market Size"
-              value={formik.values.marketSize}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.marketSize && formik.errors.marketSize}
-              helperText={formik.touched.marketSize && formik.errors.marketSize ? formik.errors.marketSize : ""}
-            />
-
-            {/* Previous Rounds */}
-            <MyInput
-              name="previousRounds"
-              type="text"
-              label="Previous Rounds"
-              value={formik.values.previousRounds}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.previousRounds && formik.errors.previousRounds}
-              helperText={
-                formik.touched.previousRounds && formik.errors.previousRounds ? formik.errors.previousRounds : ""
-              }
             />
 
             <MyInput
@@ -420,7 +394,7 @@ const AddStartUp = () => {
               </label>
             </div>
 
-            {/* Deal Structure */}
+            {/* Deal Structure Preference */}
             <Autocomplete
               size="small"
               multiple
@@ -434,8 +408,8 @@ const AddStartUp = () => {
                 <MyInput
                   {...params}
                   name="dealStructure"
-                  label="Deal Structure"
-                  placeholder="Select deal structures"
+                  label="Deal Structure Preference"
+                  placeholder="Select Deal Structure Preferences"
                   error={formik.touched.dealStructure && Boolean(formik.errors.dealStructure)}
                   helperText={formik.touched.dealStructure && formik.errors.dealStructure}
                 />
@@ -602,6 +576,20 @@ const AddStartUp = () => {
               placeholder="Write some content here..."
               name="problemAndSolution"
               label="Problem And Solution"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="marketSize"
+              label="Market Size"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="previousRounds"
+              label="Previous Rounds"
             />
           </div>
         </div>

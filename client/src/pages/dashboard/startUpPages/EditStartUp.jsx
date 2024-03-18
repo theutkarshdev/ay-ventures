@@ -254,12 +254,12 @@ const EditStartUp = () => {
               }
             />
 
-            {/* Founding Date */}
+            {/* Incorporation/Founding Date */}
             <MyInput
               name="foundingDate"
               type="date"
               InputLabelProps={{ shrink: true }}
-              label="Founding Date"
+              label="Incorporation/Founding Date"
               value={formik.values.foundingDate}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -445,7 +445,7 @@ const EditStartUp = () => {
               </label>
             </div>
 
-            {/* Deal Structure */}
+            {/* Deal Structure Preference */}
             <Autocomplete
               size="small"
               multiple
@@ -459,8 +459,8 @@ const EditStartUp = () => {
                 <MyInput
                   {...params}
                   name="dealStructure"
-                  label="Deal Structure"
-                  placeholder="Select deal structures"
+                  label="Deal Structure Preference"
+                  placeholder="Select Deal Structure Preferences"
                   error={formik.touched.dealStructure && Boolean(formik.errors.dealStructure)}
                   helperText={formik.touched.dealStructure && formik.errors.dealStructure}
                 />
