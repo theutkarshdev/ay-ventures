@@ -21,7 +21,6 @@ const employeeSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required")
     .required("Email is required"),
-  linkedin: Yup.string().required("Linkedin url is required"),
   // Add more fields as needed
 });
 export const investorValidationSchema = Yup.object({
@@ -43,15 +42,11 @@ export const investorValidationSchema = Yup.object({
   website: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
   date_onboarded: Yup.date().required("Date Onboarded is Required"),
   rounds_invest_in: Yup.array().min(1, "At least one round to invest in is required"),
-  deal_structure: Yup.array().min(1, "At least one deal structure is required"),
-  startup_min_revenue: Yup.number().required("Revenue is Required").positive("Revenue must be a positive number"),
+  startup_min_revenue: Yup.number().positive("Revenue must be a positive number"),
   startup_min_company_age: Yup.number()
-    .required("Company Age is Required")
     .positive("Company Age must be a positive number")
     .integer("Company Age must be an integer"),
-  startup_max_valuation_cap: Yup.number()
-    .required("Valuation Cap is Required")
-    .positive("Valuation Cap must be a positive number"),
+  startup_max_valuation_cap: Yup.number().positive("Valuation Cap must be a positive number"),
   preference: Yup.object().shape({
     sc_st_obc: Yup.boolean(),
     women: Yup.boolean(),

@@ -51,7 +51,7 @@ const ViewStartUp = () => {
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Other Info</h2>
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Documents</h2>
         <div className="p-4 grid md:grid-cols-2 lg:grid-cols-4 gap-4 break-all">
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Revenue</h4>
@@ -69,27 +69,7 @@ const ViewStartUp = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Pitch Deck</h4>
-            <p className="text-sm opacity-70">{startUpApi.pitchDeck}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Business Plan</h4>
-            <p className="text-sm opacity-70">{startUpApi.businessPlan}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">MIS</h4>
-            <p className="text-sm opacity-70">{startUpApi.mIS}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Other Documents</h4>
-            <p className="text-sm opacity-70">{startUpApi.otherDocuments}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Founding Date</h4>
+            <h4 className="text-sm font-semibold">Incorporation/Founding Date</h4>
             <p className="text-sm opacity-70">{startUpApi.foundingDate}</p>
           </div>
 
@@ -170,6 +150,31 @@ const ViewStartUp = () => {
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Any Lead Investor</h4>
             <p className="text-sm opacity-70">{startUpApi.anyLeadInvestor ? "true" : "false"}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Other Info</h2>
+        <div className="p-4 grid md:grid-cols-2 lg:grid-cols-4 gap-4 break-all">
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Pitch Deck</h4>
+            <p className="text-sm opacity-70">{startUpApi.pitchDeck}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Business Plan</h4>
+            <p className="text-sm opacity-70">{startUpApi.businessPlan}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">MIS</h4>
+            <p className="text-sm opacity-70">{startUpApi.mIS}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Other Documents</h4>
+            <p className="text-sm opacity-70">{startUpApi.otherDocuments}</p>
           </div>
         </div>
       </div>

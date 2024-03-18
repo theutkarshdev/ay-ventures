@@ -53,34 +53,48 @@ const ViewInvestor = () => {
       <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border">
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Investment Info</h2>
         <div className="grid grid-cols-4 gap-4 break-all">
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Sector Focus</h4>
-            <p className="text-sm opacity-70">{investorApi.sector_focus}</p>
+          <div className="border rounded-lg p-3 bg-white col-span-4">
+            <h4 className="text-sm font-semibold mb-3">Sector Focus</h4>
+            <div className="text-xs opacity-70 flex gap-2 flex-wrap">
+              {investorApi.sector_focus?.map((item, idx) => (
+                <p className="bg-gray-100 rounded-full py-1 px-3 border" key={idx}>
+                  {item}
+                </p>
+              ))}
+            </div>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Rounds they invest in</h4>
-            <p className="text-sm opacity-70">{investorApi.rounds_invest_in}</p>
+            <p className="text-sm opacity-70">{investorApi.rounds_invest_in || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Deal Structure</h4>
-            <p className="text-sm opacity-70">{investorApi.deal_structure}</p>
+            <p className="text-sm opacity-70">
+              {investorApi?.deal_structure?.length > 0
+                ? investorApi?.deal_structure?.map((item, idx) => (
+                    <p className="bg-gray-100 rounded-full py-1 px-3 border" key={idx}>
+                      {item}
+                    </p>
+                  ))
+                : "NA"}
+            </p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Type</h4>
-            <p className="text-sm opacity-70">{investorApi.type}</p>
+            <p className="text-sm opacity-70">{investorApi.type || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Ticket Size</h4>
-            <p className="text-sm opacity-70">$ {investorApi.min_ticket_size}</p>
+            <p className="text-sm opacity-70">$ {investorApi.min_ticket_size || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Minimum Annual Revenue of Company Required</h4>
-            <p className="text-sm opacity-70">$ {investorApi.startup_min_revenue}</p>
+            <p className="text-sm opacity-70">$ {investorApi.startup_min_revenue || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -90,12 +104,14 @@ const ViewInvestor = () => {
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Maximum Valuation Cap they invest in ?</h4>
-            <p className="text-sm opacity-70">$ {investorApi.startup_max_valuation_cap}</p>
+            <p className="text-sm opacity-70">$ {investorApi.startup_max_valuation_cap || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Invest Globally</h4>
-            <p className="text-sm opacity-70">{investorApi.startup_location_preference?.global ? "true" : "false"}</p>
+            <p className="text-sm opacity-70">
+              {investorApi.startup_location_preference?.global ? "true" : "false" || "NA"}
+            </p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -128,7 +144,7 @@ const ViewInvestor = () => {
         <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Employees Info</h2>
         {investorApi?.employees?.length > 0 &&
           investorApi?.employees?.map((emp, index) => (
-            <div className="mt-5 bg-slate-100 rounded-lg p-4">
+            <div key={index} className="mt-5 bg-slate-100 rounded-lg p-4">
               <h3 className="text-lg font-semibold">Employee {index + 1}</h3>
               <div className="grid grid-cols-4 gap-4 mt-4 break-all">
                 <div className="border rounded-lg p-3 bg-white">
