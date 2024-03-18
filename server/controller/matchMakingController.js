@@ -9,10 +9,59 @@ import {
 
 export async function getAllMatchMaking(req, res) {
   try {
+    const { limit, skip } = req.query;
     const allMatch = await MatchMakingModel.find()
-      .populate("investorId", "employees.first_name employees.email")
-      .populate("emailQueue.startUpId", "companyName");
-    res.json({ data: allMatch });
+      .populate("investorId", "employees firm_name firm_email")
+      .populate("emailQueue.startUpId", "companyName email");
+
+    const formattedData = {
+      message: "Matching fetched...",
+      total:0,
+      limit: limit,
+      skip: skip,
+      data: [],
+    };
+
+    allMatch.forEach((match, index) => {
+      match.emailQueue.forEach((email) => {
+        const mailArray = email.send.timeline?.map((time, timeIndex) => {
+          const employee =
+            timeIndex === 2
+              ? match.investorId.employees[1] || match.investorId.employees[0]
+              : match.investorId.employees[0];
+
+          return {
+            sentTo: employee.email,
+            empName: employee.first_name,
+            sentDate: time,
+            mailType:
+              timeIndex === 2
+                ? "followUp2"
+                : timeIndex === 0
+                ? "primary"
+                : "followUp1",
+          };
+        }) || [];
+
+        formattedData.data.push({
+          _id: email._id,
+          
+          firmName: match.investorId.firm_name,
+          firmEmail: match.investorId.firm_email,
+          companyName: email.startUpId.companyName,
+          companyEmail: email.startUpId.email,
+          mailArray: mailArray,
+          respond: email.response,
+        });
+      });
+    });
+    formattedData.total=formattedData.data.length
+    const limitedData = formattedData.data.slice(parseInt(skip), parseInt(skip) + parseInt(limit));
+    formattedData.data = limitedData.map((data, index) => ({
+      ...data,
+      serial_no: index + 1 + parseInt(skip), // Adding skip to the serial number
+    }));
+    res.json(formattedData);
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Server Error" });
@@ -77,8 +126,7 @@ export async function StartUpMatchMaking() {
               if (investor.startup_location_preference.global == true) {
                 score = scoreMatching(score, investor, startup);
                 insertQueueData(investor, startup, score);
-              }
-               else if (
+              } else if (
                 investor.startup_location_preference.country.includes(
                   startup.location.country
                 )
@@ -94,8 +142,11 @@ export async function StartUpMatchMaking() {
                   score = scoreMatching(score, investor, startup);
 
                   insertQueueData(investor, startup, score);
-                }
-                else if(!investor.startup_location_preference.country.includes("India")){
+                } else if (
+                  !investor.startup_location_preference.country.includes(
+                    "India"
+                  )
+                ) {
                   score = scoreMatching(score, investor, startup);
                   insertQueueData(investor, startup, score);
                 }
@@ -137,7 +188,7 @@ export async function InvestorMatchMaking() {
                 score = scoreMatching(score, investor, startup);
 
                 insertQueueData(investor, startup, score);
-              }  else if (
+              } else if (
                 investor.startup_location_preference.country.includes(
                   startup.location.country
                 )
@@ -153,7 +204,11 @@ export async function InvestorMatchMaking() {
                   score = scoreMatching(score, investor, startup);
 
                   insertQueueData(investor, startup, score);
-                }else if(!investor.startup_location_preference.country.includes("India")){
+                } else if (
+                  !investor.startup_location_preference.country.includes(
+                    "India"
+                  )
+                ) {
                   score = scoreMatching(score, investor, startup);
                   insertQueueData(investor, startup, score);
                 }
