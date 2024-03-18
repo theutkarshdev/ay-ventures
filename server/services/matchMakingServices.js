@@ -27,10 +27,11 @@ export function scoreMatching(score,investor,startup){
      if(checkIntersection(investor.deal_structure,startup.dealStructure)){
       score++
      }
-     if(investor.location.country==startup.location.country){
+     if(startup.investorLocationPreference.country.includes(investor.location.country)){
       score++
+  
      }
-     if(investor.location.state==startup.location.state){
+     if(startup.investorLocationPreference.state.includes(investor.location.state)){
       score++
      }
      if(investor.startup_min_revenue<=startup.revenue){
@@ -39,14 +40,53 @@ export function scoreMatching(score,investor,startup){
      if(investor.startup_min_company_age<=dateToMonths(startup.foundingDate)){
       score++
      }
-     if(investor.startup_max_valuation_cap<=startup.valuation){
+     if(investor.startup_max_valuation_cap>=startup.valuation){
       score++
      }
-     if(investor.preference.sc_st_obc<=startup.anyOfTheCofounders_sc_st_obc){
+     if(investor.preference.sc_st_obc===startup.anyOfTheCofounders_sc_st_obc){
       score++
      }
-     if(investor.preference.women<=startup.anyOfTheCofoundersWoman){
+     if(investor.preference.women===startup.anyOfTheCofoundersWoman){
       score++
      }
-     
+     return score
+}
+export function arrayEqualityCheck(arr1, arr2) {
+ 
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    
+    return true;
+  
+}
+export function objectsEqual(obj1, obj2) {
+  if (obj1 === obj2) {
+    return true;
+  }
+
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+    return false;
+  }
+
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (let key of keys1) {
+    if (!keys2.includes(key) || !objectsEqual(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+
+  return true;
 }
