@@ -1,4 +1,4 @@
-import { mongoose } from "mongoose";
+import  mongoose  from "mongoose";
 const { Schema } = mongoose;
 
 // Define schema for employees
@@ -40,6 +40,7 @@ const FirmSchema = new Schema({
     women: { type: Boolean, default: false },
   },
   employees: [EmployeeSchema], // Embed the Employee schema
+  synced: { type: Boolean, default: false },
 });
 
 // Create the model

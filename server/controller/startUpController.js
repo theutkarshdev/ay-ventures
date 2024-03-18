@@ -1,5 +1,6 @@
 import StartUpModel from "../model/startUpModel.js";
-
+import { StartUpMatchMaking, deleteStartUpFromQueue, updateStartupMatch } from "./matchMakingController.js";
+import {arrayEqualityCheck,objectsEqual} from "../services/matchMakingServices.js"
 export const multiAddStartUp = async (req, res) => {
   const startUpData = req.body;
   try {
@@ -14,7 +15,9 @@ export const multiAddStartUp = async (req, res) => {
     });
 
     const results = await Promise.all(startUpPromises);
+    
     res.status(201).json({ message: "All StartUps successfully added", results });
+    StartUpMatchMaking();
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: error.message || "Server error" });
@@ -151,6 +154,7 @@ export const getStartUp = async (req, res) => {
 export const updateStartUp = async (req, res) => {
   const { id } = req.params;
   const startUpData = req.body;
+  const {sector,investorMinimumTicketSize,currentRound,location}=req.body
   try {
     const existingStartUp = await StartUpModel.findById(id);
     if (!existingStartUp) {
@@ -162,6 +166,15 @@ export const updateStartUp = async (req, res) => {
       return res.status(400).json({ message: "Request body is empty" });
     }
 
+    if(!arrayEqualityCheck(sector,existingStartUp.sector)||investorMinimumTicketSize!=existingStartUp.investorMinimumTicketSize||currentRound!=existingStartUp.currentRound||!objectsEqual(location,existingStartUp.location)){
+      startUpData.synced=false
+     
+      console.log("changed")
+    }
+    else{
+      startUpData.synced=true
+    }
+
     // Update investor fields
     Object.keys(startUpData).forEach((key) => {
       existingStartUp[key] = startUpData[key];
@@ -170,7 +183,11 @@ export const updateStartUp = async (req, res) => {
     // Save updated StartUp
     const updatedStartUp = await existingStartUp.save();
 
-    return res.status(200).json({ message: "Updated Successfully...", startUp: updatedStartUp });
+     res.status(200).json({ message: "Updated Successfully...", startUp: updatedStartUp });
+     if(!startUpData.synced){
+
+       updateStartupMatch(id)
+     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server Error" });
@@ -185,6 +202,7 @@ export const delStartUp = async (req, res) => {
       return res.status(404).json({ message: "StartUp not found" });
     }
     res.status(200).json({ message: "Successfully Deleted...", deletedStartUp });
+    deleteStartUpFromQueue(id)
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });

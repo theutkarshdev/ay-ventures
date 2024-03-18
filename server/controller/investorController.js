@@ -1,4 +1,6 @@
 import InvestorFirmModel from "../model/investorModel.js";
+import { arrayEqualityCheck, objectsEqual } from "../services/matchMakingServices.js";
+import { InvestorMatchMaking, updateInvestorMatch } from "./matchMakingController.js";
 
 export const multiAddInvestor = async (req, res) => {
   const investorData = req.body;
@@ -15,6 +17,7 @@ export const multiAddInvestor = async (req, res) => {
 
     const results = await Promise.all(investorPromises);
     res.status(201).json({ message: "All Investors successfully added", results });
+    InvestorMatchMaking()
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: error.message || "Server error" });
@@ -131,6 +134,7 @@ export const getInvestor = async (req, res) => {
 
 export const updateInvestor = async (req, res) => {
   const investorData = req.body;
+  const{sector_focus,min_ticket_size,rounds_invest_in,startup_location_preference}=req.body
   const { id } = req.params;
   try {
     const existingInvestor = await InvestorFirmModel.findById(id);
@@ -141,6 +145,18 @@ export const updateInvestor = async (req, res) => {
     if (Object.keys(investorData).length === 0) {
       return res.status(400).json({ message: "Request body is empty" });
     }
+   
+
+  
+
+    if(!arrayEqualityCheck(sector_focus,existingInvestor.sector_focus)||min_ticket_size!=existingInvestor.min_ticket_size||!arrayEqualityCheck(rounds_invest_in,existingInvestor.rounds_invest_in)||!objectsEqual(startup_location_preference,existingInvestor.startup_location_preference)){
+      investorData.synced=false
+     
+      console.log("changed")
+    }
+    else{
+      investorData.synced=true
+    }
     // Update investor fields
     Object.keys(investorData).forEach((key) => {
       existingInvestor[key] = investorData[key];
@@ -148,8 +164,12 @@ export const updateInvestor = async (req, res) => {
 
     // Save updated investor
     const updatedInvestor = await existingInvestor.save();
-
-    return res.status(200).json({ message: "Updated Successfully...", investor: updatedInvestor, investorData });
+   
+     res.status(200).json({ message: "Updated Successfully...", investor: updatedInvestor, investorData });
+  
+    if(updatedInvestor.synced==false){
+      updateInvestorMatch(id)
+    }
   } catch (error) {
     return res.status(500).json({ message: "Server Error" });
   }
@@ -163,6 +183,7 @@ export const delInvestor = async (req, res) => {
       return res.status(404).json({ message: "Investor not found" });
     }
     res.status(200).json({ message: "Successfully Deleted...", deletedInvestor });
+    deletInvestorMatch(id)
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
