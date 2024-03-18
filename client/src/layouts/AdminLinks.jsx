@@ -8,6 +8,7 @@ const links = [
   { text: "Deal Flow", icon: "fluent:cloud-flow-24-regular", path: "/deal-flow" },
   { text: "Investor Management", icon: "fluent-emoji-high-contrast:money-bag", path: "/investor" },
   { text: "Company Management", icon: "ion:rocket-outline", path: "/startup" },
+  { text: "Match Making", icon: "akar-icons:arrow-repeat", path: "/match-making" },
   { text: "User Management", icon: "solar:user-linear", path: "/user" },
 ];
 

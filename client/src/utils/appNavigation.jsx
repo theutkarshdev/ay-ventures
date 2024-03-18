@@ -14,6 +14,7 @@ import AddStartUp from "./../pages/dashboard/startUpPages/AddStartUp";
 import ViewStartUp from "./../pages/dashboard/startUpPages/ViewStartUp";
 import EditStartUp from "./../pages/dashboard/startUpPages/EditStartUp";
 import DealFlowList from "../pages/dashboard/dealFlowPages/DealFlowList";
+import MatchMaking from "../pages/dashboard/dealFlowPages/MatchMaking";
 
 // Create router configuration
 export const AdminRoutes = [
@@ -73,6 +74,15 @@ export const AdminRoutes = [
           {
             index: true,
             element: <DealFlowList />,
+          },
+        ],
+      },
+      {
+        path: "/match-making",
+        children: [
+          {
+            index: true,
+            element: <MatchMaking />,
           },
         ],
       },
