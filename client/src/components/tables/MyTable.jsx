@@ -162,7 +162,6 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
                                   className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-yellow-100 text-yellow-500 border-yellow-500 text-xl"
                                   icon={"fluent:eye-16-regular"}
                                 />
-
                                 <Icon
                                   onClick={() => handleEdit(row)}
                                   className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-blue-100 text-blue-500 border-blue-500 text-lg"
@@ -206,7 +205,7 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
           <NoData />
         )}
 
-        {!loading ? (
+        {!loading && tableData?.data?.length > 0 && (
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 100, 200]}
             component="div"
@@ -216,7 +215,9 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        ) : (
+        )}
+
+        {loading && !tableData?.data?.length > 0 && (
           <div className="flex gap-3 justify-end p-4">
             <Skeleton className="py-1 w-40" animation="wave" variant="text" />
             <Skeleton className="py-1 w-32" animation="wave" variant="text" />

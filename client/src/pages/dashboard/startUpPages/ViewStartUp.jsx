@@ -51,26 +51,11 @@ const ViewStartUp = () => {
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Documents</h2>
-        <div className="p-4 grid md:grid-cols-2 lg:grid-cols-4 gap-4 break-all">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Financial Info</h2>
+        <div className="p-4 grid md:grid-cols-2 gap-4 break-all">
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Revenue</h4>
             <p className="text-sm opacity-70">{startUpApi.revenue}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Date On Boarded</h4>
-            <p className="text-sm opacity-70">{startUpApi.dateOnboarded}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Phone Number</h4>
-            <p className="text-sm opacity-70">{startUpApi.phoneNumber}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Incorporation/Founding Date</h4>
-            <p className="text-sm opacity-70">{startUpApi.foundingDate}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -84,61 +69,40 @@ const ViewStartUp = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Market Size</h4>
+            <p className="text-sm opacity-70">{startUpApi.marketSize}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Other Info</h2>
+        <div className="p-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4 break-all">
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Incorporation/Founding Date</h4>
+            <p className="text-sm opacity-70">{startUpApi.foundingDate}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Sector</h4>
             <p className="text-sm opacity-70">{startUpApi.sector}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Market Size</h4>
-            <p className="text-sm opacity-70">{startUpApi.marketSize}</p>
+            <h4 className="text-sm font-semibold">Current Round</h4>
+            <p className="text-sm opacity-70">{startUpApi.sector}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Previous Rounds</h4>
-            <p className="text-sm opacity-70">{startUpApi.previousRounds}</p>
+            <h4 className="text-sm font-semibold"> Location Country</h4>
+            <p className="text-sm opacity-70">{startUpApi.location.country}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">CurrentRound</h4>
-            <p className="text-sm opacity-70">{startUpApi.currentRound}</p>
+            <h4 className="text-sm font-semibold">Location State</h4>
+            <p className="text-sm opacity-70">{startUpApi.location.state}</p>
           </div>
 
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Current Country</h4>
-            <p className="text-sm opacity-70">{startUpApi.location?.country}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Current State</h4>
-            <p className="text-sm opacity-70">{startUpApi.location?.state}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Deadline To Close</h4>
-            <p className="text-sm opacity-70">{startUpApi.deadlineToClose}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Type Preference</h4>
-            <p className="text-sm opacity-70">{startUpApi.investorTypePreference}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Minimum Ticket Size</h4>
-            <p className="text-sm opacity-70">{startUpApi.investorMinimumTicketSize}</p>
-          </div>
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Deal Structure</h4>
-            <p className="text-sm opacity-70">{startUpApi.dealStructure}</p>
-          </div>
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Location Preference Country</h4>
-            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.country}</p>
-          </div>
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Investor Location Preference State</h4>
-            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.state}</p>
-          </div>
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Any Of The Cofounders SC/ST/OBC</h4>
             <p className="text-sm opacity-70">{startUpApi.anyOfTheCofounders_sc_st_obc ? "true" : "false"}</p>
@@ -151,11 +115,70 @@ const ViewStartUp = () => {
             <h4 className="text-sm font-semibold">Any Lead Investor</h4>
             <p className="text-sm opacity-70">{startUpApi.anyLeadInvestor ? "true" : "false"}</p>
           </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Deadline To Close</h4>
+            <p className="text-sm opacity-70">{startUpApi.deadlineToClose}</p>
+          </div>
         </div>
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Other Info</h2>
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Preferences</h2>
+        <div className="p-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4 break-all">
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Deal Structure</h4>
+            <p className="text-sm opacity-70">{startUpApi.dealStructure}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Investor Type Preference</h4>
+            <p className="text-sm opacity-70">{startUpApi.investorTypePreference}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Investor Minimum Ticket Size</h4>
+            <p className="text-sm opacity-70">{startUpApi.investorMinimumTicketSize}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Investor Location Preference Country</h4>
+            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.country}</p>
+          </div>
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Investor Location Preference State</h4>
+            <p className="text-sm opacity-70">{startUpApi?.investorLocationPreference?.state}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Documents</h2>
+        <div className="p-4 grid md:grid-cols-2 gap-4 break-all">
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Pitch Deck</h4>
+            <p className="text-sm opacity-70">{startUpApi.pitchDeck}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Business Plan</h4>
+            <p className="text-sm opacity-70">{startUpApi.businessPlan}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">MIS</h4>
+            <p className="text-sm opacity-70">{startUpApi.mIS}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Other Documents</h4>
+            <p className="text-sm opacity-70">{startUpApi.otherDocuments}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Founders</h2>
         <div className="p-4 grid md:grid-cols-2 lg:grid-cols-4 gap-4 break-all">
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Pitch Deck</h4>
@@ -180,13 +203,6 @@ const ViewStartUp = () => {
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">About the team</h2>
-        <div className="p-4">
-          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.aboutTheTeam }}></div>
-        </div>
-      </div>
-
-      <div className="mt-5 mx-5 bg-white rounded-xl border">
         <h2 className="border-b p-4 font-semibold text-xl opacity-80">About the company</h2>
         <div className="p-4">
           <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.aboutTheCompany }}></div>
@@ -201,33 +217,65 @@ const ViewStartUp = () => {
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Commitments</h2>
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Traction</h2>
         <div className="p-4">
-          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.commitments }}></div>
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.traction }}></div>
         </div>
       </div>
+
       <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">GTM</h2>
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Problem And Solution</h2>
         <div className="p-4">
-          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.gTM }}></div>
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.problemAndSolution }}></div>
         </div>
       </div>
+
       <div className="mt-5 mx-5 bg-white rounded-xl border">
         <h2 className="border-b p-4 font-semibold text-xl opacity-80">USP And Competitors</h2>
         <div className="p-4">
           <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.uSPAndCompetitors }}></div>
         </div>
       </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">About the team</h2>
+        <div className="p-4">
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.aboutTheTeam }}></div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Market Size</h2>
+        <div className="p-4">
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.marketSize }}></div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Commitments</h2>
+        <div className="p-4">
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.commitments }}></div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Previous Rounds</h2>
+        <div className="p-4">
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.previousRounds }}></div>
+        </div>
+      </div>
+
+      <div className="mt-5 mx-5 bg-white rounded-xl border">
+        <h2 className="border-b p-4 font-semibold text-xl opacity-80">GTM</h2>
+        <div className="p-4">
+          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.gTM }}></div>
+        </div>
+      </div>
+
       <div className="mt-5 mx-5 bg-white rounded-xl border">
         <h2 className="border-b p-4 font-semibold text-xl opacity-80">Future Plans</h2>
         <div className="p-4">
           <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.futurePlans }}></div>
-        </div>
-      </div>
-      <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Problem And Solution</h2>
-        <div className="p-4">
-          <div className="no-more-tailwind" dangerouslySetInnerHTML={{ __html: startUpApi.problemAndSolution }}></div>
         </div>
       </div>
     </div>

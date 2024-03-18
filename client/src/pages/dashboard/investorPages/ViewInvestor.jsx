@@ -71,7 +71,7 @@ const ViewInvestor = () => {
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Deal Structure</h4>
-            <p className="text-sm opacity-70">
+            <div className="text-xs opacity-70 flex flex-wrap gap-2">
               {investorApi?.deal_structure?.length > 0
                 ? investorApi?.deal_structure?.map((item, idx) => (
                     <p className="bg-gray-100 rounded-full py-1 px-3 border" key={idx}>
@@ -79,12 +79,22 @@ const ViewInvestor = () => {
                     </p>
                   ))
                 : "NA"}
-            </p>
+            </div>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
             <h4 className="text-sm font-semibold">Type</h4>
             <p className="text-sm opacity-70">{investorApi.type || "NA"}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Current Country</h4>
+            <p className="text-sm opacity-70">{investorApi.location.country || "NA"}</p>
+          </div>
+
+          <div className="border rounded-lg p-3 bg-white">
+            <h4 className="text-sm font-semibold">Current State</h4>
+            <p className="text-sm opacity-70">{investorApi.location.state || "NA"}</p>
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
@@ -108,7 +118,7 @@ const ViewInvestor = () => {
           </div>
 
           <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Invest Globally</h4>
+            <h4 className="text-sm font-semibold">Do they invest globally?</h4>
             <p className="text-sm opacity-70">
               {investorApi.startup_location_preference?.global ? "true" : "false" || "NA"}
             </p>
