@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import SimpleDialog from "./SimpleDialog";
 import TableRowsLoader from "./TableRowsLoader";
 
-const MyTable = ({ columns, tableDataApi, delApi }) => {
+const MyTable = ({ columns, tableDataApi, delApi, tablePermissions }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState({ data: [], total: 0 });
@@ -88,8 +88,8 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
   const handleChangePage = (event, newPage) => {
     const newSkip = newPage * rowsPerPage;
     setPage(newPage);
-    searchParams.set("skip", newSkip.toString());
-    navigate(`?${searchParams.toString()}`, { replace: true });
+    searchParams.set("skip", newSkip?.toString());
+    navigate(`?${searchParams?.toString()}`, { replace: true });
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -97,9 +97,9 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
     const newSkip = 0;
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    searchParams.set("limit", newRowsPerPage.toString());
-    searchParams.set("skip", newSkip.toString());
-    navigate(`?${searchParams.toString()}`, { replace: true });
+    searchParams.set("limit", newRowsPerPage?.toString());
+    searchParams.set("skip", newSkip?.toString());
+    navigate(`?${searchParams?.toString()}`, { replace: true });
   };
 
   return (
@@ -157,21 +157,27 @@ const MyTable = ({ columns, tableDataApi, delApi }) => {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               <div className="flex gap-2 justify-center">
-                                <Icon
-                                  onClick={() => handleView(row)}
-                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-yellow-100 text-yellow-500 border-yellow-500 text-xl"
-                                  icon={"fluent:eye-16-regular"}
-                                />
-                                <Icon
-                                  onClick={() => handleEdit(row)}
-                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-blue-100 text-blue-500 border-blue-500 text-lg"
-                                  icon={"fluent:edit-16-regular"}
-                                />
-                                <Icon
-                                  onClick={() => handleDelete(row._id, row.firm_name)}
-                                  className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-red-100 text-red-500 border-red-500 text-lg"
-                                  icon={"fluent:delete-16-regular"}
-                                />
+                                {tablePermissions?.view && (
+                                  <Icon
+                                    onClick={() => handleView(row)}
+                                    className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-yellow-100 text-yellow-500 border-yellow-500 text-xl"
+                                    icon={"fluent:eye-16-regular"}
+                                  />
+                                )}
+                                {tablePermissions?.edit && (
+                                  <Icon
+                                    onClick={() => handleEdit(row)}
+                                    className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-blue-100 text-blue-500 border-blue-500 text-lg"
+                                    icon={"fluent:edit-16-regular"}
+                                  />
+                                )}
+                                {tablePermissions?.delete && (
+                                  <Icon
+                                    onClick={() => handleDelete(row._id, row.firm_name)}
+                                    className="cursor-pointer p-1 border opacity-70 size-6 rounded-md bg-red-100 text-red-500 border-red-500 text-lg"
+                                    icon={"fluent:delete-16-regular"}
+                                  />
+                                )}
                               </div>
                             </TableCell>
                           );
