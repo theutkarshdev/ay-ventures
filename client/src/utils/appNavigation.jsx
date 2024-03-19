@@ -15,6 +15,7 @@ import ViewStartUp from "./../pages/dashboard/startUpPages/ViewStartUp";
 import EditStartUp from "./../pages/dashboard/startUpPages/EditStartUp";
 import DealFlowList from "../pages/dashboard/dealFlowPages/DealFlowList";
 import MatchMaking from "../pages/dashboard/dealFlowPages/MatchMaking";
+import ViewMatch from "../pages/dashboard/dealFlowPages/ViewMatch";
 
 // Create router configuration
 export const AdminRoutes = [
@@ -83,6 +84,10 @@ export const AdminRoutes = [
           {
             index: true,
             element: <MatchMaking />,
+          },
+          {
+            path: "view/:id",
+            element: <ViewMatch />,
           },
         ],
       },

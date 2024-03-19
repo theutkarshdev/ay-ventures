@@ -12,6 +12,13 @@ const tableColumns = [
   { id: "actions", label: "Actions", minWidth: 100, align: "center" },
 ];
 
+const permissions = {
+  edit: true,
+  view: true,
+  delete: true,
+};
+
+
 const InvestorList = () => {
   return (
     <>
@@ -21,7 +28,7 @@ const InvestorList = () => {
         btnIcon={"fluent:add-circle-20-regular"}
         btnLink="/investor/add"
       />
-      <Table delApi={"investor/delete"} tableDataApi={"investor/get-all"} columns={tableColumns} />
+      <Table delApi={"investor/delete"} tableDataApi={"investor/get-all"} columns={tableColumns} tablePermissions={permissions}/>
     </>
   );
 };

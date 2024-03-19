@@ -582,7 +582,6 @@ const AddInvestor = () => {
                   name={`employees[${index}].email`}
                   type="text"
                   label="Email"
-                  disabled
                   placeholder="Enter email"
                   value={formik.values.employees[index]?.email}
                   onChange={formik.handleChange}
