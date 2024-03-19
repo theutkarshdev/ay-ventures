@@ -26,7 +26,7 @@ export async function getAllMatchMaking(req, res) {
       match.emailQueue.forEach((email) => {
         const mailArray = email.send.timeline?.map((time, timeIndex) => {
           const employee =
-            timeIndex === 2
+            timeIndex === 3
               ? match.investorId.employees[1] || match.investorId.employees[0]
               : match.investorId.employees[0];
 
@@ -77,13 +77,13 @@ const {id}=req.params;
 ;
 const mailArray = match.emailQueue[0].send.timeline?.map((time, timeIndex) => {
   const employee =
-    timeIndex === 2
+    timeIndex === 3
       ? match.investorId.employees[1] || match.investorId.employees[0]
       : match.investorId.employees[0];
 
   return {
-    sentTo: match.emailQueue[0].email,
-    empName: match.emailQueue[0].first_name,
+    sentTo: employee.email,
+    empName: employee.first_name,
     sentDate: time,
     mailType:
       timeIndex === 2
