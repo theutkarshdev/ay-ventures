@@ -23,7 +23,7 @@ const matchMakingSchema = new Schema(
           },
           timeline: [
             {
-              type: Date,
+              type: String,
             },
           ],
         },
