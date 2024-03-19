@@ -11,6 +11,12 @@ const tableColumns = [
   { id: "actions", label: "Actions", minWidth: 100, align: "center" },
 ];
 
+const permissions = {
+  edit: true,
+  view: true,
+  delete: false,
+};
+
 const StartUpList = () => {
   return (
     <>
@@ -20,7 +26,12 @@ const StartUpList = () => {
         btnIcon={"fluent:add-circle-20-regular"}
         btnLink="/startup/add"
       />
-      <Table delApi={"startup/delete"} tableDataApi={"startup/get-all"} columns={tableColumns} />
+      <Table
+        delApi={"startup/delete"}
+        tableDataApi={"startup/get-all"}
+        columns={tableColumns}
+        tablePermissions={permissions}
+      />
     </>
   );
 };
