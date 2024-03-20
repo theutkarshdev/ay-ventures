@@ -177,7 +177,9 @@ const ViewInvestor = () => {
 
                 <div className="border rounded-lg p-3 bg-white">
                   <h4 className="text-sm font-semibold">LinkedIn</h4>
-                  <p className="text-sm opacity-70">{emp.linkedin}</p>
+                  <Link to={emp.linkedin} className="text-sm text-sky-600">
+                    {emp.linkedin}
+                  </Link>
                 </div>
               </div>
             </div>
