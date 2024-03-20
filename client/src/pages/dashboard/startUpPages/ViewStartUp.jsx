@@ -177,29 +177,58 @@ const ViewStartUp = () => {
         </div>
       </div>
 
-      <div className="mt-5 mx-5 bg-white rounded-xl border">
-        <h2 className="border-b p-4 font-semibold text-xl opacity-80">Founders</h2>
-        <div className="p-4 grid md:grid-cols-2 lg:grid-cols-4 gap-4 break-all">
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Pitch Deck</h4>
-            <p className="text-sm opacity-70">{startUpApi?.pitchDeck}</p>
-          </div>
+      <div className="mt-5 mx-5 p-5 pt-3 bg-white rounded-xl border break-all">
+        <h2 className="border-b pb-3 mb-5 font-semibold text-xl opacity-80">Founders Info</h2>
+        <div className="mt-5 bg-white rounded-lg p-4">
+          <h3 className="text-lg font-semibold">Founder</h3>
+          <div className="grid grid-cols-4 gap-4 mt-4 break-all">
+            <div className="border rounded-lg p-3 bg-white">
+              <h4 className="text-sm font-semibold">Full Name</h4>
+              <p className="text-sm opacity-70">{startUpApi.founder}</p>
+            </div>
+            <div className="border rounded-lg p-3 bg-white">
+              <h4 className="text-sm font-semibold">Email</h4>
+              <p className="text-sm opacity-70">{startUpApi.email}</p>
+            </div>
 
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Business Plan</h4>
-            <p className="text-sm opacity-70">{startUpApi?.businessPlan}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">MIS</h4>
-            <p className="text-sm opacity-70">{startUpApi?.mIS}</p>
-          </div>
-
-          <div className="border rounded-lg p-3 bg-white">
-            <h4 className="text-sm font-semibold">Other Documents</h4>
-            <p className="text-sm opacity-70">{startUpApi?.otherDocuments}</p>
+            <div className="border rounded-lg p-3 bg-white">
+              <h4 className="text-sm font-semibold">Phone Number</h4>
+              <p className="text-sm opacity-70">{startUpApi.phoneNumber}</p>
+            </div>
           </div>
         </div>
+        {startUpApi?.coFounders?.length > 0 &&
+          startUpApi?.coFounders?.map((cof, index) => (
+            <div key={index} className="mt-5 bg-white rounded-lg p-4">
+              <h3 className="text-lg font-semibold">Co-Founder {index + 1}</h3>
+              <div className="grid grid-cols-4 gap-4 mt-4 break-all">
+                <div className="border rounded-lg p-3 bg-white">
+                  <h4 className="text-sm font-semibold">First Name</h4>
+                  <p className="text-sm opacity-70">{cof.first_name}</p>
+                </div>
+
+                <div className="border rounded-lg p-3 bg-white">
+                  <h4 className="text-sm font-semibold">Last Name</h4>
+                  <p className="text-sm opacity-70">{cof.last_name}</p>
+                </div>
+
+                <div className="border rounded-lg p-3 bg-white">
+                  <h4 className="text-sm font-semibold">Email</h4>
+                  <p className="text-sm opacity-70">{cof.email}</p>
+                </div>
+
+                <div className="border rounded-lg p-3 bg-white">
+                  <h4 className="text-sm font-semibold">Phone Number</h4>
+                  <p className="text-sm opacity-70">{cof.phone_number}</p>
+                </div>
+
+                <div className="border rounded-lg p-3 bg-white">
+                  <h4 className="text-sm font-semibold">LinkedIn</h4>
+                  <p className="text-sm opacity-70">{cof.linkedin}</p>
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
 
       <div className="mt-5 mx-5 bg-white rounded-xl border">
