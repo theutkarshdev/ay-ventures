@@ -109,6 +109,17 @@ const AddInvestor = () => {
     setEmployees((prevEmployees) => prevEmployees.filter((_, i) => i !== index));
   };
 
+  const handleGlobalCheckboxChange = (event) => {
+    const { checked } = event.target;
+    if (checked) {
+      formik.setFieldValue("startup_location_preference.global", true);
+      formik.setFieldValue("startup_location_preference.country", []);
+      formik.setFieldValue("startup_location_preference.state", []);
+    } else {
+      formik.setFieldValue("startup_location_preference.global", false);
+    }
+  };
+
   return (
     <>
       <PageNav
@@ -148,32 +159,47 @@ const AddInvestor = () => {
               helperText={formik.touched.firm_email && formik.errors.firm_email ? formik.errors.firm_email : ""}
             />
 
-            <MySelect
-              name="location.country"
-              label="Current Country"
-              options={countries} // Define your country options
+            <Autocomplete
+              size="small"
+              options={countries} // Define your options
               value={formik.values.location.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.country && formik.errors.location?.country}
-              helperText={
-                formik.touched.location?.country && formik.errors.location?.country
-                  ? formik.errors.location?.country
-                  : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.country", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.country"
+                  label="Current Country"
+                  error={formik.touched.location?.country && formik.errors.location?.country}
+                  helperText={
+                    formik.touched.location?.country && formik.errors.location?.country
+                      ? formik.errors.location?.country
+                      : ""
+                  }
+                />
+              )}
             />
 
-            <MySelect
-              name="location.state"
-              label="Current State"
-              options={indianStates} // Define your state options
+            <Autocomplete
+              size="small"
+              disabled={formik.values.location.country !== "India"}
+              options={indianStates} // Define your options
               value={formik.values.location.state}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.state && formik.errors.location?.state}
-              helperText={
-                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.state", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.state"
+                  label="Current State"
+                  error={formik.touched.location?.state && formik.errors.location?.state}
+                  helperText={
+                    formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+                  }
+                />
+              )}
             />
 
             {/* Ticket Size */}
@@ -226,7 +252,7 @@ const AddInvestor = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
             <Autocomplete
               size="small"
-              className="col-span-4"
+              className="md:col-span-2 lg:col-span-3"
               multiple
               id="sector_focus"
               filterOptions={(options, params) => {
@@ -286,7 +312,7 @@ const AddInvestor = () => {
                   type="checkbox"
                   name="startup_location_preference.global"
                   checked={formik.values.startup_location_preference.global}
-                  onChange={formik.handleChange}
+                  onChange={handleGlobalCheckboxChange}
                   className="mt-0.5"
                 />
                 Global
@@ -332,7 +358,10 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.startup_location_preference.global}
+              disabled={
+                formik.values.startup_location_preference.global ||
+                !formik.values.startup_location_preference.country.includes("India")
+              }
               id="startup_location_preference_state"
               options={indianStates} // Define your options
               value={formik.values.startup_location_preference.state}
