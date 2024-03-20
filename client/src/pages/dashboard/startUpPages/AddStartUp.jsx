@@ -303,33 +303,47 @@ const AddStartUp = () => {
               error={formik.touched.currentRound && formik.errors.currentRound}
               helperText={formik.touched.currentRound && formik.errors.currentRound ? formik.errors.currentRound : ""}
             />
-
-            <MySelect
-              name="location.country"
-              label="Current Country"
-              options={countries} // Define your country options
+            <Autocomplete
+              size="small"
+              options={countries} // Define your options
               value={formik.values.location.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.country && formik.errors.location?.country}
-              helperText={
-                formik.touched.location?.country && formik.errors.location?.country
-                  ? formik.errors.location?.country
-                  : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.country", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.country"
+                  label="Current Country"
+                  error={formik.touched.location?.country && formik.errors.location?.country}
+                  helperText={
+                    formik.touched.location?.country && formik.errors.location?.country
+                      ? formik.errors.location?.country
+                      : ""
+                  }
+                />
+              )}
             />
 
-            <MySelect
-              name="location.state"
-              label="Current State"
-              options={indianStates} // Define your state options
+            <Autocomplete
+              size="small"
+              disabled={formik.values.location.country !== "India"}
+              options={indianStates} // Define your options
               value={formik.values.location.state}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.state && formik.errors.location?.state}
-              helperText={
-                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.state", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.state"
+                  label="Current State"
+                  error={formik.touched.location?.state && formik.errors.location?.state}
+                  helperText={
+                    formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+                  }
+                />
+              )}
             />
 
             {/* Deadline to Close */}
@@ -420,7 +434,6 @@ const AddStartUp = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.investorLocationPreference.global}
               id="investorLocationPreference_country"
               options={countries} // Define your options
               value={formik.values.investorLocationPreference.country}
@@ -455,7 +468,7 @@ const AddStartUp = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.investorLocationPreference.global}
+              disabled={!formik.values.investorLocationPreference.country.includes("India")}
               id="investorLocationPreference_state"
               options={indianStates} // Define your options
               value={formik.values.investorLocationPreference.state}
