@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import PageNav from "../../../components/header/PageNav";
 import { Icon } from "@iconify/react";
@@ -224,7 +224,9 @@ const ViewStartUp = () => {
 
                 <div className="border rounded-lg p-3 bg-white">
                   <h4 className="text-sm font-semibold">LinkedIn</h4>
-                  <p className="text-sm opacity-70">{cof.linkedin}</p>
+                  <Link to={cof.linkedin} className="text-sm text-sky-600">
+                    {cof.linkedin}
+                  </Link>
                 </div>
               </div>
             </div>
