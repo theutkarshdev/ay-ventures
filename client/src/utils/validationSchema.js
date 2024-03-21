@@ -41,6 +41,8 @@ export const investorValidationSchema = Yup.object({
     .required("Ticket Size is Required")
     .positive("max Ticket Size must be a positive number"),
   website: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
+  companyLinkedin: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
+  founderLinkedin: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
   date_onboarded: Yup.date().required("Date Onboarded is Required"),
   rounds_invest_in: Yup.array().min(1, "At least one round to invest in is required"),
   startup_min_revenue: Yup.number().positive("Revenue must be a positive number"),
