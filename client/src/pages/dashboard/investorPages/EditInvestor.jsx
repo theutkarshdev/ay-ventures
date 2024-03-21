@@ -145,10 +145,20 @@ const AddInvestor = () => {
     fetchInvestor();
   }, []);
 
+  const handleGlobalCheckboxChange = (event) => {
+    const { checked } = event.target;
+    if (checked) {
+      formik.setFieldValue("startup_location_preference.global", true);
+      formik.setFieldValue("startup_location_preference.country", []);
+      formik.setFieldValue("startup_location_preference.state", []);
+    } else {
+      formik.setFieldValue("startup_location_preference.global", false);
+    }
+  };
   return (
     <>
       <PageNav
-        label={"Edit Investor"}
+        label={"Add Investor"}
         btnText={"Investor List"}
         btnIcon={"solar:users-group-rounded-outline"}
         btnLink="/investor"
@@ -175,7 +185,6 @@ const AddInvestor = () => {
             <MyInput
               name="firm_email"
               type="email"
-              disabled
               label="Investor Firm Email"
               placeholder="Ex: example@gmail.com"
               value={formik.values.firm_email}
@@ -185,64 +194,45 @@ const AddInvestor = () => {
               helperText={formik.touched.firm_email && formik.errors.firm_email ? formik.errors.firm_email : ""}
             />
 
-            {/* Type */}
-            <MySelect
-              name="type"
-              label="Type"
-              options={investorTypes}
-              value={formik.values.type}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.type && formik.errors.type}
-              helperText={formik.touched.type && formik.errors.type ? formik.errors.type : ""}
-            />
-
-            <MySelect
-              name="location.country"
-              label="Current Country"
-              options={countries} // Define your country options
-              value={formik.values.location.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.country && formik.errors.location?.country}
-              helperText={
-                formik.touched.location?.country && formik.errors.location?.country
-                  ? formik.errors.location?.country
-                  : ""
-              }
-            />
-
-            <MySelect
-              name="location.state"
-              label="Current State"
-              options={indianStates} // Define your state options
-              value={formik.values.location.state}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.state && formik.errors.location?.state}
-              helperText={
-                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
-              }
-            />
-
-            {/* Replace array fields with Autocomplete */}
             <Autocomplete
               size="small"
-              multiple
-              id="sector_focus"
-              options={sectorFocusOptions}
-              value={formik.values.sector_focus}
+              options={countries} // Define your options
+              value={formik.values.location.country}
               onChange={(event, newValue) => {
-                formik.setFieldValue("sector_focus", newValue);
+                formik.setFieldValue("location.country", newValue);
               }}
               renderInput={(params) => (
                 <MyInput
                   {...params}
-                  name="sector_focus"
-                  label="Sector Focus"
-                  placeholder="Select sector focus"
-                  error={formik.touched.sector_focus && Boolean(formik.errors.sector_focus)}
-                  helperText={formik.touched.sector_focus && formik.errors.sector_focus}
+                  name="location.country"
+                  label="Current Country"
+                  error={formik.touched.location?.country && formik.errors.location?.country}
+                  helperText={
+                    formik.touched.location?.country && formik.errors.location?.country
+                      ? formik.errors.location?.country
+                      : ""
+                  }
+                />
+              )}
+            />
+
+            <Autocomplete
+              size="small"
+              disabled={formik.values.location.country !== "India"}
+              options={indianStates} // Define your options
+              value={formik.values.location.state}
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.state", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.state"
+                  label="Current State"
+                  error={formik.touched.location?.state && formik.errors.location?.state}
+                  helperText={
+                    formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+                  }
                 />
               )}
             />
@@ -267,7 +257,7 @@ const AddInvestor = () => {
               name="website"
               type="url"
               label="Website"
-              placeholder="Enter website URL"
+              placeholder="Eg: https://example.com"
               value={formik.values.website}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -289,12 +279,52 @@ const AddInvestor = () => {
                 formik.touched.date_onboarded && formik.errors.date_onboarded ? formik.errors.date_onboarded : ""
               }
             />
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Thesis</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            <Autocomplete
+              size="small"
+              className="md:col-span-2 lg:col-span-3"
+              multiple
+              id="sector_focus"
+              filterOptions={(options, params) => {
+                const filter = createFilterOptions();
+                const filtered = filter(options, params);
+                return ["Select All...", ...filtered];
+              }}
+              options={sectorFocusOptions}
+              value={formik.values.sector_focus}
+              onChange={(event, newValue) => {
+                if (newValue.find((option) => option === "Select All...")) {
+                  formik.setFieldValue(
+                    "sector_focus",
+                    newValue.length === sectorFocusOptions.length ? [] : sectorFocusOptions,
+                  );
+                  return;
+                }
+
+                formik.setFieldValue("sector_focus", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="sector_focus"
+                  label="Sector Focus"
+                  placeholder="Select sector focus"
+                  error={formik.touched.sector_focus && Boolean(formik.errors.sector_focus)}
+                  helperText={formik.touched.sector_focus && formik.errors.sector_focus}
+                />
+              )}
+            />
 
             <Autocomplete
               size="small"
               multiple
               id="rounds_invest_in"
-              options={roundInvestOptions}
+              options={roundInvestOptions} // Define your options
               value={formik.values.rounds_invest_in}
               onChange={(event, newValue) => {
                 formik.setFieldValue("rounds_invest_in", newValue);
@@ -311,90 +341,13 @@ const AddInvestor = () => {
               )}
             />
 
-            <Autocomplete
-              size="small"
-              multiple
-              id="deal_structure"
-              options={dealStructureOptions}
-              value={formik.values.deal_structure}
-              onChange={(event, newValue) => {
-                formik.setFieldValue("deal_structure", newValue);
-              }}
-              renderInput={(params) => (
-                <MyInput
-                  {...params}
-                  name="deal_structure"
-                  label="Deal Structure"
-                  placeholder="Select Deal Structure"
-                  error={formik.touched.deal_structure && Boolean(formik.errors.deal_structure)}
-                  helperText={formik.touched.deal_structure && formik.errors.deal_structure}
-                />
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">Preference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
-            {/* Company Age */}
-            <MyInput
-              name="startup_min_company_age"
-              type="number"
-              label="Minimum Company Age in Months"
-              placeholder="Enter minimum company age in Months"
-              value={formik.values.startup_min_company_age}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_min_company_age && formik.errors.startup_min_company_age}
-              helperText={
-                formik.touched.startup_min_company_age && formik.errors.startup_min_company_age
-                  ? formik.errors.startup_min_company_age
-                  : ""
-              }
-            />
-
-            {/* startup_min_revenue */}
-            <MyInput
-              name="startup_min_revenue"
-              type="number"
-              label="startup_min_revenue in USD($)"
-              placeholder="Enter startup_min_revenue in USD($)"
-              value={formik.values.startup_min_revenue}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_min_revenue && formik.errors.startup_min_revenue}
-              helperText={
-                formik.touched.startup_min_revenue && formik.errors.startup_min_revenue
-                  ? formik.errors.startup_min_revenue
-                  : ""
-              }
-            />
-
-            {/* Valuation Cap */}
-            <MyInput
-              name="startup_max_valuation_cap"
-              type="number"
-              label="Valuation Cap in USD($)"
-              placeholder="Enter valuation cap in USD($)"
-              value={formik.values.startup_max_valuation_cap}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap}
-              helperText={
-                formik.touched.startup_max_valuation_cap && formik.errors.startup_max_valuation_cap
-                  ? formik.errors.startup_max_valuation_cap
-                  : ""
-              }
-            />
-
             <div className="border rounded p-2 border-gray-400">
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  name="startup_location_preference.global" // Corrected name attribute
+                  name="startup_location_preference.global"
                   checked={formik.values.startup_location_preference.global}
-                  onChange={formik.handleChange}
+                  onChange={handleGlobalCheckboxChange}
                   className="mt-0.5"
                 />
                 Global
@@ -405,9 +358,9 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.startup_location_preference.global} // Disable based on global value
+              disabled={formik.values.startup_location_preference.global}
               id="startup_location_preference_country"
-              options={countries} // This should be your country options
+              options={countries} // Define your options
               value={formik.values.startup_location_preference.country}
               onChange={(event, newValue) => {
                 formik.setFieldValue("startup_location_preference.country", newValue);
@@ -440,9 +393,12 @@ const AddInvestor = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.startup_location_preference.global} // Disable based on global value
+              disabled={
+                formik.values.startup_location_preference.global ||
+                !formik.values.startup_location_preference.country.includes("India")
+              }
               id="startup_location_preference_state"
-              options={indianStates} // This should be your state options
+              options={indianStates} // Define your options
               value={formik.values.startup_location_preference.state}
               onChange={(event, newValue) => {
                 formik.setFieldValue("startup_location_preference.state", newValue);
@@ -470,6 +426,71 @@ const AddInvestor = () => {
                 />
               )}
             />
+          </div>
+        </div>
+
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Additional Preferences</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 items-center">
+            {/* Type */}
+            <MySelect
+              name="type"
+              label="Type"
+              options={investorTypes} // Define your options
+              value={formik.values.type}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.type && formik.errors.type}
+              helperText={formik.touched.type && formik.errors.type ? formik.errors.type : ""}
+            />
+
+            <Autocomplete
+              size="small"
+              multiple
+              id="deal_structure"
+              options={dealStructureOptions} // Define your options
+              value={formik.values.deal_structure}
+              onChange={(event, newValue) => {
+                formik.setFieldValue("deal_structure", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="deal_structure"
+                  label="Deal Structure"
+                  placeholder="Select Deal Structure"
+                  error={formik.touched.deal_structure && Boolean(formik.errors.deal_structure)}
+                  helperText={formik.touched.deal_structure && formik.errors.deal_structure}
+                />
+              )}
+            />
+            {/* Company Age */}
+            <MyInput
+              name="startup_min_company_age"
+              type="number"
+              label="Minimum Company Age in Months"
+              placeholder="Enter minimum company age in Months"
+              value={formik.values.startup_min_company_age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.startup_min_company_age && formik.errors.startup_min_company_age}
+              helperText={
+                formik.touched.startup_min_company_age && formik.errors.startup_min_company_age
+                  ? formik.errors.startup_min_company_age
+                  : ""
+              }
+            />
+            {/* Revenue */}
+
+            <CurrencyInput name="startup_min_revenue" label="Minimum Revenue in USD($)" formik={formik} />
+
+            {/* Valuation Cap */}
+            <CurrencyInput
+              name="startup_max_valuation_cap"
+              type="number"
+              label="Maximum Valuation Cap in USD($)"
+              formik={formik}
+            />
 
             {/* Checkbox for lead investor required */}
             <div className="border rounded p-2 border-gray-400">
@@ -490,7 +511,7 @@ const AddInvestor = () => {
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  name="preference.sc_st_obc" // Corrected name attribute
+                  name="preference.sc_st_obc"
                   checked={formik.values.preference.sc_st_obc}
                   onChange={formik.handleChange}
                   className="mt-0.5"
@@ -502,7 +523,7 @@ const AddInvestor = () => {
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
-                  name="preference.women" // Corrected name attribute
+                  name="preference.women"
                   checked={formik.values.preference.women}
                   onChange={formik.handleChange}
                   className="mt-0.5"
@@ -582,7 +603,6 @@ const AddInvestor = () => {
                   name={`employees[${index}].email`}
                   type="text"
                   label="Email"
-                  disabled
                   placeholder="Enter email"
                   value={formik.values.employees[index]?.email}
                   onChange={formik.handleChange}
@@ -607,20 +627,13 @@ const AddInvestor = () => {
                     formik.touched.employees && formik.errors.employees && formik.errors.employees[index]?.linkedin
                   }
                 />
-                {/* Add more fields for other employee details as needed */}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mx-5 float-right">
-          <FilledBtn
-            type="submit"
-            extra="my-10"
-            iconRight={true}
-            icon="solar:arrow-right-linear"
-            text="Save Investor"
-          />
+        <div className="p-5 float-right">
+          <FilledBtn type="submit" text="Save Investor" />
         </div>
       </form>
     </>

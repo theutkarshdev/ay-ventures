@@ -153,7 +153,7 @@ const EditStartUp = () => {
   return (
     <>
       <PageNav
-        label={"Update StartUp"}
+        label={"Add StartUp"}
         btnText={"StartUp List"}
         btnIcon={"solar:users-group-rounded-outline"}
         btnLink="/startup"
@@ -231,7 +231,7 @@ const EditStartUp = () => {
             {/* MIS */}
             <MyInput
               name="mIS"
-              type="text"
+              type="url"
               label="MIS"
               value={formik.values.mIS}
               onChange={formik.handleChange}
@@ -243,7 +243,7 @@ const EditStartUp = () => {
             {/* Other Documents */}
             <MyInput
               name="otherDocuments"
-              type="text"
+              type="url"
               label="Other Documents"
               value={formik.values.otherDocuments}
               onChange={formik.handleChange}
@@ -295,35 +295,9 @@ const EditStartUp = () => {
               )}
             />
 
-            {/* Market Size */}
-            <MyInput
-              name="marketSize"
-              type="text"
-              label="Market Size"
-              value={formik.values.marketSize}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.marketSize && formik.errors.marketSize}
-              helperText={formik.touched.marketSize && formik.errors.marketSize ? formik.errors.marketSize : ""}
-            />
-
-            {/* Previous Rounds */}
-            <MyInput
-              name="previousRounds"
-              type="text"
-              label="Previous Rounds"
-              value={formik.values.previousRounds}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.previousRounds && formik.errors.previousRounds}
-              helperText={
-                formik.touched.previousRounds && formik.errors.previousRounds ? formik.errors.previousRounds : ""
-              }
-            />
-
             <MyInput
               name="pitchDeck"
-              type="text"
+              type="url"
               label="Pitch Deck"
               value={formik.values.pitchDeck}
               onChange={formik.handleChange}
@@ -334,7 +308,7 @@ const EditStartUp = () => {
 
             <MyInput
               name="businessPlan"
-              type="text"
+              type="url"
               label="Business Plan"
               value={formik.values.businessPlan}
               onChange={formik.handleChange}
@@ -354,33 +328,47 @@ const EditStartUp = () => {
               error={formik.touched.currentRound && formik.errors.currentRound}
               helperText={formik.touched.currentRound && formik.errors.currentRound ? formik.errors.currentRound : ""}
             />
-
-            <MySelect
-              name="location.country"
-              label="Current Country"
-              options={countries} // Define your country options
+            <Autocomplete
+              size="small"
+              options={countries} // Define your options
               value={formik.values.location.country}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.country && formik.errors.location?.country}
-              helperText={
-                formik.touched.location?.country && formik.errors.location?.country
-                  ? formik.errors.location?.country
-                  : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.country", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.country"
+                  label="Current Country"
+                  error={formik.touched.location?.country && formik.errors.location?.country}
+                  helperText={
+                    formik.touched.location?.country && formik.errors.location?.country
+                      ? formik.errors.location?.country
+                      : ""
+                  }
+                />
+              )}
             />
 
-            <MySelect
-              name="location.state"
-              label="Current State"
-              options={indianStates} // Define your state options
+            <Autocomplete
+              size="small"
+              disabled={formik.values.location.country !== "India"}
+              options={indianStates} // Define your options
               value={formik.values.location.state}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.location?.state && formik.errors.location?.state}
-              helperText={
-                formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
-              }
+              onChange={(event, newValue) => {
+                formik.setFieldValue("location.state", newValue);
+              }}
+              renderInput={(params) => (
+                <MyInput
+                  {...params}
+                  name="location.state"
+                  label="Current State"
+                  error={formik.touched.location?.state && formik.errors.location?.state}
+                  helperText={
+                    formik.touched.location?.state && formik.errors.location?.state ? formik.errors.location?.state : ""
+                  }
+                />
+              )}
             />
 
             {/* Deadline to Close */}
@@ -471,7 +459,6 @@ const EditStartUp = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.investorLocationPreference.global}
               id="investorLocationPreference_country"
               options={countries} // Define your options
               value={formik.values.investorLocationPreference.country}
@@ -506,7 +493,7 @@ const EditStartUp = () => {
             <Autocomplete
               size="small"
               multiple
-              disabled={formik.values.investorLocationPreference.global}
+              disabled={!formik.values.investorLocationPreference.country.includes("India")}
               id="investorLocationPreference_state"
               options={indianStates} // Define your options
               value={formik.values.investorLocationPreference.state}
@@ -627,6 +614,20 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="problemAndSolution"
               label="Problem And Solution"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="marketSize"
+              label="Market Size"
+            />
+
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="previousRounds"
+              label="Previous Rounds"
             />
           </div>
         </div>

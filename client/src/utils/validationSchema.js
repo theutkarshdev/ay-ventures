@@ -21,6 +21,7 @@ const employeeSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required")
     .required("Email is required"),
+  linkedin: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
   // Add more fields as needed
 });
 export const investorValidationSchema = Yup.object({
@@ -68,7 +69,7 @@ const coFounderSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format")
     .required("Email is Required")
     .required("Email is required"),
-  linkedin: Yup.string().required("Linkedin url is required"),
+  linkedin: Yup.string().matches(/^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/, "Invalid website URL"),
   // Add more fields as needed
 });
 export const startUpValidationSchema = Yup.object().shape({
