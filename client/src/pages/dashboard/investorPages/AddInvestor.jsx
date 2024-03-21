@@ -18,6 +18,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import CurrencyInput from "../../../components/form/CurrencyInput";
+import MyCheckbox from "../../../components/form/MyCheckBox";
 
 const initialValues = {
   firm_name: "",
@@ -433,8 +434,9 @@ const AddInvestor = () => {
             <MyInput
               name="startup_min_company_age"
               type="number"
-              label="Minimum Company Age in Months"
-              placeholder="Enter minimum company age in Months"
+              label="Min Company Age (Months)"
+              popover="Min age of the company required by the investor to invest."
+              placeholder="Enter minimum company age (Months)"
               value={formik.values.startup_min_company_age}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -457,45 +459,32 @@ const AddInvestor = () => {
               formik={formik}
             />
 
-            {/* Checkbox for lead investor required */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="lead_investor_required"
-                  checked={formik.values.lead_investor_required}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Lead Investor Required
-              </label>
-            </div>
+            <MyCheckbox
+              label="Lead Investor Required"
+              name="lead_investor_required"
+              checked={formik.values.lead_investor_required}
+              onChange={formik.handleChange}
+              tooltip={"Do the investor require commitment from another lead investor before investing themselves?"}
+            />
 
-            {/* Checkboxes for preference */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="preference.sc_st_obc"
-                  checked={formik.values.preference.sc_st_obc}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                SC/ST/OBC
-              </label>
-            </div>
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="preference.women"
-                  checked={formik.values.preference.women}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Women
-              </label>
-            </div>
+            {/* Checkboxes for preferences */}
+            <MyCheckbox
+              label="SC/ST/OBC"
+              name="preference.sc_st_obc"
+              checked={formik.values.preference.sc_st_obc}
+              onChange={formik.handleChange}
+              tooltip={
+                "Does the investor have a preference for companies who have at least one cofounder from SC/ST/OBC background?"
+              }
+            />
+
+            <MyCheckbox
+              label="Women"
+              name="preference.women"
+              checked={formik.values.preference.women}
+              onChange={formik.handleChange}
+              tooltip={"Does the investor have a preference for companies that have at least one woman cofounder?"}
+            />
           </div>
         </div>
 
