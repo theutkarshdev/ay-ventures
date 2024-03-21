@@ -14,6 +14,8 @@ const CoFounderSchema = new Schema({
 const StartUpSchema = new Schema({
   dateOnboarded: String,
   companyName: String,
+  companyLinkedIn: String,
+  foundersLinkedIn: String,
   founder: String,
   email: String,
   phoneNumber: String,

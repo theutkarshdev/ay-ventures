@@ -24,6 +24,8 @@ const initialValues = {
   dateOnboarded: "",
   companyName: "",
   founder: "",
+  companyLinkedin: "",
+  founderLinkedin: "",
   email: "",
   location: {
     country: "",
@@ -165,16 +167,42 @@ const AddStartUp = () => {
               helperText={formik.touched.companyName && formik.errors.companyName ? formik.errors.companyName : ""}
             />
 
+            <MyInput
+              name="companyLinkedin"
+              type="url"
+              label="Company Linkedin"
+              value={formik.values.companyLinkedin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.companyLinkedin && formik.errors.companyLinkedin}
+              helperText={
+                formik.touched.companyLinkedin && formik.errors.companyLinkedin ? formik.errors.companyLinkedin : ""
+              }
+            />
+
             {/* Founder */}
             <MyInput
               name="founder"
               type="text"
-              label="Founder"
+              label="Founder Name"
               value={formik.values.founder}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.founder && formik.errors.founder}
               helperText={formik.touched.founder && formik.errors.founder ? formik.errors.founder : ""}
+            />
+
+            <MyInput
+              name="founderLinkedin"
+              type="url"
+              label="Founder Linkedin"
+              value={formik.values.founderLinkedin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.founderLinkedin && formik.errors.founderLinkedin}
+              helperText={
+                formik.touched.founderLinkedin && formik.errors.founderLinkedin ? formik.errors.founderLinkedin : ""
+              }
             />
 
             {/* Email */}
