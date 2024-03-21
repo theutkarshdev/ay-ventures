@@ -26,6 +26,11 @@ const matchMakingSchema = new Schema(
               type: String,
             },
           ],
+          messageIds: [
+            {
+              type: String,
+            },
+          ],
         },
         score: {
           type: Number,
@@ -39,6 +44,15 @@ const matchMakingSchema = new Schema(
         remark: String,
       },
     ],
+    lastinitalMail:{
+      type:String,
+      default:""
+    },
+    lastfollowUpMail:{
+      type:String,
+      default:""
+    },
+
   },
   { timestamps: true }
 );
