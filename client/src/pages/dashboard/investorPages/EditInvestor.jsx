@@ -20,6 +20,10 @@ import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
 import { useParams } from "react-router-dom";
 import CurrencyInput from "../../../components/form/CurrencyInput";
+import MyCheckbox from './../../../components/form/MyCheckBox';
+
+
+
 
 const initialValues = {
   firm_name: "",
@@ -120,6 +124,7 @@ const AddInvestor = () => {
   const fetchInvestor = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACK_URL}/api/investor/get/${id}`);
+
 
       if (response.status === 200) {
         setPrevInvestorData(response?.data?.data);

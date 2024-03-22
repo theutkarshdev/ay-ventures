@@ -285,8 +285,8 @@ const AddStartUp = () => {
             />
             <Autocomplete
               size="small"
-              options={countries} // Define your options
-              value={formik.values.location.country}
+              options={countries}
+              value={indianStates.includes(formik.values.location.country) ? formik.values.location.country : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.country", newValue);
               }}
@@ -309,7 +309,7 @@ const AddStartUp = () => {
               size="small"
               disabled={formik.values.location.country !== "India"}
               options={indianStates} // Define your options
-              value={formik.values.location.state}
+              value={indianStates.includes(formik.values.location.state) ? formik.values.location.state : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.state", newValue);
               }}
@@ -708,7 +708,9 @@ const AddStartUp = () => {
               placeholder="Write some content here..."
               name="previousRounds"
               label="Previous Rounds"
-              tooltip={"funding that a company  has received from private equity investors in previous round<br/> Ex- raised 750 k from finserv capital at 12 Cr valuation in seed round"}
+              tooltip={
+                "funding that a company  has received from private equity investors in previous round<br/> Ex- raised 750 k from finserv capital at 12 Cr valuation in seed round"
+              }
             />
           </div>
         </div>
