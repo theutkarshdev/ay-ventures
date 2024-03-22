@@ -5,7 +5,7 @@ import FilledBtn from "./../../../components/buttons/FilledBtn";
 import MySelect from "./../../../components/form/MySelect";
 import { startUpValidationSchema } from "./../../../utils/validationSchema";
 import PageNav from "./../../../components/header/PageNav";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, Tooltip } from "@mui/material";
 import {
   indianStates,
   investorTypes,
@@ -20,11 +20,15 @@ import QuillEditor from "../../../components/form/QuillEditor";
 import { useParams } from "react-router-dom";
 import { isEqual } from "lodash";
 import CurrencyInput from "../../../components/form/CurrencyInput";
+import MyCheckbox from "./../../../components/form/MyCheckBox";
+import { Icon } from "@iconify/react";
 
 const initialValues = {
   dateOnboarded: "",
   companyName: "",
   founder: "",
+  companyLinkedin: "",
+  founderLinkedin: "",
   email: "",
   location: {
     country: "",
@@ -48,10 +52,6 @@ const initialValues = {
   previousRounds: "",
   commitments: "",
   currentRound: "",
-  location: {
-    country: "",
-    state: "",
-  },
   deadlineToClose: "",
   investorTypePreference: [],
   investorMinimumTicketSize: 0,
@@ -308,7 +308,7 @@ const EditStartUp = () => {
             <Autocomplete
               size="small"
               options={countries} // Define your options
-              value={formik.values.location.country}
+              value={indianStates.includes(formik.values.location.country) ? formik.values.location.country : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.country", newValue);
               }}
@@ -331,7 +331,7 @@ const EditStartUp = () => {
               size="small"
               disabled={formik.values.location.country !== "India"}
               options={indianStates} // Define your options
-              value={formik.values.location.state}
+              value={indianStates.includes(formik.values.location.state) ? formik.values.location.state : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.state", newValue);
               }}
@@ -598,33 +598,21 @@ const EditStartUp = () => {
             />
 
             {/* SC/ST/OBC Cofounders */}
-
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="anyOfTheCofounders_sc_st_obc"
-                  checked={formik.values.anyOfTheCofounders_sc_st_obc}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Any of the Cofounders SC/ST/OBC
-              </label>
-            </div>
+            <MyCheckbox
+              label="Any of the Cofounders SC/ST/OBC"
+              name="anyOfTheCofounders_sc_st_obc"
+              checked={formik.values.anyOfTheCofounders_sc_st_obc}
+              onChange={formik.handleChange}
+            />
 
             {/* Woman Cofounders */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  name="anyOfTheCofoundersWoman"
-                  type="checkbox"
-                  checked={formik.values.anyOfTheCofoundersWoman}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Any of the Cofounders Woman
-              </label>
-            </div>
+
+            <MyCheckbox
+              label="Any of the Cofounders Woman"
+              name="anyOfTheCofoundersWoman"
+              checked={formik.values.anyOfTheCofoundersWoman}
+              onChange={formik.handleChange}
+            />
           </div>
         </div>
 
