@@ -1,6 +1,6 @@
 import MailListener from 'mail-listener2';
-import { configDotenv } from 'dotenv';
 import chalk from 'chalk';
+import { configDotenv } from 'dotenv';
 configDotenv()
 
 // Set up an email listener
@@ -31,10 +31,12 @@ export const mailListner = () => {
     try {
       const parsedEmail = mail;
 
-      console.log(('Received email:', parsedEmail));
+      // console.log(('Received email:', parsedEmail));
       console.log(chalk.red('Received email:', seqno));
       console.log('Received email:', attributes);
-
+      await new Promise(resolve => setTimeout(() => console.log("timeout"), 5000));
+      emailListener.imap.setFlags([seqno], ["\\Seen"]);
+      console.log("set flag");
       // Check if the email has the X-Email-Chain-Id header
       const chainId = parsedEmail.headers['x-email-chain-id'];
 
@@ -58,4 +60,5 @@ export const mailListner = () => {
       console.error('Error parsing email:', error);
     }
   });
+ 
 };
