@@ -1,8 +1,8 @@
-import { TextField } from "@mui/material";
+import { Backdrop, InputAdornment, Popover, TextField, Tooltip } from "@mui/material";
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useState } from "react";
 
-const MyInput = ({ error, helperText, ...restProps }) => {
+const MyInput = ({ error, helperText, popover, ...restProps }) => {
   return (
     <TextField
       size="small"
@@ -17,6 +17,27 @@ const MyInput = ({ error, helperText, ...restProps }) => {
           </span>
         )
       }
+      InputProps={{
+        endAdornment: popover && (
+          <InputAdornment position="end">
+            <Tooltip
+              placement="top"
+              title={
+                <div
+                  className="bg-white rounded text-black text-sm my-1 p-3"
+                  dangerouslySetInnerHTML={{ __html: popover }}
+                ></div>
+              }
+              arrow
+            >
+              <Icon
+                icon="fluent:info-16-regular"
+                className="text-lg cursor-pointer hover:bg-gray-100 rounded-full"
+              />
+            </Tooltip>
+          </InputAdornment>
+        ),
+      }}
       {...restProps}
     />
   );

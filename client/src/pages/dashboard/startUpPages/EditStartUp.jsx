@@ -5,7 +5,7 @@ import FilledBtn from "./../../../components/buttons/FilledBtn";
 import MySelect from "./../../../components/form/MySelect";
 import { startUpValidationSchema } from "./../../../utils/validationSchema";
 import PageNav from "./../../../components/header/PageNav";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, Tooltip } from "@mui/material";
 import {
   indianStates,
   investorTypes,
@@ -20,11 +20,15 @@ import QuillEditor from "../../../components/form/QuillEditor";
 import { useParams } from "react-router-dom";
 import { isEqual } from "lodash";
 import CurrencyInput from "../../../components/form/CurrencyInput";
+import MyCheckbox from "./../../../components/form/MyCheckBox";
+import { Icon } from "@iconify/react";
 
 const initialValues = {
   dateOnboarded: "",
   companyName: "",
   founder: "",
+  companyLinkedin: "",
+  founderLinkedin: "",
   email: "",
   location: {
     country: "",
@@ -48,10 +52,6 @@ const initialValues = {
   previousRounds: "",
   commitments: "",
   currentRound: "",
-  location: {
-    country: "",
-    state: "",
-  },
   deadlineToClose: "",
   investorTypePreference: [],
   investorMinimumTicketSize: 0,
@@ -189,19 +189,6 @@ const EditStartUp = () => {
               error={formik.touched.companyName && formik.errors.companyName}
               helperText={formik.touched.companyName && formik.errors.companyName ? formik.errors.companyName : ""}
             />
-
-            {/* Founder */}
-            <MyInput
-              name="founder"
-              type="text"
-              label="Founder"
-              value={formik.values.founder}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.founder && formik.errors.founder}
-              helperText={formik.touched.founder && formik.errors.founder ? formik.errors.founder : ""}
-            />
-
             {/* Email */}
             <MyInput
               name="email"
@@ -226,33 +213,45 @@ const EditStartUp = () => {
               helperText={formik.touched.phoneNumber && formik.errors.phoneNumber ? formik.errors.phoneNumber : ""}
             />
 
-            <CurrencyInput name="revenue" label="Revenue in USD($)" placeholder="Revenue in USD($)" formik={formik} />
-
-            {/* MIS */}
             <MyInput
-              name="mIS"
+              name="companyLinkedin"
               type="url"
-              label="MIS"
-              value={formik.values.mIS}
+              label="Company Linkedin"
+              value={formik.values.companyLinkedin}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.mIS && formik.errors.mIS}
-              helperText={formik.touched.mIS && formik.errors.mIS ? formik.errors.mIS : ""}
-            />
-
-            {/* Other Documents */}
-            <MyInput
-              name="otherDocuments"
-              type="url"
-              label="Other Documents"
-              value={formik.values.otherDocuments}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.otherDocuments && formik.errors.otherDocuments}
+              error={formik.touched.companyLinkedin && formik.errors.companyLinkedin}
               helperText={
-                formik.touched.otherDocuments && formik.errors.otherDocuments ? formik.errors.otherDocuments : ""
+                formik.touched.companyLinkedin && formik.errors.companyLinkedin ? formik.errors.companyLinkedin : ""
               }
             />
+
+            {/* Founder */}
+            <MyInput
+              name="founder"
+              type="text"
+              label="Founder Name"
+              value={formik.values.founder}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.founder && formik.errors.founder}
+              helperText={formik.touched.founder && formik.errors.founder ? formik.errors.founder : ""}
+            />
+
+            <MyInput
+              name="founderLinkedin"
+              type="url"
+              label="Founder Linkedin"
+              value={formik.values.founderLinkedin}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.founderLinkedin && formik.errors.founderLinkedin}
+              helperText={
+                formik.touched.founderLinkedin && formik.errors.founderLinkedin ? formik.errors.founderLinkedin : ""
+              }
+            />
+
+            <CurrencyInput name="revenue" label="Revenue in USD($)" placeholder="Revenue in USD($)" formik={formik} />
 
             {/* Incorporation/Founding Date */}
             <MyInput
@@ -295,28 +294,6 @@ const EditStartUp = () => {
               )}
             />
 
-            <MyInput
-              name="pitchDeck"
-              type="url"
-              label="Pitch Deck"
-              value={formik.values.pitchDeck}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.pitchDeck && formik.errors.pitchDeck}
-              helperText={formik.touched.pitchDeck && formik.errors.pitchDeck ? formik.errors.pitchDeck : ""}
-            />
-
-            <MyInput
-              name="businessPlan"
-              type="url"
-              label="Business Plan"
-              value={formik.values.businessPlan}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.businessPlan && formik.errors.businessPlan}
-              helperText={formik.touched.businessPlan && formik.errors.businessPlan ? formik.errors.businessPlan : ""}
-            />
-
             {/* Current Round */}
             <MySelect
               name="currentRound"
@@ -331,7 +308,7 @@ const EditStartUp = () => {
             <Autocomplete
               size="small"
               options={countries} // Define your options
-              value={formik.values.location.country}
+              value={indianStates.includes(formik.values.location.country) ? formik.values.location.country : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.country", newValue);
               }}
@@ -354,7 +331,7 @@ const EditStartUp = () => {
               size="small"
               disabled={formik.values.location.country !== "India"}
               options={indianStates} // Define your options
-              value={formik.values.location.state}
+              value={indianStates.includes(formik.values.location.state) ? formik.values.location.state : null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("location.state", newValue);
               }}
@@ -388,7 +365,59 @@ const EditStartUp = () => {
           </div>
         </div>
         <div className="mt-5 mx-5 bg-white rounded-lg p-5">
-          <h2 className="font-semibold text-xl opacity-70">StartUp Preferences</h2>
+          <h2 className="font-semibold text-xl opacity-70">Documents Links</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+            <MyInput
+              name="pitchDeck"
+              type="url"
+              label="Pitch Deck"
+              value={formik.values.pitchDeck}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.pitchDeck && formik.errors.pitchDeck}
+              helperText={formik.touched.pitchDeck && formik.errors.pitchDeck ? formik.errors.pitchDeck : ""}
+            />
+
+            <MyInput
+              name="businessPlan"
+              type="url"
+              label="Business Plan"
+              value={formik.values.businessPlan}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.businessPlan && formik.errors.businessPlan}
+              helperText={formik.touched.businessPlan && formik.errors.businessPlan ? formik.errors.businessPlan : ""}
+            />
+
+            {/* MIS */}
+            <MyInput
+              name="mIS"
+              type="url"
+              label="MIS"
+              value={formik.values.mIS}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.mIS && formik.errors.mIS}
+              helperText={formik.touched.mIS && formik.errors.mIS ? formik.errors.mIS : ""}
+            />
+
+            {/* Other Documents */}
+            <MyInput
+              name="otherDocuments"
+              type="url"
+              label="Other Documents"
+              value={formik.values.otherDocuments}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.otherDocuments && formik.errors.otherDocuments}
+              helperText={
+                formik.touched.otherDocuments && formik.errors.otherDocuments ? formik.errors.otherDocuments : ""
+              }
+            />
+          </div>
+        </div>
+        <div className="mt-5 mx-5 bg-white rounded-lg p-5">
+          <h2 className="font-semibold text-xl opacity-70">Preferences</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
             {/* Investor Type Preference */}
             <Autocomplete
@@ -420,18 +449,14 @@ const EditStartUp = () => {
             />
 
             {/* Any Lead Investor */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  name="anyLeadInvestor"
-                  type="checkbox"
-                  checked={formik.values.anyLeadInvestor}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Any Lead Investor
-              </label>
-            </div>
+
+            <MyCheckbox
+              label="Any Lead Investor"
+              name="anyLeadInvestor"
+              checked={formik.values.anyLeadInvestor}
+              onChange={formik.handleChange}
+              tooltip="Does the company have any commitment (soft or hard) from an investor that can lead the entire round as lead investor?"
+            />
 
             {/* Deal Structure Preference */}
             <Autocomplete
@@ -485,6 +510,30 @@ const EditStartUp = () => {
                       ? formik.errors.investorLocationPreference.country
                       : ""
                   }
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        {
+                          <Tooltip
+                            placement="top"
+                            title={
+                              <div className="bg-white rounded text-black text-sm my-1 p-3">
+                                Does the founder have a preference for investors from a particular country?
+                              </div>
+                            }
+                            arrow
+                          >
+                            <Icon
+                              icon="fluent:info-16-regular"
+                              className="text-lg cursor-pointer hover:bg-gray-100 rounded-full"
+                            />
+                          </Tooltip>
+                        }
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
                 />
               )}
             />
@@ -520,38 +569,50 @@ const EditStartUp = () => {
                       ? formik.errors.investorLocationPreference.state
                       : ""
                   }
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        {
+                          <Tooltip
+                            placement="top"
+                            title={
+                              <div className="bg-white rounded text-black text-sm my-1 p-3">
+                                Does the founder have a preference for investors from a particular Indian state?
+                              </div>
+                            }
+                            arrow
+                          >
+                            <Icon
+                              icon="fluent:info-16-regular"
+                              className="text-lg cursor-pointer hover:bg-gray-100 rounded-full"
+                            />
+                          </Tooltip>
+                        }
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
                 />
               )}
             />
 
             {/* SC/ST/OBC Cofounders */}
-
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  name="anyOfTheCofounders_sc_st_obc"
-                  checked={formik.values.anyOfTheCofounders_sc_st_obc}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Any of the Cofounders SC/ST/OBC
-              </label>
-            </div>
+            <MyCheckbox
+              label="Any of the Cofounders SC/ST/OBC"
+              name="anyOfTheCofounders_sc_st_obc"
+              checked={formik.values.anyOfTheCofounders_sc_st_obc}
+              onChange={formik.handleChange}
+            />
 
             {/* Woman Cofounders */}
-            <div className="border rounded p-2 border-gray-400">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  name="anyOfTheCofoundersWoman"
-                  type="checkbox"
-                  checked={formik.values.anyOfTheCofoundersWoman}
-                  onChange={formik.handleChange}
-                  className="mt-0.5"
-                />
-                Any of the Cofounders Woman
-              </label>
-            </div>
+
+            <MyCheckbox
+              label="Any of the Cofounders Woman"
+              name="anyOfTheCofoundersWoman"
+              checked={formik.values.anyOfTheCofoundersWoman}
+              onChange={formik.handleChange}
+            />
           </div>
         </div>
 
@@ -563,6 +624,9 @@ const EditStartUp = () => {
             placeholder="Write some content here..."
             name="aboutTheCompany"
             label="About The Company"
+            tooltip="<p>Write 2-3 lines defining what the company does exactly. Do not use any vague language. Keep it simple.</p>
+            <p><b>Ex-</b> Visa2Fly is a US-based entity catering to India, its first truly online visa application platform. Their mission is to make visa obtaining process as hassle-free as possible. The team ensure that you have access to the most comprehensive and updated information about the types of visas, fees and other specific requirements for the respective countries that you wish to visit. Our vision is to cater its customers with the easiest process to apply for a visa and make sure that customers are satisfied and well provided.</p> 
+            "
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
             <QuillEditor
@@ -570,15 +634,29 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="aboutTheTeam"
               label="About The Team"
+              tooltip={
+                "Founding team ,current role and their previous experience.<br/> Ex- 1. Yash Ajmera : (Founder)The Man behind the idea & inception Buy By Scrap Data Scientist from IIIT Bangalore and MBA from ICFA .13+ years of industry experience in strategy, finance, and planning.<br/> 2. Swati ( Cofounder)  The key controller of technical and operation management of business. B.Tech in Computer Science from CTAE, Udaipur, 6+ years of experience in Software Development.<br/> 3. Rajeshwar Mehra : ( COO ) MBA, CS and LLB with 12+ years experience in corporate,  Currently associated with a law firm since 8 years."
+              }
             />
 
-            <QuillEditor formik={formik} placeholder="Write some content here..." name="traction" label="Traction" />
+            <QuillEditor
+              formik={formik}
+              placeholder="Write some content here..."
+              name="traction"
+              label="Traction"
+              tooltip={
+                "<p>This should include key metrics of the company like revenue,repeat orders , Locations, Downloads, etc. </p><p>Ex-</p> <p>Customers Acquired -  30,000</p><p> Our Current Presence - Goa</p><p> Repeat Order Rate - 80%</p><p> Retail shop - 250+ Restaurants - 55+</p><p> Downloads - 300000</p>"
+              }
+            />
 
             <QuillEditor
               formik={formik}
               placeholder="Write some content here..."
               name="businessModel"
               label="Business Model"
+              tooltip={
+                "<p>How does the company make money? And what is the nature of the business, like B2B, B2C, D2C, etc</p><p><b>Ex-</b> We are Working in both B2B and B2C models through V-Commerce (Village Commerce) that helps in creating and sustaining rural consumption eco-system.</p> <ul style='list-style-type: disc;padding-left:20px;margin-top:7px;'><li>Timely delivery of goods to the customers </li> <li>Quality products at affordable prices</li><li> Micro-Warehouses network for quick service.</li></ul>"
+              }
             />
 
             <QuillEditor
@@ -586,6 +664,9 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="commitments"
               label="Commitments"
+              tooltip={
+                "soft or hard finance investments commitments given by any investor<br/> Ex- 2.5cr from FDI Singapore"
+              }
             />
 
             <QuillEditor
@@ -600,6 +681,9 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="uSPAndCompetitors"
               label="USP And Competitors"
+              tooltip={
+                "what makes Companies product or service better than competitors.& Competitors- company, that is trying to compete with companies in similar space.<br/> Ex- USP : Our USP is the Supply Chain Network, which empowers Rural Youth to perform these functions and build rural economy for a good living in rural areas.<br/> Ex- Competitors:  Godrej , farm2fork ,mangrove, ruralpharma.pvtltd"
+              }
             />
 
             <QuillEditor
@@ -614,6 +698,9 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="problemAndSolution"
               label="Problem And Solution"
+              tooltip={
+                "<p>Write about the problem(s) the company is solving and the exact solution they are applying. Make sure the headings of Problem and Solution are bold.</p><p>Ex-</p><br/><p><b>Problem-</b></p><ol style='list-style-type: decimal;padding-left:20px;margin-top:5px;'> <li>High travel time</li><li> Low-quality products are a big challenge</li><li> Crowded market</li><li> No early returns</li><li> Gap in rural and urban areas</li></ol><br/><p><b>Solution-</b></p> <ol style='list-style-type: decimal;padding-left:20px;margin-top:5px;'><li>New brand onboarding a key focus to reach 500 by 2024</li> <li>100+ fashion brands in mid and premium segment</li><li> Average order value 2800/- INR</li><li> Commission model 33-35% retained </li><li>Launched Globally</li></ol>"
+              }
             />
 
             <QuillEditor
@@ -621,6 +708,9 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="marketSize"
               label="Market Size"
+              tooltip={
+                "Cumulative figure of number of potential buyers of a product or service within a given market that includes TAM, SAM,SOM <br/>Ex-<br/><ul style='list-style-type: disc;padding-left:20px;margin-top:7px;'> <li>TAM- $3.2 Billion</li><li> SAM - $1.4 Billion</li><li> SOM - $.8 Billion</li></ul>"
+              }
             />
 
             <QuillEditor
@@ -628,6 +718,9 @@ const EditStartUp = () => {
               placeholder="Write some content here..."
               name="previousRounds"
               label="Previous Rounds"
+              tooltip={
+                "funding that a company  has received from private equity investors in previous round<br/> Ex- raised 750 k from finserv capital at 12 Cr valuation in seed round"
+              }
             />
           </div>
         </div>
