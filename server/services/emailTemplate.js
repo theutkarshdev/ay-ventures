@@ -11,7 +11,7 @@ export async function initialMailTemplate(investor, startup) {
     <p>${startup.aboutTheCompany}</p>
     <p><strong>Business Model:</strong></p>
     <p>${startup.businessModel}</p>
-    <p><strong>Revenue:</strong>${startup.revenue}</p>
+    <p><strong>Revenue:</strong>$${startup.revenue}</p>
     <p><strong>Traction:</strong></p>
     <p>${startup.traction}</p>
     <p><strong>Problem & Solution:</strong></p>
@@ -20,9 +20,9 @@ export async function initialMailTemplate(investor, startup) {
     <p>${startup.uSPAndCompetitors}</p>
     <p><strong>About the Team:<strong></p>
     <p>${startup.aboutTheTeam}</p>
-    <p><strong>Market Size:</strong>${startup.marketSize}</p>
-    <p><strong>Investment Ask:</strong>${startup.investmentAsk}</p>
-    <p><strong>Valuation:</strong>${startup.valuation}</p>
+    <p><strong>Market Size:</strong>$${startup.marketSize}</p>
+    <p><strong>Investment Ask:</strong>$${startup.investmentAsk}</p>
+    <p><strong>Valuation:</strong>$${startup.valuation}</p>
     <p><strong>Commitment:<strong></p>
     <p>${startup.commitments}</p>
     <p><strong>Previous Round:<strong></p>

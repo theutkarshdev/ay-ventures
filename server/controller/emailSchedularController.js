@@ -1,15 +1,15 @@
-import  {getInitialEmailsToSend}  from "../services/emailSchedularService.js";
+import sendMail from "../mail/mailSender.js"
 
 
 
 
-export async function sendInitialMail(req,res){
+export async function sendCronjobsMails(req,res){
 try {
-  const emails=await  getInitialEmailsToSend()
-  res.json({emails})
+ await sendMail()
+ res.json({message:"mail sent successfully"})
   
 } catch (error) {
-  
+  res.status(500).json({message:"server error"})
 }
 
 }
