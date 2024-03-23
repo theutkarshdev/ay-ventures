@@ -46,10 +46,10 @@ export async function getAllMatchMaking(req, res) {
         formattedData.data.push({
           _id: email._id,
           
-          firmName: match.investorId.firm_name,
-          firmEmail: match.investorId.firm_email,
-          companyName: email.startUpId.companyName,
-          companyEmail: email.startUpId.email,
+          firmName: match.investorId?.firm_name,
+          firmEmail: match.investorId?.firm_email,
+          companyName: email.startUpId?.companyName,
+          companyEmail: email.startUpId?.email,
           mailArray: mailArray,
           respond: email.response,
           remark: email.remark,
@@ -108,7 +108,7 @@ const data={
     // console.log(match)
     res.json(data)
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).json({ message: "Server Error" });
   }
 }
