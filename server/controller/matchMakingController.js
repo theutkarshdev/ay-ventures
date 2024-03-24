@@ -1,7 +1,7 @@
 import MatchMakingModel from "../model/matchMakingModel.js";
 import StartUpModel from "../model/startUpModel.js";
 import InvestorFirmModel from "../model/investorModel.js";
-
+import mongoose from "mongoose";
 import {
   checkIntersection,
   scoreMatching,
@@ -72,14 +72,44 @@ export async function getAllMatchMaking(req, res) {
 export async function getSingleMatchMaking(req,res){
 const {id}=req.params;
   try {
-  const match = await MatchMakingModel.findOne({ "emailQueue._id": id }) .populate("investorId", "employees firm_name firm_email")
-  .populate("emailQueue.startUpId", "companyName email");
+  const matchData = await MatchMakingModel.aggregate([
+    { $unwind: "$emailQueue" },
+   {
+ 
+   
+   $match: {
+     "emailQueue._id":new mongoose.Types.ObjectId(id),
+   }
+ },
+ 
+  {
+     $lookup: {
+       from: "investorfirms", // Assuming "investors" is the collection name for investorId
+       localField: "investorId",
+       foreignField: "_id",
+       as: "investorId",
+     }
+   
+ },
+  {
+     $lookup: {
+       from: "startups", // Assuming "investors" is the collection name for investorId
+       localField: "emailQueue.startUpId",
+       foreignField: "_id",
+       as: "emailQueue.startUpId",
+     }
+   
+ },
+ 
+ 
+ ])
 ;
-const mailArray = match.emailQueue[0].send.timeline?.map((time, timeIndex) => {
+const match=matchData[0]
+const mailArray = match.emailQueue.send.timeline?.map((time, timeIndex) => {
   const employee =
     timeIndex === 3
-      ? match.investorId.employees[1] || match.investorId.employees[0]
-      : match.investorId.employees[0];
+      ? match.investorId[0].employees[1] || match.investorId[0].employees[0]
+      : match.investorId[0].employees[0];
 
   return {
     sentTo: employee.email,
@@ -94,16 +124,16 @@ const mailArray = match.emailQueue[0].send.timeline?.map((time, timeIndex) => {
   };
 }) || [];
 const data={
-  _id: match.emailQueue[0]._id,
+  _id: match.emailQueue._id,
           
-  firmName: match.investorId.firm_name,
-  firmEmail: match.investorId.firm_email,
-  companyName: match.emailQueue[0].startUpId.companyName,
-  companyEmail: match.emailQueue[0].startUpId.email,
+  firmName: match.investorId[0].firm_name,
+  firmEmail: match.investorId[0].firm_email,
+  companyName: match.emailQueue.startUpId[0].companyName,
+  companyEmail: match.emailQueue.startUpId[0].email,
   mailArray: mailArray,
-  respond: match.emailQueue[0].response,
-  remark: match.emailQueue[0].remark,
-  score: match.emailQueue[0].score,
+  respond: match.emailQueue.response,
+  remark: match.emailQueue.remark,
+  score: match.emailQueue.score,
 }
     // console.log(match)
     res.json(data)
