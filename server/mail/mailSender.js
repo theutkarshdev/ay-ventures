@@ -41,8 +41,9 @@ export default async function sendMail() {
 
   try {
     const initialMails = await getInitialEmailsToSend();
+   
     if (initialMails.length > 0) {
-      Promise.all(
+   await   Promise.all(
         initialMails.map(async (email) => {
           // console.log(email)
           const initialMailOptions = {
@@ -65,16 +66,17 @@ export default async function sendMail() {
               messageId: initialInfo.messageId,
             });
           } catch (error) {
+            throw error
             console.log(error)
           }
          
         })
-      );
+      )
     }
 
     const followUp1Mails = await getFollowUp1EmailsToSend();
     if (followUp1Mails.length > 0) {
-      Promise.all(
+   await   Promise.all(
         followUp1Mails.map(async (email) => {
           const followUpMailOptions = {
             from: "test@ayventures.in",
@@ -102,7 +104,7 @@ export default async function sendMail() {
 
     const followUp2Mails = await getFollowUp2EmailsToSend();
     if (followUp2Mails.length > 0) {
-      Promise.all(
+   await   Promise.all(
         followUp2Mails.map(async (email) => {
           const followUpMailOptions = {
             from: "test@ayventures.in",
@@ -129,7 +131,7 @@ export default async function sendMail() {
 
     const initial2Mails = await getInitial2EmailsToSend();
     if (initial2Mails.length > 0) {
-      Promise.all(
+    await  Promise.all(
         initial2Mails.map(async (email) => {
           if (email.investorId[0].employees[1]) {
             const initial2MailOptions = {
@@ -155,10 +157,11 @@ export default async function sendMail() {
         })
       );
     }
-    
+    console.log(initialMails.length,initial2Mails.length,followUp1Mails.length,followUp2Mails.length)
   } catch (error) {
     console.error("Error sending email:", error);
     throw error;
+    PromiseRejectionEvent(error);
   }
 
   
